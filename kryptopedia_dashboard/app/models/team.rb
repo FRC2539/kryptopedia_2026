@@ -12,6 +12,10 @@ class Team < ApplicationRecord
 
   has_many :team_members
 
+  def enrolled?
+    team_members.any?
+  end
+
   def nickname
     tba_info["nickname"]
   end
@@ -44,6 +48,11 @@ class Team < ApplicationRecord
       { primary: c["primaryHex"], secondary: c["secondaryHex"], verified: c["verified"] }
     end
   end
+
+  def to_param
+    number.to_s
+  end
+
 
   private
   def tba_info

@@ -416,6 +416,44 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="addressable (v2.8.8) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="addressable" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8" />
+          <option name="version" value="2.8.8" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8/tasks" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8/tasks" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/addressable-2.8.8/tasks" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="annotaterb (v4.20.0) [path][gem]" type="rubylib">
         <properties>
           <option name="additionalInfo">
@@ -747,6 +785,44 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="childprocess (v5.1.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="childprocess" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0" />
+          <option name="version" value="5.1.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0/.github" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0/.github" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/childprocess-5.1.0/.github" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="concurrent-ruby (v1.3.6) [path][gem]" type="rubylib">
         <properties>
           <option name="additionalInfo">
@@ -1051,6 +1127,74 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/et-orbi-1.4.0/lib" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="faraday (v2.14.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="faraday" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0" />
+          <option name="version" value="2.14.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0/examples" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0/examples" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-2.14.0/examples" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="faraday-net_http (v3.4.2) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="faraday-net_http" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-net_http-3.4.2" />
+          <option name="version" value="3.4.2" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-net_http-3.4.2/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/faraday-net_http-3.4.2/lib" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -1435,6 +1579,76 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="launchy (v3.1.1) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="launchy" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/launchy-3.1.1" />
+          <option name="version" value="3.1.1" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/launchy-3.1.1/exe" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/launchy-3.1.1/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/launchy-3.1.1/exe" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/launchy-3.1.1/lib" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/launchy-3.1.1/exe" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="letter_opener (v1.10.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="letter_opener" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/letter_opener-1.10.0" />
+          <option name="version" value="1.10.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/letter_opener-1.10.0/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/letter_opener-1.10.0/spec" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/letter_opener-1.10.0/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/letter_opener-1.10.0/spec" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/letter_opener-1.10.0/spec" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="lint_roller (v1.1.0) [path][gem]" type="rubylib">
         <properties>
           <option name="additionalInfo">
@@ -1725,6 +1939,41 @@
         </SOURCES>
         <excluded>
           <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/msgpack-1.8.0/ext" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="net-http (v0.9.1) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="net-http" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/net-http-0.9.1" />
+          <option name="version" value="0.9.1" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/net-http-0.9.1/doc" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/net-http-0.9.1/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/net-http-0.9.1/doc" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/net-http-0.9.1/lib" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/net-http-0.9.1/doc" />
         </excluded>
       </library>
     </orderEntry>
@@ -2242,6 +2491,41 @@
         </SOURCES>
         <excluded>
           <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/psych-5.3.1/ext" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="public_suffix (v7.0.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="public_suffix" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/public_suffix-7.0.0" />
+          <option name="version" value="7.0.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/public_suffix-7.0.0/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/public_suffix-7.0.0/data" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/public_suffix-7.0.0/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/public_suffix-7.0.0/data" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/public_suffix-7.0.0/data" />
         </excluded>
       </library>
     </orderEntry>

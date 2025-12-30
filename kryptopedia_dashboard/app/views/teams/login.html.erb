@@ -1,0 +1,11 @@
+<h1>sign in :)</h1>
+
+<%= form_with url: team_send_login_code_path(@team) do |form| %>
+  <div>
+    <%= form.label :email, "Email:" %>
+    <%= form.email_field :email, required: true %>
+  </div>
+  <div>
+    <%= form.submit "Send Verification Code" %>
+  </div>
+<% end %>

@@ -1,0 +1,35 @@
+<% content_for :title do %>
+  Team <%= @team.number %> | Kryptopedia Dashboard
+<% end %>
+
+<% content_for :content do %>
+  <div class="team-color-strip" style="background-color: <%= @team.colors[:primary] %>"></div>
+  <div class="team-header">
+    <div class="left">
+      <div class="name-stack">
+        <h1>Kryptopedia</h1>
+        <h2><%= @team.number %> - <%= @team.nickname %></h2>
+      </div>
+      <nav class="menu">
+        <%= link_to "Events", team_events_path(@team) %>
+        <%= link_to "Devices", "#" %>
+        <%= link_to "Scouters", team_team_members_path(@team) %>
+        <%= link_to "Settings?", "#" %>
+      </nav>
+    </div>
+    <div class="team-logout">
+      <%= link_to "Logout", team_logout_path(@team) %>
+    </div>
+  </div>
+  <% if flash[:alert] %>
+    <div class="flash-message alert"><%= flash[:alert] %></div>
+  <% end %>
+  <% if flash[:notice] %>
+    <div class="flash-message notice"><%= flash[:notice] %></div>
+  <% end %>
+  <div class="content">
+    <%= yield %>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>

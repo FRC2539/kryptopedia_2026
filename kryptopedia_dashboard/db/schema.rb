@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_29_055849) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_30_004352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "team_members", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
+    t.integer "email_code"
+    t.datetime "email_code_sent_at"
     t.string "name"
     t.integer "role"
     t.bigint "team_id", null: false

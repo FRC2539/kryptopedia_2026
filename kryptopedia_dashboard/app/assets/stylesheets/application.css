@@ -8,3 +8,23 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+body {
+    margin: 0;
+}
+
+.flash-message {
+    padding: 10px;
+    margin: 5px;
+    border: 1px dotted black;
+    border-radius: 5px;
+    color: white;
+}
+
+.alert {
+    background-color: darkred;
+}
+
+.notice {
+    background-color: darkgreen;
+}

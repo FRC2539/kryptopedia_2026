@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "pages/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -10,5 +11,16 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "pages#index"
+
+  resources :teams, path: "", param: :number do
+    get "login" => "teams#login", as: :login
+    post "login" => "teams#send_login_code", as: :send_login_code
+    get "login/verify_code" => "teams#verify_login_code", as: :verify_login_code
+    post "login/verify_code" => "teams#process_login_code", as: :process_login_code
+    get :logout
+
+    resources :events
+    resources :team_members
+  end
 end

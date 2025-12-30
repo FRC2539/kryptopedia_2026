@@ -1,0 +1,9 @@
+<h1>Kryptopedia</h1>
+<% if flash[:alert] %>
+  <div style="color: red"><%= flash[:alert] %></div>
+<% end %>
+
+<h2>log in:</h2>
+<% @teams.each do |team| %>
+  <%= link_to team.number, team_login_path(team) %>
+<% end %>

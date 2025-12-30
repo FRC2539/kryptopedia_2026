@@ -1,0 +1,62 @@
+.team-color-strip {
+    height: 5px;
+    width: 100%;
+}
+
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    gap: 1rem;
+
+    .left {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+
+        .name-stack {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+
+            h1 {
+                margin: 0;
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+            h2 {
+                margin: 0.25rem 0 0 0;
+                font-size: 0.7rem;
+                font-weight: 400;
+                color: #666;
+            }
+        }
+
+        .menu {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
+
+    }
+
+
+    a {
+        font-size: 0.875rem;
+        text-decoration: none;
+        color: #333;
+    }
+
+    a:hover {
+        opacity: 0.7;
+    }
+}
+
+.content {
+    padding: 1rem;
+}
+
+

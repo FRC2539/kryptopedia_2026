@@ -5,17 +5,49 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e239fbf0-1016-4443-8c59-923808faa00a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/services/tba_service.rb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/team_colors_service.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/main.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/controllers/concerns/team_concern.rb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/javascript/controllers/verification_code_auto_fill_controller.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/views/events/index.html.erb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/views/layouts/teams.html.erb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/views/pages/index.html.erb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/views/team_member_mailer/verification_code_email.html.erb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/views/team_members/index.html.erb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/views/teams/login.html.erb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/views/teams/verify_login_code.html.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kryptopedia_dashboard.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kryptopedia_dashboard.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/assets/stylesheets/application.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/assets/stylesheets/application.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/concerns/.keep" beforeDir="false" afterPath="$PROJECT_DIR$/app/assets/stylesheets/teams.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/javascript/controllers/hello_controller.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/team.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/team.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/team_member.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/team_member.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/layouts/application.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/layouts/application.html.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/credentials/development.yml.enc" beforeDir="false" afterPath="$PROJECT_DIR$/config/credentials/development.yml.enc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/environments/development.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/environments/development.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/environments/test.rb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/schema.rb" beforeDir="false" afterPath="$PROJECT_DIR$/db/schema.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="ERB File" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -28,6 +60,9 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="37UkPb2yWoNjaOyjmNl7OMnkMJJ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -36,10 +71,11 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Rails.kryptopedia_dashboard.executor": "Run",
+    "RailsCreateViewFileDialog.DEFAULT_TEMPLATE": "ERB File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1766973619084",
+    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1767054648697",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "/usr/bin/ruby",
     "node.js.detected.package.eslint": "true",
@@ -48,9 +84,15 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "ruby.structure.view.model.defaults.configured": "true",
+    "settings.editor.selected.configurable": "actions.on.save",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/views/pages" />
+    </key>
+  </component>
   <component name="RunManager" selected="Rails.kryptopedia_dashboard">
     <configuration name="kryptopedia_dashboard" type="RailsRunConfigurationType" factoryName="Rails">
       <module name="kryptopedia_dashboard" />
@@ -144,15 +186,21 @@
       <option name="presentableId" value="Default" />
       <updated>1766965014279</updated>
       <workItem from="1766965015448" duration="4051000" />
-      <workItem from="1766973557762" duration="12175000" />
+      <workItem from="1766973557762" duration="24835000" />
+      <workItem from="1767054585785" duration="14626000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/kryptopedia_dashboard@kryptopedia_dashboard.rcov" NAME="kryptopedia_dashboard Coverage Results" MODIFIED="1766965040918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="kryptopedia_dashboard" />
+    <SUITE FILE_PATH="coverage/kryptopedia_dashboard@kryptopedia_dashboard.rcov" NAME="kryptopedia_dashboard Coverage Results" MODIFIED="1767063317156" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="kryptopedia_dashboard" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

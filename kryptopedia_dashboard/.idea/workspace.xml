@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e239fbf0-1016-4443-8c59-923808faa00a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../kryptopedia/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../kryptopedia/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../kryptopedia/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/concerns/team_concern.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/concerns/team_concern.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/teams_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/teams_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/team.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/team.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/team_member.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/team_member.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/schema.rb" beforeDir="false" afterPath="$PROJECT_DIR$/db/schema.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/mailers/application_mailer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/mailers/application_mailer.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/team_member_mailer/verification_code_email.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/team_member_mailer/verification_code_email.html.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/environments/production.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/environments/production.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +27,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/app/mailers/team_member_mailer.rb" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -184,7 +181,7 @@
       <workItem from="1768060609527" duration="3000" />
       <workItem from="1768267007054" duration="929000" />
       <workItem from="1768432308659" duration="957000" />
-      <workItem from="1768760919054" duration="1624000" />
+      <workItem from="1768760919054" duration="4103000" />
     </task>
     <servers />
   </component>

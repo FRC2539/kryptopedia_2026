@@ -36,6 +36,6 @@ class TeamMember < ApplicationRecord
     self.email_code = rand(100000..999999)
     self.email_code_sent_at = Time.current
     save!
-    TeamMemberMailer.verification_code_email(self).deliver_later
+    TeamMemberMailer.verification_code_email(self).deliver_now
   end
 end

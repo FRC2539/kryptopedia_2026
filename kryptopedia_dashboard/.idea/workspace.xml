@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e239fbf0-1016-4443-8c59-923808faa00a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/mailers/application_mailer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/mailers/application_mailer.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/team_member_mailer/verification_code_email.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/team_member_mailer/verification_code_email.html.erb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/environments/production.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/environments/production.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/database.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +77,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/config" />
+      <recent name="$PROJECT_DIR$/bin" />
       <recent name="$PROJECT_DIR$/app/views/pages" />
     </key>
   </component>
@@ -181,7 +182,7 @@
       <workItem from="1768060609527" duration="3000" />
       <workItem from="1768267007054" duration="929000" />
       <workItem from="1768432308659" duration="957000" />
-      <workItem from="1768760919054" duration="4103000" />
+      <workItem from="1768760919054" duration="10190000" />
     </task>
     <servers />
   </component>
@@ -194,7 +195,7 @@
     </ignored-roots>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/kryptopedia_dashboard@kryptopedia_dashboard.rcov" NAME="kryptopedia_dashboard Coverage Results" MODIFIED="1768761220993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="kryptopedia_dashboard" />
+    <SUITE FILE_PATH="coverage/kryptopedia_dashboard@kryptopedia_dashboard.rcov" NAME="kryptopedia_dashboard Coverage Results" MODIFIED="1768769558715" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="kryptopedia_dashboard" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_30_004352) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_05_231615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "devices", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.bigint "owner_id"
+    t.string "owner_type"
+    t.datetime "updated_at", null: false
+    t.index ["owner_type", "owner_id"], name: "index_devices_on_owner"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string "auth_token"
+    t.datetime "created_at", null: false
+    t.bigint "owner_id"
+    t.string "owner_type"
+    t.datetime "updated_at", null: false
+    t.index ["auth_token"], name: "index_sessions_on_auth_token", unique: true
+    t.index ["owner_type", "owner_id"], name: "index_sessions_on_owner"
+  end
 
   create_table "team_members", force: :cascade do |t|
     t.datetime "created_at", null: false

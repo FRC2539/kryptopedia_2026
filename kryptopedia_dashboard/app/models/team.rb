@@ -12,6 +12,8 @@ class Team < ApplicationRecord
 
   has_many :team_members
 
+  has_many :devices, as: :owner
+
   def enrolled?
     team_members.any?
   end
@@ -19,12 +21,15 @@ class Team < ApplicationRecord
   def nickname
     tba_info["nickname"]
   end
+
   def rookie_year
     tba_info["rookie_year"]
   end
+
   def country
     tba_info["country"]
   end
+
   def website
     tba_info["website"]
   end
@@ -53,8 +58,8 @@ class Team < ApplicationRecord
     number.to_s
   end
 
-
   private
+
   def tba_info
     Rails.cache.fetch("#{cache_key}/tba_info", expires_in: 7.days) do
       TBAService.team(number)

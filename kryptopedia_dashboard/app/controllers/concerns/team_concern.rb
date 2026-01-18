@@ -13,8 +13,9 @@ module TeamConcern
   end
 
   def current_user
-    if session[:team_member_id]
-      @current_user ||= TeamMember.find_by(id: session[:team_member_id], team: @team)
+    if session[:session_auth_token]
+      @session ||= Session.find_by(auth_token: session[:session_auth_token])
+      @current_user ||= @session&.owner
     end
   end
 

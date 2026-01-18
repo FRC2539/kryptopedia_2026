@@ -1,18 +1,95 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/util/device.dart';
+import 'package:kryptopedia/widgets/menu/main_menu.dart';
+
+const Color cougarOrange = Color.fromARGB(225, 242, 101, 34);
+const Color cougarOffBlack = Color.fromARGB(225, 47, 45, 45);
 
 void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    // DbHelper dbHelper = DbHelper();
+    // dbHelper.initializeDb();
+
+    super.initState();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 1),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      title: "Kryptopedia - Rebuilt",
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: cougarOrange,
+          brightness: Brightness.dark,
+        ),
+      ),
       home: Scaffold(
-        body: Center(
-          child: Text('Hello World!', style: TextStyle(fontSize: 24)),
+        appBar: AppBar(
+          actions: <Widget>[
+            ConfettiWidget(
+              key: UniqueKey(),
+              confettiController: _confettiController,
+              numberOfParticles: 20,
+              colors: const [cougarOrange, cougarOffBlack],
+            ),
+            IconButton(
+              splashColor: cougarOrange,
+              icon: Image.asset('assets/images/gearpaw.png'),
+              onPressed: () {
+                _confettiController.play();
+              },
+            ),
+          ],
+          // backgroundColor: Colors.grey.shade900,
+          title: Text(
+            "Kryptopedia - Rebuilt",
+            style: TextStyle(fontSize: Device.fontHeader(context)),
+            maxLines: 1,
+          ),
+          centerTitle: true,
+        ),
+        body: Row(
+          children: [
+            Container(
+              // color: Colors.grey.shade900,
+              width: landscape(context)
+                  ? MediaQuery.of(context).size.width / 3.0
+                  : MediaQuery.of(context).size.width,
+              child: const MainMenu(),
+            ),
+            Visibility(
+              visible: landscape(context),
+              child: Expanded(
+                child: Container(
+                  // color: Colors.black,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Image(
+                      image: AssetImage('assets/images/REBUILT.png'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

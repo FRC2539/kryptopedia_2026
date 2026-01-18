@@ -29,6 +29,9 @@ class TeamMember < ApplicationRecord
   enum :role, [:scouter, :admin], default: :scouter
   validates :email, uniqueness: { scope: :team_id }
 
+  has_many :sessions, as: :owner, dependent: :destroy
+  has_many :devices, as: :owner, dependent: :destroy
+
   def send_email_code!
     self.email_code = rand(100000..999999)
     self.email_code_sent_at = Time.current

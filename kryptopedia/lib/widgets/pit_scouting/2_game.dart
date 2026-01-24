@@ -20,23 +20,20 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
     return ScoutingSection(
       title: 'Robot Gameplay',
       children: [
-        CombinedColumnLayout(
-          column1: [
-            CheckboxList(
-              title: "Robot intakes from:",
-              options: const [
-                // the two values are linked and they must be unlinked. i think they both update the first value in the list.
-                MultiSelectOption(value: true, label: 'Ground'),
-                MultiSelectOption(value: true, label: 'Top'),
-              ],
-              initialValues: [false, false],
-              callback: (List<bool> newValues) {
-                scoutedPitSingleton.hasGroundIntake = newValues[0];
-                scoutedPitSingleton.hasTopIntake = newValues[1];
-              },
-            ),
-          ],
-          column2: [
+        CombinedColumnLayout(column1: [
+          CheckboxList(
+            title: "Robot intakes from:",
+            options: [
+              // the two values are linked and they must be unlinked. i think they both update the first value in the list.
+              MultiSelectOption(value: FuelPickupMethod.ground, label: 'Ground'),
+              MultiSelectOption(value: FuelPickupMethod.top, label: 'Top'),
+            ],
+            initialValues: scoutedPitSingleton.fuelPickupMethods,
+            callback: (values) {
+              scoutedPitSingleton.fuelPickupMethods = values;
+            }
+          ),
+        ], column2: [
           
         ]),
       ],

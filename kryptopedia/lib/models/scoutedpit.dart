@@ -21,8 +21,18 @@ class ScoutedPit {
     _drivetrain = value.index;
   }
 
-  bool hasGroundIntake = false;
-  bool hasTopIntake = false;
+  
+  int _fuelPickupMethods = 0; //1 << enum index
+  List<FuelPickupMethod> get fuelPickupMethods => [
+        if (_fuelPickupMethods & 1 != 0) FuelPickupMethod.ground,
+        if (_fuelPickupMethods & 2 != 0) FuelPickupMethod.top
+      ];
+  set fuelPickupMethods(List<FuelPickupMethod> value) {
+    _fuelPickupMethods = 0;
+    for (var element in value) {
+      _fuelPickupMethods += 1 << element.index;
+    }
+  }
 
   String autoComments = "";
   List<int> buddyAssists = []; //enum index list
@@ -45,8 +55,7 @@ class ScoutedPit {
     extendedHeight = 28;
     drivetrain = Drivetrain.swerve;
 
-    hasGroundIntake = false;
-    hasTopIntake = false;
+    fuelPickupMethods = [];
 
     autoComments = "";
     buddyAssists = [];
@@ -113,5 +122,7 @@ class ScoutedPit {
   }
   */
 }
+
+enum FuelPickupMethod { ground, top }
 
 enum Drivetrain { swerve, tank, mecanum, other }

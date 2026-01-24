@@ -60,7 +60,6 @@ class _MainAppState extends State<MainApp> {
               },
             ),
           ],
-          // backgroundColor: Colors.grey.shade900,
           title: Text(
             "Kryptopedia - Rebuilt",
             style: TextStyle(fontSize: Device.fontHeader(context)),
@@ -71,7 +70,6 @@ class _MainAppState extends State<MainApp> {
         body: Row(
           children: [
             SizedBox(
-              // color: Colors.grey.shade900,
               width: landscape(context)
                   ? MediaQuery.of(context).size.width / 3.0
                   : MediaQuery.of(context).size.width,
@@ -80,14 +78,9 @@ class _MainAppState extends State<MainApp> {
             Visibility(
               visible: landscape(context),
               child: Expanded(
-                child: Container(
-                  // color: Colors.white,
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: Image(
-                      image: AssetImage('assets/images/REBUILT.png'),
-                    ),
-                  ),
+                child: const Align(
+                  alignment: Alignment.center,
+                  child: Image(image: AssetImage('assets/images/REBUILT.png')),
                 ),
               ),
             ),

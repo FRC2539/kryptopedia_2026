@@ -34,14 +34,7 @@ class _SyncPopupState extends State<SyncPopup> {
           ),
           ElevatedButton.icon(
             onPressed: () async {
-              bool? confirmed = await showDialog(
-                context: context,
-                builder: (context) => ConfirmationDialog(
-                  title: "are you sure???",
-                  body: "this could be bad!",
-                  dangerous: true,
-                ),
-              );
+              bool? confirmed = await clearDbConfirmation(context);
               if (confirmed == true) {
                 DbHelper dbHelper = DbHelper();
                 await dbHelper.recreateDatabaseWithTestData();
@@ -55,14 +48,7 @@ class _SyncPopupState extends State<SyncPopup> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  bool? confirmed = await showDialog(
-                    context: context,
-                    builder: (context) => ConfirmationDialog(
-                      title: "are you sure???",
-                      body: "this could be bad!",
-                      dangerous: true,
-                    ),
-                  );
+                  bool? confirmed = await clearDbConfirmation(context);
                   if (confirmed == true) {
                     DbHelper dbHelper = DbHelper();
                     await dbHelper.recreateDatabase();
@@ -83,3 +69,13 @@ class _SyncPopupState extends State<SyncPopup> {
     );
   }
 }
+
+Future<bool?> clearDbConfirmation(BuildContext context) async =>
+    await showDialog(
+      context: context,
+      builder: (context) => ConfirmationDialog(
+        title: "Clear the database?",
+        body: "any unsynced data will be lost! this could be bad!!",
+        dangerous: true,
+      ),
+    );

@@ -36,7 +36,7 @@ class ScoutingSave extends StatelessWidget {
                 },
               );
 
-              if (context.mounted && confirmation != null) {
+              if (context.mounted && confirmation == true) {
                 Navigator.pop(context);
               }
             },
@@ -57,7 +57,6 @@ class ScoutingSave extends StatelessWidget {
             onPressed: () async {
               final bool? confirmation = await showDialog(
                 context: context,
-                barrierDismissible: true,
                 builder: (BuildContext context) {
                   return const ConfirmationDialog(
                     title: 'Confirmation',
@@ -70,11 +69,11 @@ class ScoutingSave extends StatelessWidget {
                 },
               );
 
-              if (confirmation != null) {
+              if (confirmation == true) {
                 String? message = saveFunction();
 
                 if (context.mounted) {
-                  await showDialog<String>(
+                  await showDialog(
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext context) {

@@ -13,8 +13,10 @@ module TeamConcern
   end
 
   def current_user
-    if session[:session_auth_token]
-      @session ||= Session.find_by(auth_token: session[:session_auth_token])
+    if cookies.signed[:session_auth_token]
+      cookies.signed[:session_auth_token] = { value: cookies.signed[:session_auth_token], expires: 1.week.from_now }
+  
+      @session ||= Session.find_by(auth_token: cookies.signed[:session_auth_token])
       @current_user ||= @session&.owner
     end
   end

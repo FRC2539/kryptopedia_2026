@@ -1,5 +1,6 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/dialogs/db/sync.dart';
 import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/widgets/menu/main_menu.dart';
 
@@ -50,6 +51,7 @@ class _MainAppState extends State<MainApp> {
               numberOfParticles: 20,
               colors: const [cougarOrange, cougarOffBlack],
             ),
+            SyncDialogButton(),
             IconButton(
               splashColor: cougarOrange,
               icon: Image.asset('assets/images/gearpaw.png'),
@@ -68,7 +70,7 @@ class _MainAppState extends State<MainApp> {
         ),
         body: Row(
           children: [
-            Container(
+            SizedBox(
               // color: Colors.grey.shade900,
               width: landscape(context)
                   ? MediaQuery.of(context).size.width / 3.0
@@ -79,7 +81,7 @@ class _MainAppState extends State<MainApp> {
               visible: landscape(context),
               child: Expanded(
                 child: Container(
-                  // color: Colors.black,
+                  // color: Colors.white,
                   child: const Align(
                     alignment: Alignment.center,
                     child: Image(
@@ -92,6 +94,23 @@ class _MainAppState extends State<MainApp> {
           ],
         ),
       ),
+    );
+  }
+}
+
+//separate widget the `showDialog` builder needs a `context` that has stuff added
+//to it by the `MaterialApp` already?
+class SyncDialogButton extends StatelessWidget {
+  const SyncDialogButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      splashColor: cougarOrange,
+      icon: Icon(Icons.cloud_sync),
+      onPressed: () {
+        showDialog(context: context, builder: (context) => SyncPopup());
+      },
     );
   }
 }

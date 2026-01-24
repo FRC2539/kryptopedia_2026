@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:kryptopedia/dialogs/confirmation.dart';
+import 'package:kryptopedia/dialogs/generic_confirmation.dart';
 
 import 'package:kryptopedia/dialogs/notification.dart';
 
@@ -21,18 +21,20 @@ class ScoutingSave extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () async {
-              final String? confirmation = await showDialog<String>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) {
-                    return ConfirmationDialog(
-                      title: '*** WARNING ***',
-                      body: "You are about to cancel your current scouting "
-                          "activity.  If you continue, you will lose all "
-                          "scouted data collected.",
-                      cancelText: "Return to Form",
-                    );
-                  });
+              final bool? confirmation = await showDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return ConfirmationDialog(
+                    title: '*** WARNING ***',
+                    body:
+                        "You are about to cancel your current scouting "
+                        "activity.  If you continue, you will lose all "
+                        "scouted data collected.",
+                    cancelText: "Return to Form",
+                  );
+                },
+              );
 
               if (context.mounted && confirmation != null) {
                 Navigator.pop(context);
@@ -53,19 +55,20 @@ class ScoutingSave extends StatelessWidget {
           const SizedBox(width: 100.0),
           ElevatedButton(
             onPressed: () async {
-              final String? confirmation = await showDialog<String>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) {
-                    return const ConfirmationDialog(
-                      title: 'Confirmation',
-                      body:
-                          "You are about to save your scouting observations.  "
-                          "Once these settings are saved, you will not be able "
-                          "to make any additional changes.",
-                      confirmText: "Save",
-                    );
-                  });
+              final bool? confirmation = await showDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return const ConfirmationDialog(
+                    title: 'Confirmation',
+                    body:
+                        "You are about to save your scouting observations.  "
+                        "Once these settings are saved, you will not be able "
+                        "to make any additional changes.",
+                    confirmText: "Save",
+                  );
+                },
+              );
 
               if (confirmation != null) {
                 String? message = saveFunction();
@@ -77,10 +80,11 @@ class ScoutingSave extends StatelessWidget {
                     builder: (BuildContext context) {
                       return NotificationDialog(
                         title: "Scouting Data Saved",
-                        body: "Successfully recorded.\n\n"
+                        body:
+                            "Successfully recorded.\n\n"
                             '${message ?? ""}',
                       );
-                    }
+                    },
                   );
                 }
 

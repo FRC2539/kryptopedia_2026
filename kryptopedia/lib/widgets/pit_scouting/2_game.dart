@@ -32,8 +32,27 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
               scoutedPitSingleton.fuelPickupMethods = values;
             }
           ),
+          DropdownList(
+            label: "Shooter type",
+            options: [
+              MultiSelectOption(value: ShooterType.noTurret, label: 'No Turret'),
+              MultiSelectOption(value: ShooterType.singleTurret, label: 'Single Turret'),
+              MultiSelectOption(value: ShooterType.doubleTurret, label: 'Double Turret'),
+            ],
+            initialValue: scoutedPitSingleton.shooterType,
+            callback: (value) {
+              scoutedPitSingleton.shooterType = value;
+            },
+          )
         ], column2: [
-          
+          NumberField(label: "Max Fuel Capacity",
+            minValue: 0,
+            maxValue: 504,
+            startValue: scoutedPitSingleton.maxFuelCapacity,
+            callback: (value) {
+              scoutedPitSingleton.maxFuelCapacity = value;
+            },
+          ),
         ]),
       ],
     );

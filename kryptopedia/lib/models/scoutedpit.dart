@@ -33,6 +33,12 @@ class ScoutedPit {
       _fuelPickupMethods += 1 << element.index;
     }
   }
+  int _shooterType = 0; //enum index
+  ShooterType get shooterType => ShooterType.values[_shooterType];
+  set shooterType(ShooterType value) {
+    _shooterType = value.index;
+  }
+  int maxFuelCapacity = 0;
 
   String autoComments = "";
   List<int> buddyAssists = []; //enum index list
@@ -56,6 +62,8 @@ class ScoutedPit {
     drivetrain = Drivetrain.swerve;
 
     fuelPickupMethods = [];
+    shooterType = ShooterType.noTurret;
+    maxFuelCapacity = 35;
 
     autoComments = "";
     buddyAssists = [];
@@ -124,5 +132,7 @@ class ScoutedPit {
 }
 
 enum FuelPickupMethod { ground, top }
+
+enum ShooterType { noTurret, singleTurret, doubleTurret }
 
 enum Drivetrain { swerve, tank, mecanum, other }

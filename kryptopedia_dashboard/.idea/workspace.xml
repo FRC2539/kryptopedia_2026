@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e239fbf0-1016-4443-8c59-923808faa00a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/util/db/events.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/util/db/events.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/concerns/team_concern.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/concerns/team_concern.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/teams_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/teams_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/credentials/development.yml.enc" beforeDir="false" afterPath="$PROJECT_DIR$/config/credentials/development.yml.enc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/credentials/production.yml.enc" beforeDir="false" afterPath="$PROJECT_DIR$/config/credentials/production.yml.enc" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +63,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1768760981549",
+    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1769219861053",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "/usr/bin/ruby",
     "node.js.detected.package.eslint": "true",
@@ -186,6 +184,7 @@
       <workItem from="1768267007054" duration="929000" />
       <workItem from="1768432308659" duration="957000" />
       <workItem from="1768760919054" duration="19278000" />
+      <workItem from="1769219798537" duration="653000" />
     </task>
     <servers />
   </component>

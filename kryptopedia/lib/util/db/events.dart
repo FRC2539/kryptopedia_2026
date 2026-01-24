@@ -23,23 +23,12 @@ class DbEvents {
     return result;
   }
 
-  Future<List<Event>> getEvents() async {
-    Database db = await dbHelper.db;
-
-    final List<Map<String, dynamic>> events = await db.query(Event.tableName);
-
-    return List.generate(events.length, (i) {
-      return Event.fromMap(events[i]);
-    });
-  }
-
-  Future<Event> getEvent(int id) async {
+  Future<Event> getEvent() async {
     Database db = await dbHelper.db;
 
     final List<Map<String, dynamic>> result = await db.query(
       Event.tableName,
-      where: "${Event.idKey} = ?",
-      whereArgs: [id],
+      where: "${Event.idKey} = 0",
     );
 
     Event returnValue = Event.fromMap(result.first);

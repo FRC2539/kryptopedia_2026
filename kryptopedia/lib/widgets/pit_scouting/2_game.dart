@@ -24,7 +24,6 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
           CheckboxList(
             title: "Robot intakes from:",
             options: [
-              // the two values are linked and they must be unlinked. i think they both update the first value in the list.
               MultiSelectOption(value: FuelPickupMethod.ground, label: 'Ground'),
               MultiSelectOption(value: FuelPickupMethod.top, label: 'Top'),
             ],

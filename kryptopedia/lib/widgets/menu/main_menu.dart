@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/scoutedpit.dart';
+import 'package:kryptopedia/models/team.dart';
+import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/screens/pit_scouting.dart';
 import 'package:kryptopedia/widgets/menu/section.dart';
 import 'package:kryptopedia/widgets/menu/version_number.dart';
+
+var defaultTeam = Team(0, "Default Team");
+var defaultEvent = Event(0, "Default Event", "", 0);
 
 class MainMenu extends StatelessWidget {
   const MainMenu({super.key});
@@ -9,20 +16,13 @@ class MainMenu extends StatelessWidget {
   Widget build(BuildContext c) {
     return ListView(
       children: [
-        //test section
+        // Scouting
         MenuSection([
           MenuItemDefinition(
-            title: "pimp down",
-            description: "pimp in distress",
-            icon: Icons.personal_injury,
-            portraitWidget: const PlaceholderScreen(),
+            title: "Pit Scouting",
+            icon: Icons.construction,
+            landscapeWidget: PitScouting(team: defaultTeam, event: defaultEvent),
             dev: true,
-          ),
-          MenuItemDefinition(
-            title: "i need a hundred and fifty million dollars",
-            icon: Icons.money,
-            portraitWidget: const PlaceholderScreen(),
-            landscapeWidget: const PlaceholderScreen(),
           ),
           MenuItemDefinition(
             title: "show a snack bar",

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kryptopedia/models/scoutedpit.dart';
+import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/widgets/common/checkboxes.dart';
 import 'package:kryptopedia/widgets/common/dropdown.dart';
@@ -20,7 +20,10 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
     return ScoutingSection(
       title: 'Robot Gameplay',
       children: [
-        CombinedColumnLayout(column1: [
+        ResponsiveLayout(
+          portraitMode: LayoutMode.singleColumn,
+          landscapeMode: LayoutMode.twoColumn,
+          group1: [
           CheckboxList(
             title: "Robot intakes from:",
             options: [
@@ -44,7 +47,8 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
               scoutedPitSingleton.shooterType = value;
             },
           )
-        ], column2: [
+          ],
+          group2: [
           NumberField(label: "Max Fuel Capacity",
             minValue: 0,
             maxValue: 504,

@@ -10,7 +10,7 @@ class ConfirmationDialog extends StatefulWidget {
   final String body;
   final String confirmText;
   final String cancelText;
-  final bool dangerous;
+  final bool protected;
 
   const ConfirmationDialog({
     super.key,
@@ -18,7 +18,7 @@ class ConfirmationDialog extends StatefulWidget {
     required this.body,
     this.confirmText = "Continue",
     this.cancelText = "Cancel",
-    this.dangerous = false,
+    this.protected = false,
   });
 
   @override
@@ -32,31 +32,30 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      surfaceTintColor: widget.dangerous ? Colors.red : Colors.transparent,
+      constraints: BoxConstraints(
+        maxHeight: Device.dialogHeight(context, 0.5),
+        maxWidth: 600,
+      ),
+      surfaceTintColor: widget.protected ? Colors.red : Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      child: ConstrainedBox(
-        // padding: EdgeInsets.all(8),
-        // height:
-        // width: Device.dialogWidth(context, 0.6),
-        constraints: BoxConstraints(
-          maxHeight: Device.dialogHeight(context, 0.5),
-        ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 20,
           children: [
             Visibility(
-              visible: widget.dangerous,
+              visible: widget.protected,
               child: Icon(Icons.warning, color: Colors.red),
             ),
             Text(
               widget.title,
               style: TextStyle(
                 fontSize: Device.fontHeader(context),
-                fontWeight: widget.dangerous
+                fontWeight: widget.protected
                     ? FontWeight.bold
                     : FontWeight.normal,
-                color: widget.dangerous ? Colors.red : Colors.white,
+                color: widget.protected ? Colors.red : Colors.white,
               ),
               maxLines: 1,
             ),
@@ -66,7 +65,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
               maxLines: 2,
             ),
             Visibility(
-              visible: widget.dangerous,
+              visible: widget.protected,
               child: Column(
                 spacing: 8,
                 children: [
@@ -125,7 +124,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: (!widget.dangerous || isFormValid)
+                  onPressed: (!widget.protected || isFormValid)
                       ? () {
                           Navigator.of(context).pop(true);
                         }

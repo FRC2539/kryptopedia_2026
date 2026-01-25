@@ -56,44 +56,4 @@ class ResponsiveLayout extends StatelessWidget {
   }
 }
 
-enum LayoutMode { singleColumn, twoColumn, singleRow, }
-
-    // Use [ResponsiveLayout] if you want. at some point i'll move everything to it maybe)
-class CombinedColumnLayout extends StatelessWidget {
-  final List<Widget> column1;
-  final List<Widget> column2;
-
-  const CombinedColumnLayout(
-      {super.key, required this.column1, required this.column2});
-
-  @override
-  Widget build(BuildContext context) {
-    if (landscape(context)) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: column1,
-            ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: column2,
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ...column1,
-          ...column2,
-        ],
-      );
-    }
-  }
-}
+enum LayoutMode { singleColumn, twoColumn, singleRow }

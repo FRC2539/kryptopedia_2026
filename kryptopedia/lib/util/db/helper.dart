@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -57,9 +58,13 @@ class DbHelper {
   Future<void> createTables(Database db) async {
     DbTeams dbTeams = DbTeams();
     DbEvents dbEvents = DbEvents();
+    DbScoutedPits dbScoutedPits = DbScoutedPits();
 
-    dbTeams.ensureTableExists(db);
-    dbEvents.ensureTableExists(db);
+    Future.wait([
+      dbTeams.ensureTableExists(db),
+      dbEvents.ensureTableExists(db),
+      dbScoutedPits.ensureTableExists(db),
+    ]);
   }
 
   Future<bool> tableExists(Database db, String tableName) async {

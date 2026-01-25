@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 import '../util/deviceinfo.dart';
 
-class GenericTextInputDialog extends StatefulWidget {
+class TextInputDialog extends StatefulWidget {
   final String title;
   final String subtitle;
   final bool multiline;
 
-  const GenericTextInputDialog({
+  const TextInputDialog({
     super.key,
     required this.title,
     this.subtitle = "",
@@ -16,10 +16,10 @@ class GenericTextInputDialog extends StatefulWidget {
   });
 
   @override
-  State<GenericTextInputDialog> createState() => _GenericTextInputDialogState();
+  State<TextInputDialog> createState() => _TextInputDialogState();
 }
 
-class _GenericTextInputDialogState extends State<GenericTextInputDialog> {
+class _TextInputDialogState extends State<TextInputDialog> {
   final _formKey = GlobalKey<FormState>();
   final _inputKey = GlobalKey<FormFieldState>();
 
@@ -32,11 +32,10 @@ class _GenericTextInputDialogState extends State<GenericTextInputDialog> {
           width: 500,
           height: 400,
           child: Column(
+          spacing: 8,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
+            AutoSizeText(
                   widget.title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -44,14 +43,10 @@ class _GenericTextInputDialogState extends State<GenericTextInputDialog> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
+            AutoSizeText(
                   widget.subtitle,
                   textAlign: TextAlign.center,
                 ),
-              ),
               Form(
                   key: _formKey,
                   child: Column(

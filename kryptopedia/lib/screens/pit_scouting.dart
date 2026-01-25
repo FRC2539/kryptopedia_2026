@@ -2,8 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/team.dart';
+import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/singletons.dart';
-// import 'package:kryptopedia/util/dbhelpers/dbscoutedpit.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/widgets/common/banners.dart';
 import 'package:kryptopedia/widgets/common/save.dart';
@@ -28,7 +28,6 @@ class _PitScoutingState extends State<PitScouting> {
   void initState() {
     super.initState();
     scoutedPitSingleton.setToDefaults(
-      widget.event.id,
       widget.team.number,
     );
   }
@@ -54,8 +53,9 @@ class _PitScoutingState extends State<PitScouting> {
                   PitScoutingGame(),
                   PitScoutingSummary(),
                   ScoutingSave(saveFunction: () {
-                    // DbScoutedPit dbScoutedPit = DbScoutedPit();
-                    // dbScoutedPit.insertScoutedPit(scoutedPitSingleton);
+                    DbScoutedPits dbScoutedPit = DbScoutedPits();
+                    //TODO: not async... what happens if this fails?
+                    dbScoutedPit.insertScoutedPit(scoutedPitSingleton);
                     return "Event: ${widget.event.id}\nTeam: ${widget.team.number}\n${widget.team.nickname}";
                   })
                 ],

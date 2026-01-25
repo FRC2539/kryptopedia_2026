@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/text_field.dart';
@@ -20,12 +22,16 @@ class PitScoutingSummary extends StatelessWidget {
           callback: (String newValue) async {
             // Make sure the Robot_Pics folder exists.
             final Directory appDir = await getApplicationDocumentsDirectory();
-            Directory robotPicsDir =
-                await Directory("${appDir.path}/Robot_Pics").create();
+            Directory robotPicsDir = await Directory(
+              "${appDir.path}/Robot_Pics",
+            ).create();
 
             // Calculate Robot Pic Filename (with and without folder)
+            DbEvents dbEvents = DbEvents();
+            Event event = await dbEvents.getEvent();
+
             String robotFileName =
-                "${scoutedPitSingleton.eventId}_${scoutedPitSingleton.teamId}_photo_1.jpg";
+                "${event.code}_${scoutedPitSingleton.teamNumber}_photo_1.jpg";
             String robotFileNameWithPath =
                 "${robotPicsDir.path}/$robotFileName";
 

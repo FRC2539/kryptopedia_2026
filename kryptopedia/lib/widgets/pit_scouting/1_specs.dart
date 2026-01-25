@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kryptopedia/models/scoutedpit.dart';
+import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/layouts.dart';
@@ -19,15 +19,27 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
     return ScoutingSection(
       title: 'Robot Specs',
       children: [
-        CombinedColumnLayout(column1: [
+        ResponsiveLayout(
+          portraitMode: LayoutMode.singleColumn,
+          landscapeMode: LayoutMode.twoColumn,
+          group1: [
+            CheckboxListTile(
+              title: const Text("Robot is a Kit Bot"),
+              value: scoutedPitSingleton.isKitBot,
+              onChanged: (value) {
+                setState(() {
+                  scoutedPitSingleton.isKitBot = value!;
+                });
+              },
+            ),
           NumberField(
             label: "Robot weight (lbs.)",
-            subtitle: "without battery and bumpers, preferably at inspection",
+              subtitle: "without battery or bumpers, preferably at inspection",
             minValue: 35,
             maxValue: 115,
             startValue: scoutedPitSingleton.weight,
             callback: (int newValue) {
-              scoutedPitSingleton.weight = newValue;
+                scoutedPitSingleton.weight = newValue;
             },
           ),
           NumberField(
@@ -48,15 +60,9 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
             callback: (int newValue) {
               scoutedPitSingleton.depth = newValue;
             },
-          ),
-          CheckboxListTile(
-              title: const Text("Robot is a Kit Bot"),
-              value: scoutedPitSingleton.isKitBot,
-              onChanged: (value) {
-                scoutedPitSingleton.isKitBot = value!;
-                setState(() {});
-              }),
-        ], column2: [
+            ),
+          ],
+          group2: [
           NumberField(
             label: "Robot starting height (in.)",
             minValue: 2,

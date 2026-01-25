@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/generic_confirmation.dart';
 import 'package:kryptopedia/util/db/helper.dart';
@@ -13,7 +14,17 @@ class _SyncPopupState extends State<SyncPopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Database & Sync"),
+      title: Row(
+        children: [
+          Text("Database & Sync"),
+          Spacer(),
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.close),
+          ),
+        ],
+      ),
+      constraints: BoxConstraints(maxHeight: 400),
       content: Column(
         spacing: 8,
         children: [
@@ -32,16 +43,19 @@ class _SyncPopupState extends State<SyncPopup> {
               ),
             ],
           ),
-          ElevatedButton.icon(
-            onPressed: () async {
-              bool? confirmed = await clearDbConfirmation(context);
-              if (confirmed == true) {
-                DbHelper dbHelper = DbHelper();
-                await dbHelper.recreateDatabaseWithTestData();
-              }
-            },
-            label: Text("Replace DB With Test Data"),
-            icon: Icon(Icons.developer_mode),
+          Visibility(
+            visible: kDebugMode,
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                bool? confirmed = await clearDbConfirmation(context);
+                if (confirmed == true) {
+                  DbHelper dbHelper = DbHelper();
+                  await dbHelper.recreateDatabaseWithTestData();
+                }
+              },
+              label: Text("Replace DB With Test Data"),
+              icon: Icon(Icons.developer_mode),
+            ),
           ),
           Spacer(),
           Row(
@@ -76,6 +90,6 @@ Future<bool?> clearDbConfirmation(BuildContext context) async =>
       builder: (context) => ConfirmationDialog(
         title: "Clear the database?",
         body: "any unsynced data will be lost! this could be bad!!",
-        dangerous: true,
+        protected: true,
       ),
     );

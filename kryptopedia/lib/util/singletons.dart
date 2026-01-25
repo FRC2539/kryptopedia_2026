@@ -1,6 +1,3 @@
-// import 'package:kryptopedia/models/scoutedmatch.dart';
-import 'package:kryptopedia/models/scoutedpit.dart';
+import 'package:kryptopedia/models/scouted_pit.dart';
 
 final ScoutedPit scoutedPitSingleton = ScoutedPit();
-
-// final ScoutedMatch scoutedMatchSingleton = ScoutedMatch();

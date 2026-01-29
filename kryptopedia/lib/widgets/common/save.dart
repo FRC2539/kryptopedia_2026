@@ -8,7 +8,7 @@ import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 
 class ScoutingSave extends StatelessWidget {
-  final String? Function() saveFunction;
+  final Future<String?> Function() saveFunction;
 
   const ScoutingSave({super.key, required this.saveFunction});
 
@@ -70,7 +70,7 @@ class ScoutingSave extends StatelessWidget {
               );
 
               if (confirmation == true) {
-                String? message = saveFunction();
+                String? message = await saveFunction();
 
                 if (context.mounted) {
                   await showDialog(

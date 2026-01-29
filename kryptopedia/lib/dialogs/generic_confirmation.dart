@@ -73,7 +73,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                   Form(
                     key: formKey,
                     child: Column(
-                      children: <Widget>[
+                      children: [
                         TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {

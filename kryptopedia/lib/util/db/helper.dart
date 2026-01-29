@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:kryptopedia/models/event.dart';
-import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/db/teams.dart';
@@ -36,7 +34,8 @@ class DbHelper {
     if (!Platform.isWindows && !Platform.isLinux) {
       Database database = await openDatabase(
         path,
-        onCreate: (db, v) => createTables(db),
+        version: 1,
+        onCreate: (db, v) async => await createTables(db),
       );
       return database;
     } else {
@@ -45,7 +44,7 @@ class DbHelper {
         path,
         options: OpenDatabaseOptions(
           version: 1,
-          onCreate: (db, v) => createTables(db),
+          onCreate: (db, v) async => await createTables(db),
         ),
       );
       return database;
@@ -60,7 +59,7 @@ class DbHelper {
     DbEvents dbEvents = DbEvents();
     DbScoutedPits dbScoutedPits = DbScoutedPits();
 
-    Future.wait([
+    await Future.wait([
       dbTeams.ensureTableExists(db),
       dbEvents.ensureTableExists(db),
       dbScoutedPits.ensureTableExists(db),
@@ -93,31 +92,5 @@ class DbHelper {
       }
     }
     await db;
-  }
-
-  Future recreateDatabaseWithTestData() async {
-    await recreateDatabase();
-
-    DbTeams dbTeams = DbTeams();
-    DbEvents dbEvents = DbEvents();
-
-    await Future.wait([
-      dbTeams.insertTeam(Team(2539, "Krypton Cougars")),
-      dbTeams.insertTeam(Team(1, "Test Team 1")),
-      dbTeams.insertTeam(Team(2, "Test Team 2")),
-      dbTeams.insertTeam(Team(3, "Test Team 3")),
-      dbTeams.insertTeam(Team(4, "Test Team 4")),
-      dbTeams.insertTeam(Team(5, "Test Team 5")),
-      dbTeams.insertTeam(Team(6, "Test Team 6")),
-      dbTeams.insertTeam(Team(7, "Test Team 7")),
-      dbTeams.insertTeam(Team(8, "Test Team 8")),
-      dbTeams.insertTeam(Team(9, "Test Team 9")),
-      dbTeams.insertTeam(Team(10, "Test Team 10")),
-      dbTeams.insertTeam(Team(11, "Test Team 11")),
-      dbTeams.insertTeam(Team(12, "Test Team 12")),
-      dbEvents.insertEvent(
-        Event(0, "FMA District Hatboro-Horsham Event", "PAHAT", 2026),
-      ),
-    ]);
   }
 }

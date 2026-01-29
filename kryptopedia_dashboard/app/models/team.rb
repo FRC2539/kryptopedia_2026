@@ -11,8 +11,8 @@ class Team < ApplicationRecord
   validates :number, presence: true, uniqueness: true, numericality: { greater_than: 0, less_than: 10000 }
 
   has_many :team_members
-
   has_many :devices, as: :owner
+  has_many :scouted_events
 
   def enrolled?
     team_members.any?

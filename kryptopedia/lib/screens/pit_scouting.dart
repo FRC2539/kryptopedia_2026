@@ -12,10 +12,9 @@ import 'package:kryptopedia/widgets/pit_scouting/2_game.dart';
 import 'package:kryptopedia/widgets/pit_scouting/3_summary.dart';
 
 class PitScouting extends StatefulWidget {
-  final Event event;
   final Team team;
 
-  const PitScouting({super.key, required this.event, required this.team});
+  const PitScouting({super.key, required this.team});
 
   @override
   State<PitScouting> createState() => _PitScoutingState();
@@ -52,11 +51,11 @@ class _PitScoutingState extends State<PitScouting> {
                   PitScoutingSpecs(),
                   PitScoutingGame(),
                   PitScoutingSummary(),
-                  ScoutingSave(saveFunction: () {
+                ScoutingSave(
+                  saveFunction: () async {
                     DbScoutedPits dbScoutedPit = DbScoutedPits();
-                    //TODO: not async... what happens if this fails?
-                    dbScoutedPit.insertScoutedPit(scoutedPitSingleton);
-                    return "Event: ${widget.event.id}\nTeam: ${widget.team.number}\n${widget.team.nickname}";
+                    await dbScoutedPit.insertScoutedPit(scoutedPitSingleton);
+                    return "Team: ${widget.team.number}\n${widget.team.nickname}";
                   })
                 ],
               ),

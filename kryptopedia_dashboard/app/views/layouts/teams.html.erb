@@ -11,7 +11,7 @@
         <h2><%= @team.number %> - <%= @team.nickname %></h2>
       </div>
       <nav class="menu">
-        <%= link_to "Events", team_events_path(@team) %>
+        <%= link_to "Events", team_scouted_events_path(@team) %>
         <%= link_to "Devices", "#" %>
         <%= link_to "Scouters", team_team_members_path(@team) %>
         <%= link_to "Settings?", "#" %>

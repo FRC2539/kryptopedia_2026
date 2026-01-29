@@ -10,17 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_05_231615) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_29_031556) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "devices", force: :cascade do |t|
+    t.bigint "active_event_id"
     t.datetime "created_at", null: false
     t.string "name"
     t.bigint "owner_id"
     t.string "owner_type"
     t.datetime "updated_at", null: false
+    t.index ["active_event_id"], name: "index_devices_on_active_event_id"
     t.index ["owner_type", "owner_id"], name: "index_devices_on_owner"
+  end
+
+  create_table "scouted_events", force: :cascade do |t|
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.bigint "team_id", null: false
+    t.boolean "test"
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_scouted_events_on_team_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -51,5 +63,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_231615) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "devices", "scouted_events", column: "active_event_id"
+  add_foreign_key "scouted_events", "teams"
   add_foreign_key "team_members", "teams"
 end

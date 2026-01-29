@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kryptopedia"
+    namespace = "com.team2539.kryptopedia_2026"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,8 +20,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.kryptopedia"
+        applicationId = "com.team2539.kryptopedia_2026"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

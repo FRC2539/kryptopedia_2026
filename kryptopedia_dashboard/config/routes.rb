@@ -20,7 +20,9 @@ Rails.application.routes.draw do
     post "login/verify_code" => "teams#process_login_code", as: :process_login_code
     get :logout
 
-    resources :events
+    resources :scouted_events
     resources :team_members
+
+    get "api/preauth-info" => "device_api#preauth_info"
   end
 end

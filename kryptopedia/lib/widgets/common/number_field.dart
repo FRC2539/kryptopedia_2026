@@ -72,7 +72,7 @@ class _NumberFieldState extends State<NumberField> {
     );
 
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(12.0),
       child:
           Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
         Expanded(

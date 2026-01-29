@@ -31,13 +31,13 @@ class DbTeams {
     });
   }
 
-  Future<Team> getTeam(int id) async {
+  Future<Team> getTeam(int teamNumber) async {
     Database db = await dbHelper.db;
 
     final List<Map<String, dynamic>> result = await db.query(
       Team.tableName,
       where: "${Team.numberKey} = ?",
-      whereArgs: [id],
+      whereArgs: [teamNumber],
     );
 
     Team returnValue = Team.fromMap(result.first);

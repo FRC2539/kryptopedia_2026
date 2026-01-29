@@ -22,7 +22,6 @@ class DbScoutedPits {
       "${ScoutedPit.shooterTypeKey} INTEGER NOT NULL, "
       "${ScoutedPit.maxFuelCapacityKey} INTEGER NOT NULL, "
       "${ScoutedPit.autoCommentsKey} TEXT NOT NULL, "
-      "${ScoutedPit.imagePathKey} TEXT NOT NULL, "
       "${ScoutedPit.generalCommentsKey} TEXT NOT NULL)",
     );
   }
@@ -31,5 +30,21 @@ class DbScoutedPits {
     Database db = await dbHelper.db;
     int result = await db.insert(ScoutedPit.tableName, scoutedPit.toMap());
     return result;
+  }
+
+  Future<ScoutedPit?> getScoutedPit(int teamNumber) async {
+    Database db = await dbHelper.db;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      ScoutedPit.tableName,
+      where: "${ScoutedPit.teamNumberKey} = ?",
+      whereArgs: [teamNumber],
+    );
+
+    ScoutedPit? scoutedPit = result.isNotEmpty
+        ? ScoutedPit.fromMap(result.first)
+        : null;
+
+    return scoutedPit;
   }
 }

@@ -1299,6 +1299,85 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="hashid-rails (v1.4.1) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="hashid-rails" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1" />
+          <option name="version" value="1.4.1" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/bin" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/.github" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/gemfiles" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/bin" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/.github" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/gemfiles" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/bin" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/.github" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashid-rails-1.4.1/gemfiles" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="hashids (v1.0.6) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="hashids" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6" />
+          <option name="version" value="1.0.6" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6/.github" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6/lib" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6/.github" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6/spec" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/hashids-1.0.6/.github" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="i18n (v1.14.8) [path][gem]" type="rubylib">
         <properties>
           <option name="additionalInfo">

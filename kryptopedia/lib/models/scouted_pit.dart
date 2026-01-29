@@ -46,7 +46,6 @@ class ScoutedPit {
   int maxFuelCapacity = 0;
   String autoComments = "";
 
-  String imagePath = "";
   String generalComments = "";
 
   void setToDefaults(int team) {
@@ -66,7 +65,6 @@ class ScoutedPit {
     maxFuelCapacity = 35;
 
     autoComments = "";
-    imagePath = "";
     generalComments = "";
   }
 
@@ -84,7 +82,6 @@ class ScoutedPit {
   static final shooterTypeKey = "shooter_type";
   static final maxFuelCapacityKey = "max_fuel_capacity";
   static final autoCommentsKey = "auto_comments";
-  static final imagePathKey = "image_path";
   static final generalCommentsKey = "general_comments";
 
   ScoutedPit();
@@ -104,7 +101,6 @@ class ScoutedPit {
       shooterTypeKey: _shooterType,
       maxFuelCapacityKey: maxFuelCapacity,
       autoCommentsKey: autoComments,
-      imagePathKey: imagePath,
       generalCommentsKey: generalComments,
     };
   }
@@ -123,7 +119,6 @@ class ScoutedPit {
       _shooterType = map[shooterTypeKey],
       maxFuelCapacity = map[maxFuelCapacityKey],
       autoComments = map[autoCommentsKey],
-      imagePath = map[imagePathKey],
       generalComments = map[generalCommentsKey];
 }
 

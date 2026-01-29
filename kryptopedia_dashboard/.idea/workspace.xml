@@ -5,10 +5,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e239fbf0-1016-4443-8c59-923808faa00a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/android/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/android/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/android/app/src/main/kotlin/com/example/kryptopedia/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/android/app/src/main/kotlin/com/example/kryptopedia/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/dialogs/db/sync.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/dialogs/db/sync.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/dialogs/generic_confirmation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/dialogs/generic_confirmation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/dialogs/pit_scouting_select.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/dialogs/pit_scouting_select.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/models/event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/models/event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/models/scouted_pit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/models/scouted_pit.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/screens/pit_scouting.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/screens/pit_scouting.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/util/db/events.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/util/db/events.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/util/db/helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/util/db/helper.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/util/db/scouted_pits.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/util/db/scouted_pits.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/util/db/teams.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/util/db/teams.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/widgets/common/number_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/widgets/common/number_field.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/widgets/common/save.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/widgets/common/save.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/widgets/menu/main_menu.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/widgets/menu/main_menu.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/widgets/pit_scouting/3_summary.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/widgets/pit_scouting/3_summary.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/lib/widgets/pit_scouting/camera.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/lib/widgets/pit_scouting/camera.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/linux/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/linux/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kryptopedia/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../kryptopedia/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../kryptopedia/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kryptopedia_dashboard.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kryptopedia_dashboard.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/concerns/team_concern.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/concerns/team_concern.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/events_controller.rb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/helpers/events_helper.rb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/device.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/device.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/team.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/team.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/events/index.html.erb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/layouts/teams.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/layouts/teams.html.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/schema.rb" beforeDir="false" afterPath="$PROJECT_DIR$/db/schema.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +51,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="ERB File" />
+        <option value="Rails Text File" />
       </list>
     </option>
   </component>
@@ -57,26 +90,29 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Rails.kryptopedia_dashboard.executor": "Run",
-    "RailsCreateViewFileDialog.DEFAULT_TEMPLATE": "ERB File",
+    "RailsCreateViewFileDialog.DEFAULT_TEMPLATE": "Rails Text File",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1769219861053",
+    "com.intellij.lang.ruby.rbs.tools.collection.workspace.sync.RbsCollectionUpdateProjectActivity#LAST_UPDATE_TIMESTAMP": "1769655712721",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/usr/bin/ruby",
+    "last_opened_file_path": "/home/dominic/Documents/kryptopedia/kryptopedia_dashboard",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "ruby.structure.view.model.defaults.configured": "true",
-    "settings.editor.selected.configurable": "actions.on.save",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/bin" />
@@ -185,6 +221,10 @@
       <workItem from="1768432308659" duration="957000" />
       <workItem from="1768760919054" duration="19278000" />
       <workItem from="1769219798537" duration="653000" />
+      <workItem from="1769448565697" duration="274000" />
+      <workItem from="1769655653989" duration="1937000" />
+      <workItem from="1769657616001" duration="9000" />
+      <workItem from="1769699122498" duration="4751000" />
     </task>
     <servers />
   </component>
@@ -197,7 +237,7 @@
     </ignored-roots>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/kryptopedia_dashboard@kryptopedia_dashboard.rcov" NAME="kryptopedia_dashboard Coverage Results" MODIFIED="1768784333041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="kryptopedia_dashboard" />
+    <SUITE FILE_PATH="coverage/kryptopedia_dashboard@kryptopedia_dashboard.rcov" NAME="kryptopedia_dashboard Coverage Results" MODIFIED="1769729400311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="kryptopedia_dashboard" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

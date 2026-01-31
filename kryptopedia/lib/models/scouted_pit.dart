@@ -43,6 +43,8 @@ class ScoutedPit {
     _shooterType = value.index;
   }
 
+  int shooterNumber = 0;
+
   int maxFuelCapacity = 0;
   String autoComments = "";
 
@@ -63,6 +65,7 @@ class ScoutedPit {
     fuelPickupMethods = [];
     shooterType = ShooterType.noTurret;
     maxFuelCapacity = 35;
+    shooterNumber = 1;
 
     autoComments = "";
     generalComments = "";
@@ -80,6 +83,7 @@ class ScoutedPit {
   static final drivetrainKey = "drivetrain";
   static final fuelPickupMethodsKey = "fuel_pickup_methods";
   static final shooterTypeKey = "shooter_type";
+  static final shooterNumberKey = "shooter_number";
   static final maxFuelCapacityKey = "max_fuel_capacity";
   static final autoCommentsKey = "auto_comments";
   static final generalCommentsKey = "general_comments";
@@ -100,6 +104,7 @@ class ScoutedPit {
       fuelPickupMethodsKey: _fuelPickupMethods,
       shooterTypeKey: _shooterType,
       maxFuelCapacityKey: maxFuelCapacity,
+      shooterNumberKey: shooterNumber,
       autoCommentsKey: autoComments,
       generalCommentsKey: generalComments,
     };
@@ -118,12 +123,13 @@ class ScoutedPit {
       _fuelPickupMethods = map[fuelPickupMethodsKey],
       _shooterType = map[shooterTypeKey],
       maxFuelCapacity = map[maxFuelCapacityKey],
+      shooterNumber = map[shooterNumberKey],
       autoComments = map[autoCommentsKey],
       generalComments = map[generalCommentsKey];
 }
 
 enum FuelPickupMethod { ground, top }
 
-enum ShooterType { noTurret, singleTurret, doubleTurret }
+enum ShooterType { noTurret, turret }
 
 enum Drivetrain { swerve, tank, mecanum, other }

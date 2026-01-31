@@ -39,8 +39,7 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
             label: "Shooter type",
             options: [
               MultiSelectOption(value: ShooterType.noTurret, label: 'No Turret'),
-              MultiSelectOption(value: ShooterType.singleTurret, label: 'Single Turret'),
-              MultiSelectOption(value: ShooterType.doubleTurret, label: 'Double Turret'),
+                MultiSelectOption(value: ShooterType.turret, label: 'Turret'),
             ],
             initialValue: scoutedPitSingleton.shooterType,
             callback: (value) {
@@ -57,6 +56,15 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
               scoutedPitSingleton.maxFuelCapacity = value;
             },
           ),
+            NumberField(
+              label: "Number of Shooters",
+              minValue: 0,
+              maxValue: 5,
+              startValue: scoutedPitSingleton.shooterNumber,
+              callback: (value) {
+                scoutedPitSingleton.shooterNumber = value;
+              },
+            )
         ]),
       ],
     );

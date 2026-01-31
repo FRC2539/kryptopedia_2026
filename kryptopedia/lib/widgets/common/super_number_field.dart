@@ -11,6 +11,7 @@ class SuperNumberField extends StatefulWidget {
   final int maxValue;
   final int minValue;
   final int startValue;
+  final int superStep;
   final bool allowDirectEditing;
 
   final ValueChanged<int> callback;
@@ -22,6 +23,7 @@ class SuperNumberField extends StatefulWidget {
       required this.minValue,
       required this.maxValue,
       required this.startValue,
+    required this.superStep,
       required this.callback,
       this.allowDirectEditing = true});
 
@@ -225,9 +227,9 @@ class _SuperNumberFieldState extends State<SuperNumberField> {
           ),
           onTap: () {
             int currentValue = int.parse(_controller.text);
-            if (currentValue < widget.maxValue - 7) {
+              if (currentValue < widget.maxValue - widget.superStep + 1) {
               setState(() {
-                currentValue+=8;
+                  currentValue += widget.superStep;
                 _controller.text = (currentValue > 0 ? currentValue : 0)
                     .toString(); // decrementing value
                 widget.callback(currentValue);

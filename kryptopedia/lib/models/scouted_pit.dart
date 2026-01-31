@@ -37,13 +37,15 @@ class ScoutedPit {
     }
   }
 
-  int _shooterType = 0; //enum index
-  ShooterType get shooterType => ShooterType.values[_shooterType];
-  set shooterType(ShooterType value) {
-    _shooterType = value.index;
+  int _hasTurret = 0;
+  bool get hasTurret => _hasTurret == 1;
+  set hasTurret(bool value) {
+    _hasTurret = value ? 1 : 0;
   }
 
   int maxFuelCapacity = 0;
+  int shooterNumber = 0;
+
   String autoComments = "";
 
   String generalComments = "";
@@ -61,8 +63,9 @@ class ScoutedPit {
     drivetrain = Drivetrain.swerve;
 
     fuelPickupMethods = [];
-    shooterType = ShooterType.noTurret;
+    hasTurret = false;
     maxFuelCapacity = 35;
+    shooterNumber = 1;
 
     autoComments = "";
     generalComments = "";
@@ -79,7 +82,8 @@ class ScoutedPit {
   static final isKitBotKey = "is_kit_bot";
   static final drivetrainKey = "drivetrain";
   static final fuelPickupMethodsKey = "fuel_pickup_methods";
-  static final shooterTypeKey = "shooter_type";
+  static final hasTurretKey = "has_turret";
+  static final shooterNumberKey = "shooter_number";
   static final maxFuelCapacityKey = "max_fuel_capacity";
   static final autoCommentsKey = "auto_comments";
   static final generalCommentsKey = "general_comments";
@@ -98,8 +102,9 @@ class ScoutedPit {
       isKitBotKey: _isKitBot,
       drivetrainKey: _drivetrain,
       fuelPickupMethodsKey: _fuelPickupMethods,
-      shooterTypeKey: _shooterType,
+      hasTurretKey: _hasTurret,
       maxFuelCapacityKey: maxFuelCapacity,
+      shooterNumberKey: shooterNumber,
       autoCommentsKey: autoComments,
       generalCommentsKey: generalComments,
     };
@@ -116,14 +121,13 @@ class ScoutedPit {
       _isKitBot = map[isKitBotKey],
       _drivetrain = map[drivetrainKey],
       _fuelPickupMethods = map[fuelPickupMethodsKey],
-      _shooterType = map[shooterTypeKey],
+      _hasTurret = map[hasTurretKey],
       maxFuelCapacity = map[maxFuelCapacityKey],
+      shooterNumber = map[shooterNumberKey],
       autoComments = map[autoCommentsKey],
       generalComments = map[generalCommentsKey];
 }
 
 enum FuelPickupMethod { ground, top }
-
-enum ShooterType { noTurret, singleTurret, doubleTurret }
 
 enum Drivetrain { swerve, tank, mecanum, other }

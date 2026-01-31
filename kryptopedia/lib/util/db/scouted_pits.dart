@@ -19,8 +19,9 @@ class DbScoutedPits {
       "${ScoutedPit.isKitBotKey} INTEGER NOT NULL, "
       "${ScoutedPit.drivetrainKey} INTEGER NOT NULL, "
       "${ScoutedPit.fuelPickupMethodsKey} INTEGER NOT NULL, "
-      "${ScoutedPit.shooterTypeKey} INTEGER NOT NULL, "
+      "${ScoutedPit.hasTurretKey} INTEGER NOT NULL, "
       "${ScoutedPit.maxFuelCapacityKey} INTEGER NOT NULL, "
+      "${ScoutedPit.shooterNumberKey} INTEGER NOT NULL, "
       "${ScoutedPit.autoCommentsKey} TEXT NOT NULL, "
       "${ScoutedPit.generalCommentsKey} TEXT NOT NULL)",
     );

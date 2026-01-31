@@ -24,29 +24,29 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
           portraitMode: LayoutMode.singleColumn,
           landscapeMode: LayoutMode.twoColumn,
           group1: [
-          CheckboxList(
-            title: "Robot intakes from:",
-            options: [
-              MultiSelectOption(value: FuelPickupMethod.ground, label: 'Ground'),
-              MultiSelectOption(value: FuelPickupMethod.top, label: 'Top'),
-            ],
-            initialValues: scoutedPitSingleton.fuelPickupMethods,
-            callback: (values) {
-              scoutedPitSingleton.fuelPickupMethods = values;
-            }
-          ),
-          DropdownList(
-            label: "Shooter type",
-            options: [
-              MultiSelectOption(value: ShooterType.noTurret, label: 'No Turret'),
-              MultiSelectOption(value: ShooterType.singleTurret, label: 'Single Turret'),
-              MultiSelectOption(value: ShooterType.doubleTurret, label: 'Double Turret'),
-            ],
-            initialValue: scoutedPitSingleton.shooterType,
-            callback: (value) {
-              scoutedPitSingleton.shooterType = value;
-            },
-          )
+            CheckboxList(
+              title: "Robot intakes from:",
+              options: [
+                MultiSelectOption(
+                  value: FuelPickupMethod.ground,
+                  label: 'Ground',
+                ),
+                MultiSelectOption(value: FuelPickupMethod.top, label: 'Top'),
+              ],
+              initialValues: scoutedPitSingleton.fuelPickupMethods,
+              callback: (values) {
+                scoutedPitSingleton.fuelPickupMethods = values;
+              },
+            ),
+            CheckboxListTile(
+              title: const Text("Robot has a turret"),
+              value: scoutedPitSingleton.hasTurret,
+              onChanged: (value) {
+                setState(() {
+                  scoutedPitSingleton.hasTurret = value!;
+                });
+              },
+            ),
           ],
           group2: [
           NumberField(label: "Max Fuel Capacity",
@@ -57,6 +57,15 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
               scoutedPitSingleton.maxFuelCapacity = value;
             },
           ),
+            NumberField(
+              label: "Number of Shooters",
+              minValue: 0,
+              maxValue: 5,
+              startValue: scoutedPitSingleton.shooterNumber,
+              callback: (value) {
+                scoutedPitSingleton.shooterNumber = value;
+              },
+            )
         ]),
       ],
     );

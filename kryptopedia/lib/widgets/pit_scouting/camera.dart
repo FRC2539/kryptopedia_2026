@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -42,10 +43,18 @@ class _CameraState extends State<Camera> {
               padding: const EdgeInsets.only(top: 20.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  XFile? pickedImage = await _picker.pickImage(
-                    requestFullMetadata: false,
-                    source: ImageSource.camera,
-                  );
+                  XFile? pickedImage;
+                  if (kDebugMode) {
+                    XFile? pickedImage = await _picker.pickImage(
+                      requestFullMetadata: false,
+                      source: ImageSource.gallery,
+                    );
+                  } else {
+                    XFile? pickedImage = await _picker.pickImage(
+                      requestFullMetadata: false,
+                      source: ImageSource.camera,
+                    );
+                  }
                   if (pickedImage != null) {
                     if (await File(widget.imagePath).exists()) {
                       await File(widget.imagePath).delete();

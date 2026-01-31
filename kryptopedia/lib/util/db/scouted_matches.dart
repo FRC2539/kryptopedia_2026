@@ -14,8 +14,12 @@ class DbScoutedMatches {
       "${ScoutedMatch.autoFuelScoredKey} INTEGER NOT NULL, "
       "${ScoutedMatch.autoFuelFinalKey} INTEGER NOT NULL, "
       "${ScoutedMatch.autoClimbedKey} INTEGER NOT NULL, "
+      "${ScoutedMatch.teleopFuelScoredKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.teleopFuelFedKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.climbLevelKey} INTEGER NOT NULL,"
       "${ScoutedMatch.autoCommentsKey} TEXT NOT NULL, "
-      "${ScoutedMatch.generalCommentsKey} TEXT NOT NULL)",
+      "${ScoutedMatch.defenseCommentsKey} TEXT NOT NULL, "
+      "${ScoutedMatch.generalCommentsKey} TEXT NOT NULL, ",
     );
   }
 

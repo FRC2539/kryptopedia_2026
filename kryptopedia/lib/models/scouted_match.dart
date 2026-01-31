@@ -16,8 +16,17 @@ class ScoutedMatch {
     _autoClimbed = value ? 1 : 0;
   }
 
-  String autoComments = "";
+  int teleopFuelScored = 0;
+  int teleopFuelFed = 0;
 
+  int _climbLevel = 0; //enum index
+  ClimbLevel get climbLevel => ClimbLevel.values[_climbLevel];
+  set climbLevel(ClimbLevel value) {
+    _climbLevel = value.index;
+  }
+
+  String autoComments = "";
+  String defenseComments = "";
   String generalComments = "";
 
   void setToDefaults(int team) {
@@ -28,7 +37,13 @@ class ScoutedMatch {
     autoFuelFinal = 0;
     autoClimbed = false;
 
+    teleopFuelScored = 0;
+    teleopFuelFed = 0;
+
+    climbLevel = ClimbLevel.none;
+
     autoComments = "";
+    defenseComments = "";
     generalComments = "";
   }
 
@@ -38,7 +53,11 @@ class ScoutedMatch {
   static final autoFuelScoredKey = "auto_fuel_scored";
   static final autoFuelFinalKey = "auto_fuel_final";
   static final autoClimbedKey = "auto_climbed";
+  static final teleopFuelScoredKey = "teleop_fuel_scored";
+  static final teleopFuelFedKey = "teleop_fuel_fed";
+  static final climbLevelKey = "climb_level";
   static final autoCommentsKey = "auto_comments";
+  static final defenseCommentsKey = "defense_comments";
   static final generalCommentsKey = "general_comments";
 
   ScoutedMatch();
@@ -50,7 +69,11 @@ class ScoutedMatch {
       autoFuelScoredKey: autoFuelScored,
       autoFuelFinalKey: autoFuelFinal,
       autoClimbedKey: autoClimbed,
+      teleopFuelScoredKey: teleopFuelScored,
+      teleopFuelFedKey: teleopFuelFed,
+      climbLevelKey: climbLevelKey,
       autoCommentsKey: autoComments,
+      defenseCommentsKey: defenseComments,
       generalCommentsKey: generalComments,
     };
   }
@@ -61,6 +84,12 @@ class ScoutedMatch {
       autoFuelScored = map[autoFuelScoredKey],
       autoFuelFinal = map[autoFuelFinalKey],
       _autoClimbed = map[autoClimbedKey],
+      teleopFuelScored = map[teleopFuelScoredKey],
+      teleopFuelFed = map[teleopFuelFedKey],
+      _climbLevel = map[climbLevelKey],
       autoComments = map[autoCommentsKey],
+      defenseComments = map[defenseCommentsKey],
       generalComments = map[generalCommentsKey];
 }
+
+enum ClimbLevel { none, L1, L2, L3 }

@@ -6,19 +6,20 @@ import 'package:kryptopedia/widgets/common/layouts.dart';
 import 'package:kryptopedia/widgets/common/number_field.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/super_number_field.dart';
+import 'package:kryptopedia/widgets/common/text_field.dart';
 
-class AutoMatchScouting extends StatefulWidget {
-  const AutoMatchScouting({super.key});
+class TeleopMatchScouting extends StatefulWidget {
+  const TeleopMatchScouting({super.key});
 
   @override
-  State<AutoMatchScouting> createState() => _AutoMatchScoutingState();
+  State<TeleopMatchScouting> createState() => _TeleopMatchScoutingState();
 }
 
-class _AutoMatchScoutingState extends State<AutoMatchScouting> {
+class _TeleopMatchScoutingState extends State<TeleopMatchScouting> {
   @override
   Widget build(BuildContext context) {
     return ScoutingSection(
-      title: 'Auto Stats',
+      title: 'Teleop Stats',
       children: [
         ResponsiveLayout(
           portraitMode: LayoutMode.singleColumn,
@@ -29,30 +30,29 @@ class _AutoMatchScoutingState extends State<AutoMatchScouting> {
               minValue: 0,
               maxValue: 6767,
               superStep: 8,
-              startValue: scoutedMatchSingleton.autoFuelScored,
+              startValue: scoutedMatchSingleton.teleopFuelScored,
               callback: (int newValue) {
-                scoutedMatchSingleton.autoFuelScored = newValue;
+                scoutedMatchSingleton.teleopFuelScored = newValue;
               },
             ),
-            CheckboxListTile(
-              title: const Text("Robot climbed at end of auto"),
-              value: scoutedMatchSingleton.autoClimbed,
-              onChanged: (value) {
-                setState(() {
-                  scoutedMatchSingleton.autoClimbed = value!;
-                });
+            TextInputField(
+              hint: "defense comments",
+              isMultiline: true,
+              initialValue: "",
+              callback: (value) {
+                scoutedMatchSingleton.defenseComments = value;
               },
             ),
           ],
           group2: [
             SuperNumberField(
-              label: "Fuel held at end of auto",
+              label: "Fuel fed",
               minValue: 0,
               maxValue: 6767,
-              superStep: 10,
-              startValue: scoutedMatchSingleton.autoFuelFinal,
+              superStep: 8,
+              startValue: scoutedMatchSingleton.teleopFuelFed,
               callback: (int newValue) {
-                scoutedMatchSingleton.autoFuelFinal = newValue;
+                scoutedMatchSingleton.teleopFuelFed = newValue;
               },
             ),
           ],

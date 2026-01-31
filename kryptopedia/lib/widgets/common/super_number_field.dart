@@ -218,7 +218,7 @@ class _SuperNumberFieldState extends State<SuperNumberField> {
             width: (Device.isTablet(context)) ? 100.0 : 50.0,
             alignment: Alignment.center,
             child: Text(
-              " +8 ",
+                " +${widget.superStep.toString()} ",
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: Device.fontSize(context, 25.0, 40.0),

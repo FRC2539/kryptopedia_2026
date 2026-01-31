@@ -37,7 +37,12 @@ class ScoutedPit {
     }
   }
 
-  bool hasTurret = false;
+  int _hasTurret = 0;
+  bool get hasTurret => _hasTurret == 1;
+  set hasTurret(bool value) {
+    _hasTurret = value ? 1 : 0;
+  }
+
   int maxFuelCapacity = 0;
   int shooterNumber = 0;
 
@@ -97,7 +102,7 @@ class ScoutedPit {
       isKitBotKey: _isKitBot,
       drivetrainKey: _drivetrain,
       fuelPickupMethodsKey: _fuelPickupMethods,
-      hasTurretKey: hasTurret,
+      hasTurretKey: _hasTurret,
       maxFuelCapacityKey: maxFuelCapacity,
       shooterNumberKey: shooterNumber,
       autoCommentsKey: autoComments,
@@ -116,7 +121,7 @@ class ScoutedPit {
       _isKitBot = map[isKitBotKey],
       _drivetrain = map[drivetrainKey],
       _fuelPickupMethods = map[fuelPickupMethodsKey],
-      hasTurret = map[hasTurretKey],
+      _hasTurret = map[hasTurretKey],
       maxFuelCapacity = map[maxFuelCapacityKey],
       shooterNumber = map[shooterNumberKey],
       autoComments = map[autoCommentsKey],

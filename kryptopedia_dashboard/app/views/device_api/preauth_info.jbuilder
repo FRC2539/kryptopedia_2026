@@ -11,5 +11,5 @@ end
 json.devices @devices do |device|
   json.id device.hashid
   json.name device.name
-  json.used device.session != nil
+  json.used device.session.present?
 end

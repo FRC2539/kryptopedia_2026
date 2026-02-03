@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_29_031556) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_02_135852) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,6 +25,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_031556) do
     t.index ["owner_type", "owner_id"], name: "index_devices_on_owner"
   end
 
+  create_table "scouted_event_teams", force: :cascade do |t|
+    t.datetime "deleted_at"
+    t.bigint "scouted_event_id"
+    t.bigint "team_id"
+    t.datetime "updated_at"
+    t.index ["scouted_event_id", "team_id"], name: "index_set_on_event_id_and_team_id", unique: true
+    t.index ["scouted_event_id"], name: "index_scouted_event_teams_on_scouted_event_id"
+    t.index ["team_id"], name: "index_scouted_event_teams_on_team_id"
+  end
+
   create_table "scouted_events", force: :cascade do |t|
     t.string "code"
     t.datetime "created_at", null: false
@@ -33,6 +43,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_031556) do
     t.boolean "test"
     t.datetime "updated_at", null: false
     t.index ["team_id"], name: "index_scouted_events_on_team_id"
+  end
+
+  create_table "session_requests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "device_id", null: false
+    t.datetime "expires_at"
+    t.bigint "scouted_event_id", null: false
+    t.bigint "session_id"
+    t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_session_requests_on_device_id"
+    t.index ["scouted_event_id"], name: "index_session_requests_on_scouted_event_id"
+    t.index ["session_id"], name: "index_session_requests_on_session_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -65,5 +87,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_031556) do
 
   add_foreign_key "devices", "scouted_events", column: "active_event_id"
   add_foreign_key "scouted_events", "teams"
+  add_foreign_key "session_requests", "devices"
+  add_foreign_key "session_requests", "scouted_events"
+  add_foreign_key "session_requests", "sessions"
   add_foreign_key "team_members", "teams"
 end

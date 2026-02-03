@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/db/setup.dart';
 import 'package:kryptopedia/dialogs/generic_confirmation.dart';
+import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/helper.dart';
@@ -46,20 +47,32 @@ class _SyncPopupState extends State<SyncPopup> {
               if (!snapshot.data!.syncEnabled) {
                 return Text("local-only: sync is not set up");
               }
-              return Row(
-                spacing: 8,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    label: Text("Push Data"),
-                    icon: Icon(Icons.upload),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    label: Text("Pull Data"),
-                    icon: Icon(Icons.download),
-                  ),
-                ],
+              bool buttonEnabled = true;
+              return ElevatedButton.icon(
+                onPressed: buttonEnabled
+                    ? () async {
+                        setState(() {
+                          buttonEnabled = false;
+                        });
+                        DbHelper dbHelper = DbHelper();
+                        String? error = await dbHelper.syncData();
+                        setState(() {
+                          buttonEnabled = true;
+                        });
+                        if (error != null) {
+                          if (!context.mounted) return;
+                          await showDialog(
+                            context: context,
+                            builder: (context) => NotificationDialog(
+                              title: "Sync Error",
+                              body: error,
+                            ),
+                          );
+                        }
+                      }
+                    : null,
+                label: Text("Sync Data"),
+                icon: Icon(Icons.sync),
               );
             },
           ),

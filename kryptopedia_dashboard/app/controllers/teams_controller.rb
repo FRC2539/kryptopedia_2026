@@ -27,7 +27,7 @@ class TeamsController < ApplicationController
       s = Session.create(owner: team_member)
       cookies.signed[:session_auth_token] = { value: s.auth_token, expires: 1.week.from_now }
       team_member.update!(email_code: nil, email_code_sent_at: nil)
-      redirect_to team_events_path(@team)
+      redirect_to team_home_feed_path(@team)
     else
       redirect_to team_verify_login_code_path(@team), alert: "nope. maybe it expired?"
     end
@@ -39,11 +39,18 @@ class TeamsController < ApplicationController
     redirect_to team_login_path(@team), notice: "logged out!"
   end
 
+  def home_feed
+    @alert_cards = []
+
+    unanswered_session_requests = SessionRequest.alive.where(device: @team.devices, session_id: nil)
+    @alert_cards << unanswered_session_requests
+  end
+
   private
 
   def dont_reauth!
     if current_user
-      redirect_to team_events_path(@team)
+      redirect_to team_home_feed_path(@team)
     end
   end
 end

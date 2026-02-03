@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   root "pages#index"
 
   resources :teams, path: "", param: :number do
+    get "/" => "teams#home_feed", as: :home_feed
     get "login" => "teams#login", as: :login
     post "login" => "teams#send_login_code", as: :send_login_code
     get "login/verify_code" => "teams#verify_login_code", as: :verify_login_code
@@ -24,5 +25,10 @@ Rails.application.routes.draw do
     resources :team_members
 
     get "api/preauth-info" => "device_api#preauth_info"
+    get "api/start-session" => "device_api#request_session"
+    get "api/poke-session" => "device_api#check_session_request"
+    get "api/me" => "device_api#me"
+    post "api/sync" => "device_api#sync"
+
   end
 end

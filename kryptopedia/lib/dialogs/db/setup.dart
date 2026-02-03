@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/team.dart';
+import 'package:kryptopedia/util/api.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/device.dart';
@@ -73,14 +74,21 @@ class TeamDeviceForm extends StatefulWidget {
 }
 
 class _TeamDeviceFormState extends State<TeamDeviceForm> {
+  @override
+  void initState() {
+    super.initState();
+    apiDataChanged();
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   int teamNumber = 2539;
   String serverURL = "https://2539scouting.userexe.me";
-  String deviceName = "Red 1";
+  PartialEventData? event;
+  String deviceId = "";
 
   bool submitEnabled = true;
-  void submit() {
+  void submit() async {
     setState(() {
       submitEnabled = false;
     });
@@ -92,17 +100,122 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     }
     _formKey.currentState!.save();
 
-    return errorOut("uh this doesnt work yet");
+    dynamic sessionRequest = await Api.startSessionRequest(
+      serverURL,
+      teamNumber,
+      event!.id,
+      deviceId,
+    );
+
+    if (!mounted) return;
+    bool dialogOpen = true;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return NotificationDialog(
+          title: "Awaiting confirmation",
+          body:
+              "Confirmation is required- log into the dashboard to authorize this device.\n"
+              "Request ID: ${sessionRequest.data["request_id"]}",
+          okButtonText: "Cancel",
+        );
+      },
+    ).then((value) {
+      dialogOpen = false;
+    });
+
+    bool approved = false;
+    String? token;
+    while (!approved && dialogOpen) {
+      await Future.delayed(Duration(seconds: 3));
+      dynamic pokeResponse = await Api.pokeSessionRequest(
+        serverURL,
+        teamNumber,
+        sessionRequest.data["request_id"],
+      );
+      if (pokeResponse.success &&
+          pokeResponse.data["session_auth_token"] != null) {
+        approved = true;
+        token = pokeResponse.data["session_auth_token"];
+      }
+      if (pokeResponse.data == 404) {
+        //request was denied
+        if (!mounted) return;
+        Navigator.pop(context);
+        return;
+      }
+    }
+
+    if (!dialogOpen) {
+      setState(() {
+        submitEnabled = true;
+      });
+      return;
+    }
+
+    if (!mounted) return;
+    Navigator.pop(context);
+
+    Event eventData = Event(
+      0,
+      event!.name,
+      event!.code,
+      event!.year,
+      serverURL,
+      token,
+      teamNumber,
+      0,
+    );
+    DbEvents dbEvents = DbEvents();
+    await dbEvents.insertEvent(eventData);
+
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
-  void errorOut(String message) async {
-    await showDialog(
-      context: context,
-      builder: (context) =>
-          NotificationDialog(title: "Uh oh, pop-up", body: message),
-    );
+  String? apiError;
+  List<DropdownMenuItem<PartialEventData>> eventsOptions = [];
+  List<DropdownMenuItem<String>> devicesOptions = [];
+  void apiDataChanged() async {
+    APIResponse data = await Api.preauthInfo(serverURL, teamNumber);
+    if (!data.success) {
+      return setState(() {
+        apiError = data.data.toString();
+      });
+    }
+
+    List<dynamic> events = data.data["events"];
+    List<dynamic> devices = data.data["devices"];
+
+    if (events.isEmpty) {
+      return setState(() {
+        apiError = "no events exist!";
+      });
+    }
+    if (devices.isEmpty) {
+      return setState(() {
+        apiError = "no teams exist!";
+      });
+    }
+
+    eventsOptions = events
+        .map(
+          (e) => DropdownMenuItem(
+            value: PartialEventData(e["name"], e["code"], e["year"], e["id"]),
+            child: Text(e["name"]),
+          ),
+        )
+        .toList();
+    devicesOptions = devices
+        .map(
+          (e) =>
+              DropdownMenuItem<String>(value: e["id"], child: Text(e["name"])),
+        )
+        .toList();
+
     setState(() {
-      submitEnabled = true;
+      apiError = null;
     });
   }
 
@@ -121,18 +234,24 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
               LengthLimitingTextInputFormatter(5),
             ],
             initialValue: teamNumber.toString(),
-            onSaved: (newValue) => teamNumber = int.parse(newValue!),
+            onChanged: (v) => teamNumber = int.tryParse(v) ?? 0,
+            autovalidateMode: AutovalidateMode.onUnfocus,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
                 return 'must be present';
               }
+              apiDataChanged();
               return null;
             },
           ),
           TextFormField(
-            decoration: const InputDecoration(label: Text("Server URL")),
+            decoration: InputDecoration(
+              label: Text("Server URL"),
+              errorText: apiError,
+            ),
             initialValue: serverURL,
-            onSaved: (newValue) => serverURL = newValue!,
+            onChanged: (v) => serverURL = v,
+            autovalidateMode: AutovalidateMode.onUnfocus,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
                 return 'must be present';
@@ -140,18 +259,32 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
               if (value.endsWith("/")) {
                 return "don't end it with a slash";
               }
-              if (!value.startsWith("https://")) {
+              if (!RegExp(r"https?:\/\/.+").hasMatch(value)) {
                 return "must be an https url";
+              }
+              apiDataChanged();
+              return null;
+            },
+          ),
+
+          DropdownButtonFormField(
+            decoration: InputDecoration(label: Text("Event")),
+            items: eventsOptions,
+            onChanged: (v) => event = v!,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (value == null) {
+                return 'must be present';
               }
               return null;
             },
           ),
-          //TODO should be a dropdown after the server url is entered?
-          TextFormField(
-            decoration: const InputDecoration(label: Text("Device name")),
-            initialValue: deviceName,
-            onSaved: (newValue) => deviceName = newValue!,
-            validator: (String? value) {
+          DropdownButtonFormField(
+            decoration: InputDecoration(label: Text("Device")),
+            items: devicesOptions,
+            onChanged: (v) => deviceId = v ?? "",
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'must be present';
               }
@@ -172,6 +305,15 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       ),
     );
   }
+}
+
+class PartialEventData {
+  final String name;
+  final String code;
+  final int year;
+  final String id;
+
+  PartialEventData(this.name, this.code, this.year, this.id);
 }
 
 class TestDataForm extends StatefulWidget {
@@ -226,7 +368,7 @@ class _TestDataFormState extends State<TestDataForm> {
       }
       teams.add(Team(i, "Test Team $i"));
     }
-    await Future.wait(teams.map((t) => dbTeams.insertTeam(t)));
+    await Future.wait(teams.map((t) => dbTeams.upsertTeam(t)));
 
     //TODO add test matches
 

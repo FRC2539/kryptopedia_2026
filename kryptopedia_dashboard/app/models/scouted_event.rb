@@ -20,10 +20,44 @@
 #
 class ScoutedEvent < ApplicationRecord
   include Hashid::Rails
-  
-  belongs_to :team
 
-  validates :name, presence: true
-  validates :code, presence: true
+  belongs_to :owner, class_name: "Team", foreign_key: "team_id"
+  has_many :scouted_event_teams
+  has_many :teams,
+           -> { where(scouted_event_teams: { deleted_at: nil }) },
+           through: :scouted_event_teams,
+           before_add: :revive_or_create_join,
+           before_remove: :soft_remove_team_from_event
+
+  validates :name, presence: true, uniqueness: { scope: :team_id }
+  validates :code, presence: true, uniqueness: { scope: :team_id }
   validates :test, presence: true
+
+  private
+
+  def revive_or_create_join(team)
+    join = ScoutedEventTeam.unscoped.find_or_initialize_by(
+      scouted_event_id: id,
+      team_id: team.id
+    )
+
+    # If it was soft-deleted, revive by clearing deleted_at.
+    if join.new_record?
+      join.deleted_at = nil
+      join.save!
+    elsif join.deleted_at.present?
+      join.update!(deleted_at: nil)
+    end
+
+    # Stop Rails from trying to create another join record after callback.
+    throw(:abort)
+  end
+
+  def soft_remove_team_from_event(team)
+    scouted_event_teams
+      .where(team_id: team.id, deleted_at: nil)
+      .update_all(deleted_at: Time.current, updated_at: Time.current)
+
+    throw(:abort)
+  end
 end

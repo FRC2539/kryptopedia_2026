@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/singletons.dart';
@@ -21,8 +20,6 @@ class PitScouting extends StatefulWidget {
 }
 
 class _PitScoutingState extends State<PitScouting> {
-  // final DbScoutedPit dbScoutedPit = DbScoutedPit();
-
   @override
   void initState() {
     super.initState();

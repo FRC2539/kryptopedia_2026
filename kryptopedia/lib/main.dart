@@ -2,7 +2,6 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/db/setup.dart';
 import 'package:kryptopedia/dialogs/db/sync.dart';
-import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/widgets/menu/main_menu.dart';

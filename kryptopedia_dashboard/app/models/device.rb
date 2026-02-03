@@ -21,9 +21,15 @@
 #
 class Device < ApplicationRecord
   include Hashid::Rails
-  
+
   belongs_to :owner, polymorphic: true
 
+  validates :name, presence: true, uniqueness: { scope: :owner_id }
+
   has_one :session, as: :owner, dependent: :destroy
-  has_one :active_event, class_name: "ScoutedEvent"
+  belongs_to :active_event, class_name: "ScoutedEvent"
+
+  def team
+    owner.is_a?(Team) ? owner : owner.team
+  end
 end

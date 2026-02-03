@@ -15,6 +15,8 @@
 #  index_sessions_on_owner       (owner_type,owner_id)
 #
 class Session < ApplicationRecord
+  include Hashid::Rails
+
   belongs_to :owner, polymorphic: true
 
   has_secure_token :auth_token

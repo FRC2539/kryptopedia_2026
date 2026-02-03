@@ -1,10 +1,39 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Api {
-  static Future<dynamic> _makeRequest(String URL) async {
+  static Future<APIResponse> _makeRequest(
+    String url, [
+    String? token,
+    String? body,
+  ]) async {
     try {
-      Response response = await get(Uri.parse(URL));
+      String appVersion = await PackageInfo.fromPlatform().then(
+        (packageInfo) => packageInfo.version,
+      );
+      Response response;
+      if (body != null) {
+        response = await post(
+          Uri.parse(url),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-App-Version": appVersion,
+            if (token != null) "Authorization": "Bearer $token",
+          },
+          body: body,
+        );
+      } else {
+        response = await get(
+          Uri.parse(url),
+          headers: {
+            "Accept": "application/json",
+            "X-App-Version": appVersion,
+            if (token != null) "Authorization": "Bearer $token",
+          },
+        );
+      }
       if (response.statusCode.toString().startsWith("2")) {
         return APIResponse(success: true, data: json.decode(response.body));
       } else {
@@ -15,14 +44,60 @@ class Api {
     }
   }
 
-  static Future<dynamic> preauthInfo(String serverURL) async {
-    return await _makeRequest("$serverURL/api/preauth-info");
+  static Future<APIResponse> preauthInfo(
+    String serverURL,
+    int teamNumber,
+  ) async {
+    return await _makeRequest("$serverURL/$teamNumber/api/preauth-info");
+  }
+
+  static Future<APIResponse> startSessionRequest(
+    String serverURL,
+    int teamNumber,
+    String eventId,
+    String deviceId,
+  ) async {
+    return await _makeRequest(
+      "$serverURL/$teamNumber/api/start-session?event_id=$eventId&device_id=$deviceId",
+    );
+  }
+
+  static Future<APIResponse> pokeSessionRequest(
+    String serverURL,
+    int teamNumber,
+    String sessionRequestId,
+  ) async {
+    return await _makeRequest(
+      "$serverURL/$teamNumber/api/poke-session?request_id=$sessionRequestId",
+    );
+  }
+
+  static Future<APIResponse> syncData(
+    String serverURL,
+    int teamNumber,
+    String authToken,
+    String lastSync,
+    List<SyncDataItem> data,
+  ) async {
+    return await _makeRequest(
+      "$serverURL/$teamNumber/api/sync?since=$lastSync",
+      authToken,
+      jsonEncode(data),
+    );
   }
 }
 
-class APIResponse {
+class APIResponse<T> {
   final bool success;
-  final dynamic data;
+  final T data;
 
   APIResponse({required this.success, required this.data});
+}
+
+class SyncDataItem {
+  final String type;
+  final dynamic data;
+  final String? uid;
+
+  SyncDataItem({required this.type, required this.data, this.uid});
 }

@@ -5,7 +5,7 @@ import 'package:kryptopedia/util/db/events.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
-//TODO this sytem will still not work well with scouting conflicts :( rethink
+//TODO this sytem will still not work well with conflicts :( rethink
 Future<String> robotPicturePath(int teamNumber) async {
   DbEvents dbEvents = DbEvents();
   Event? event = await dbEvents.getEvent();
@@ -15,5 +15,5 @@ Future<String> robotPicturePath(int teamNumber) async {
     "${appDir.path}/Robot_Pics",
   ).create();
 
-  return join(robotPicsDir.path, "${event?.code}_${teamNumber}_robot.jpg");
+  return join(robotPicsDir.path, "${event.code}_${teamNumber}_robot.jpg");
 }

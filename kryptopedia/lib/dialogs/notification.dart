@@ -7,12 +7,16 @@ class NotificationDialog extends StatelessWidget {
   final String title;
   final String body;
   final Color titleColor;
+  final String okButtonText;
+  final bool showOkButton;
 
   const NotificationDialog({
     super.key,
     required this.title,
     required this.body,
     this.titleColor = Colors.orange,
+    this.okButtonText = "Ok",
+    this.showOkButton = true,
   });
 
   @override
@@ -40,17 +44,22 @@ class NotificationDialog extends StatelessWidget {
                 ),
               ),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                child: AutoSizeText(
-                  "Ok",
-                  style: TextStyle(
-                    fontSize: Device.fontSize(context, 15.0, 20.0),
-                    color: Colors.black,
+            Visibility(
+              visible: showOkButton,
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                  ),
+                  child: AutoSizeText(
+                    okButtonText,
+                    style: TextStyle(
+                      fontSize: Device.fontSize(context, 15.0, 20.0),
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),

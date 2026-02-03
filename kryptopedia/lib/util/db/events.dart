@@ -18,7 +18,6 @@ class DbEvents {
       "${Event.authTokenKey} TEXT, "
       "${Event.teamNumberKey} INTEGER NOT NULL, "
       "${Event.lastSyncKey} INTEGER NOT NULL)",
-
     );
   }
 
@@ -48,5 +47,15 @@ class DbEvents {
     );
 
     return Event.fromMap(result.first);
+  }
+
+  Future<int> updateSyncTime(DateTime syncTime) async {
+    Database db = await dbHelper.db;
+
+    int result = await db.update(Event.tableName, {
+      Event.lastSyncKey: syncTime.millisecondsSinceEpoch,
+    }, where: "${Event.idKey} = 0");
+
+    return result;
   }
 }

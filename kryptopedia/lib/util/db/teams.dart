@@ -15,9 +15,13 @@ class DbTeams {
     );
   }
 
-  Future<int> insertTeam(Team team) async {
+  Future<int> upsertTeam(Team team) async {
     Database db = await dbHelper.db;
-    int result = await db.insert(Team.tableName, team.toMap());
+    int result = await db.insert(
+      Team.tableName,
+      team.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return result;
   }
 
@@ -43,5 +47,17 @@ class DbTeams {
     Team returnValue = Team.fromMap(result.first);
 
     return returnValue;
+  }
+
+  Future<int> deleteTeam(int teamNumber) async {
+    Database db = await dbHelper.db;
+
+    int result = await db.delete(
+      Team.tableName,
+      where: "${Team.numberKey} = ?",
+      whereArgs: [teamNumber],
+    );
+
+    return result;
   }
 }

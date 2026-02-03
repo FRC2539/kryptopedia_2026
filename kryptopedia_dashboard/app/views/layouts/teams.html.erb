@@ -6,10 +6,13 @@
   <div class="team-color-strip" style="background-color: <%= @team.colors[:primary] %>"></div>
   <div class="team-header">
     <div class="left">
-      <div class="name-stack">
-        <h1>Kryptopedia</h1>
-        <h2><%= @team.number %> - <%= @team.nickname %></h2>
-      </div>
+      <%= link_to team_home_feed_path(@team) do %>
+        <div class="name-stack">
+          <h1>Kryptopedia</h1>
+          <h2><%= @team.number %> - <%= @team.nickname %></h2>
+        </div>
+      <% end %>
+      
       <nav class="menu">
         <%= link_to "Events", team_scouted_events_path(@team) %>
         <%= link_to "Devices", "#" %>

@@ -21,6 +21,8 @@
 #  fk_rails_...  (team_id => teams.id)
 #
 class TeamMember < ApplicationRecord
+  include Hashid::Rails
+
   belongs_to :team
 
   validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :team_id }

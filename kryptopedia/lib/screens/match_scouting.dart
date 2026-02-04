@@ -63,7 +63,7 @@ class _MatchScoutingState extends State<MatchScouting> {
                 ScoutingSave(
                   saveFunction: () async {
                     DbScoutedMatches dbScoutedMatch = DbScoutedMatches();
-                    await dbScoutedMatch.insertScoutedmatch(
+                    await dbScoutedMatch.insertScoutedMatch(
                       scoutedMatchSingleton,
                     );
                     return "Team: ${widget.team.number}\n${widget.team.nickname}";

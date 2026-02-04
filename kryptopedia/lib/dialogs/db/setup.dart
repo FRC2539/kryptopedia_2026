@@ -6,6 +6,7 @@ import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/api.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/sync.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/widgets/common/number_field.dart';
@@ -84,7 +85,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
 
   int teamNumber = 2539;
   String serverURL = "https://2539scouting.userexe.me";
-  PartialEventData? event;
+  Map<String, dynamic>? event;
   String deviceId = "";
 
   bool submitEnabled = true;
@@ -92,7 +93,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     setState(() {
       submitEnabled = false;
     });
-    if (!_formKey.currentState!.validate()) {
+    if (!_formKey.currentState!.validate() || apiError != null) {
       setState(() {
         submitEnabled = true;
       });
@@ -103,7 +104,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     dynamic sessionRequest = await Api.startSessionRequest(
       serverURL,
       teamNumber,
-      event!.id,
+      event!["id"],
       deviceId,
     );
 
@@ -142,12 +143,19 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       if (pokeResponse.data == 404) {
         //request was denied
         if (!mounted) return;
+        submitEnabled = true;
         Navigator.pop(context);
         return;
       }
     }
 
-    if (!dialogOpen) {
+    //canceled
+    if (!dialogOpen && !approved) {
+      Api.cancelSessionRequest(
+        serverURL,
+        teamNumber,
+        sessionRequest.data["request_id"],
+      );
       setState(() {
         submitEnabled = true;
       });
@@ -159,9 +167,9 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
 
     Event eventData = Event(
       0,
-      event!.name,
-      event!.code,
-      event!.year,
+      event!["name"],
+      event!["code"],
+      event!["year"],
       serverURL,
       token,
       teamNumber,
@@ -172,11 +180,14 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
 
     if (!mounted) return;
     Navigator.pop(context);
+
+    await syncDataFlow(context);
   }
 
   String? apiError;
-  List<DropdownMenuItem<PartialEventData>> eventsOptions = [];
+  List<DropdownMenuItem<String>> eventsOptions = [];
   List<DropdownMenuItem<String>> devicesOptions = [];
+  Map<String, dynamic> eventsMap = {};
   void apiDataChanged() async {
     APIResponse data = await Api.preauthInfo(serverURL, teamNumber);
     if (!data.success) {
@@ -199,14 +210,10 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       });
     }
 
-    eventsOptions = events
-        .map(
-          (e) => DropdownMenuItem(
-            value: PartialEventData(e["name"], e["code"], e["year"], e["id"]),
-            child: Text(e["name"]),
-          ),
-        )
-        .toList();
+    eventsOptions = events.map((e) {
+      eventsMap[e["id"]] = e;
+      return DropdownMenuItem<String>(value: e["id"], child: Text(e["name"]));
+    }).toList();
     devicesOptions = devices
         .map(
           (e) =>
@@ -270,7 +277,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
           DropdownButtonFormField(
             decoration: InputDecoration(label: Text("Event")),
             items: eventsOptions,
-            onChanged: (v) => event = v!,
+            onChanged: (v) => event = eventsMap[v],
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
               if (value == null) {
@@ -305,15 +312,6 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       ),
     );
   }
-}
-
-class PartialEventData {
-  final String name;
-  final String code;
-  final int year;
-  final String id;
-
-  PartialEventData(this.name, this.code, this.year, this.id);
 }
 
 class TestDataForm extends StatefulWidget {

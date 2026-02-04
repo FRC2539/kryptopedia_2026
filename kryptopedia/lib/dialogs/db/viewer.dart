@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
+import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
+import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 
 class DbViewerDialog extends StatefulWidget {
@@ -21,6 +23,7 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     DropdownMenuItem(value: Event.tableName, child: Text("Events")),
     DropdownMenuItem(value: Team.tableName, child: Text("Teams")),
     DropdownMenuItem(value: ScoutedPit.tableName, child: Text("Scouted Pits")),
+    DropdownMenuItem(value: TeamMember.tableName, child: Text("Team Members")),
   ];
 
   Future<Map<String, List<dynamic>>> getData() async {
@@ -37,6 +40,10 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     DbScoutedPits dbScoutedPits = DbScoutedPits();
     List<ScoutedPit> scoutedPits = await dbScoutedPits.getScoutedPits();
     result[ScoutedPit.tableName] = scoutedPits;
+
+    DbTeamMembers dbTeamMembers = DbTeamMembers();
+    List<TeamMember> teamMembers = await dbTeamMembers.getTeamMembers();
+    result[TeamMember.tableName] = teamMembers;
 
     return result;
   }
@@ -108,6 +115,12 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
                                 "Scouted Pit - Team: ${pit.teamNumber}",
                               ),
                               subtitle: Text(pit.toMap().toString()),
+                            );
+                          case TeamMember.tableName:
+                            TeamMember member = tableData[index] as TeamMember;
+                            return ListTile(
+                              title: Text("Team Member: ${member.name}"),
+                              subtitle: Text("ID: ${member.id}"),
                             );
                           default:
                             return ListTile(title: Text("Unknown Table"));

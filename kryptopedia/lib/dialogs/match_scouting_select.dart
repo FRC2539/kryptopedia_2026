@@ -32,7 +32,7 @@ class _ScoutmatchSelectionDialogState extends State<ScoutmatchSelectionDialog> {
 
     final results = await Future.wait(
       teams.map((t) async {
-        final match = await dbScoutedmatches.getScoutedmatch(t.number);
+        final match = await dbScoutedmatches.getScoutedMatch(t.number);
         return match == null ? t : null;
       }),
     );

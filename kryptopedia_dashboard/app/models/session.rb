@@ -17,7 +17,16 @@
 class Session < ApplicationRecord
   include Hashid::Rails
 
+  before_create :delete_other_sessions
+
   belongs_to :owner, polymorphic: true
+  has_one :session_request, dependent: :destroy
 
   has_secure_token :auth_token
+
+  private
+
+  def delete_other_sessions
+    Session.where(owner: owner).delete_all
+  end
 end

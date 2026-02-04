@@ -1,7 +1,7 @@
 class DeviceApiController < ApplicationController
   include TeamConcern
 
-  before_action :restrict_to_team_member, except: [:preauth_info, :request_session, :check_session_request]
+  before_action :restrict_to_team_member, except: [:preauth_info, :request_session, :check_session_request, :cancel_session_request]
   skip_before_action :verify_authenticity_token
 
   def preauth_info
@@ -29,6 +29,13 @@ class DeviceApiController < ApplicationController
     end
   end
 
+  def cancel_session_request
+    request = SessionRequest.alive.find_by_hashid(params[:request_id])
+    render json: { error: "not found" }, status: 404 and return unless request
+    request.destroy!
+    render json: { success: true }
+  end
+
   def me
     render json: {
       me: current_user.as_json
@@ -36,14 +43,14 @@ class DeviceApiController < ApplicationController
   end
 
   def sync
-    # TODO: process incoming data
+    render json: { error: "no" }, status: :forbidden and return if current_user.is_a? TeamMember # very good protection im so good at this
 
     since = params[:since] ? Time.parse(params[:since]).. : (10.years.ago..)
     event = current_user.active_event
 
     @synced_to = Time.current
     @teams = ScoutedEventTeam.where(updated_at: since, scouted_event: event)
-
-    puts @teams.count
+    @team_members = TeamMember.where(updated_at: since, team: current_user.team)
   end
+
 end

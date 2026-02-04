@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/db/setup.dart';
 import 'package:kryptopedia/dialogs/db/viewer.dart';
 import 'package:kryptopedia/dialogs/generic_confirmation.dart';
-import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/helper.dart';
+import 'package:kryptopedia/util/db/sync.dart';
+import 'package:relative_time/relative_time.dart';
 
 class SyncPopup extends StatefulWidget {
   const SyncPopup({super.key});
@@ -15,15 +16,23 @@ class SyncPopup extends StatefulWidget {
 
 class _SyncPopupState extends State<SyncPopup> {
   bool syncEnabled = false;
+  String lastSync = "Never";
 
-  @override
-  void initState() {
+  void loadState() {
     DbEvents dbEvents = DbEvents();
     dbEvents.getEvent().then((value) {
       setState(() {
         syncEnabled = value.syncEnabled;
+        lastSync = RelativeTime.locale(
+          const Locale('en'),
+        ).format(value.lastSync);
       });
     });
+  }
+
+  @override
+  void initState() {
+    loadState();
     super.initState();
   }
 
@@ -44,36 +53,15 @@ class _SyncPopupState extends State<SyncPopup> {
       content: Column(
         spacing: 8,
         children: [
+          Text("Last Sync: $lastSync"),
           ElevatedButton.icon(
             onPressed: syncEnabled
                 ? () async {
                     setState(() {
                       syncEnabled = false;
                     });
-                    DbHelper dbHelper = DbHelper();
-                    String? error = await dbHelper.syncData();
-                    if (error != null) {
-                      if (!context.mounted) return;
-                      await showDialog(
-                        context: context,
-                        builder: (context) => NotificationDialog(
-                          title: "Sync Error",
-                          body: error,
-                        ),
-                      );
-                    } else {
-                      if (!context.mounted) return;
-                      await showDialog(
-                        context: context,
-                        builder: (context) => NotificationDialog(
-                          title: "Sync Complete",
-                          body: "Data synced successfully! woohoo",
-                        ),
-                      );
-                    }
-                    setState(() {
-                      syncEnabled = true;
-                    });
+                    await syncDataFlow(context);
+                    loadState();
                   }
                 : null,
             label: Text("Sync Data"),

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_02_135852) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_04_014245) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_135852) do
     t.boolean "test"
     t.datetime "updated_at", null: false
     t.index ["team_id"], name: "index_scouted_events_on_team_id"
+  end
+
+  create_table "scouting_data_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "data"
+    t.bigint "scouted_event_id", null: false
+    t.bigint "team_member_id", null: false
+    t.string "type"
+    t.string "uid"
+    t.datetime "updated_at", null: false
+    t.index ["scouted_event_id"], name: "index_scouting_data_items_on_scouted_event_id"
+    t.index ["team_member_id"], name: "index_scouting_data_items_on_team_member_id"
   end
 
   create_table "session_requests", force: :cascade do |t|
@@ -87,6 +99,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_135852) do
 
   add_foreign_key "devices", "scouted_events", column: "active_event_id"
   add_foreign_key "scouted_events", "teams"
+  add_foreign_key "scouting_data_items", "scouted_events"
+  add_foreign_key "scouting_data_items", "team_members"
   add_foreign_key "session_requests", "devices"
   add_foreign_key "session_requests", "scouted_events"
   add_foreign_key "session_requests", "sessions"

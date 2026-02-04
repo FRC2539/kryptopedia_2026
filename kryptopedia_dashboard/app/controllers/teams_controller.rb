@@ -2,6 +2,7 @@ class TeamsController < ApplicationController
   include TeamConcern
 
   before_action :dont_reauth!, only: [:login, :send_login_code, :verify_login_code, :process_login_code]
+  before_action :restrict_to_team_admin, only: [:home_feed]
 
   def login
   end
@@ -43,7 +44,7 @@ class TeamsController < ApplicationController
     @alert_cards = []
 
     unanswered_session_requests = SessionRequest.alive.where(device: @team.devices, session_id: nil)
-    @alert_cards << unanswered_session_requests
+    @alert_cards += unanswered_session_requests
   end
 
   private

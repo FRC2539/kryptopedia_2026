@@ -4,10 +4,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class Api {
   static Future<APIResponse> _makeRequest(
-    String url, [
+    String url, {
     String? token,
     String? body,
-  ]) async {
+  }) async {
     try {
       String appVersion = await PackageInfo.fromPlatform().then(
         (packageInfo) => packageInfo.version,
@@ -59,6 +59,18 @@ class Api {
   ) async {
     return await _makeRequest(
       "$serverURL/$teamNumber/api/start-session?event_id=$eventId&device_id=$deviceId",
+      body: "",
+    );
+  }
+
+  static Future<APIResponse> cancelSessionRequest(
+    String serverURL,
+    int teamNumber,
+    String sessionRequestId,
+  ) async {
+    return await _makeRequest(
+      "$serverURL/$teamNumber/api/cancel-session-request?request_id=$sessionRequestId",
+      body: "",
     );
   }
 
@@ -81,8 +93,8 @@ class Api {
   ) async {
     return await _makeRequest(
       "$serverURL/$teamNumber/api/sync?since=$lastSync",
-      authToken,
-      jsonEncode(data),
+      token: authToken,
+      body: jsonEncode(data),
     );
   }
 }

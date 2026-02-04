@@ -27,7 +27,7 @@ class Device < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :owner_id }
 
   has_one :session, as: :owner, dependent: :destroy
-  belongs_to :active_event, class_name: "ScoutedEvent"
+  belongs_to :active_event, class_name: "ScoutedEvent", optional: true
 
   def team
     owner.is_a?(Team) ? owner : owner.team

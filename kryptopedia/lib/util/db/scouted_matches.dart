@@ -23,13 +23,13 @@ class DbScoutedMatches {
     );
   }
 
-  Future<int> insertScoutedmatch(ScoutedMatch scoutedmatch) async {
+  Future<int> insertScoutedMatch(ScoutedMatch scoutedMatch) async {
     Database db = await dbHelper.db;
-    int result = await db.insert(ScoutedMatch.tableName, scoutedmatch.toMap());
+    int result = await db.insert(ScoutedMatch.tableName, scoutedMatch.toMap());
     return result;
   }
 
-  Future<ScoutedMatch?> getScoutedmatch(int teamNumber) async {
+  Future<ScoutedMatch?> getScoutedMatch(int teamNumber) async {
     Database db = await dbHelper.db;
 
     final List<Map<String, dynamic>> result = await db.query(
@@ -38,10 +38,10 @@ class DbScoutedMatches {
       whereArgs: [teamNumber],
     );
 
-    ScoutedMatch? scoutedmatch = result.isNotEmpty
+    ScoutedMatch? scoutedMatch = result.isNotEmpty
         ? ScoutedMatch.fromMap(result.first)
         : null;
 
-    return scoutedmatch;
+    return scoutedMatch;
   }
 }

@@ -21,11 +21,15 @@ Rails.application.routes.draw do
     post "login/verify_code" => "teams#process_login_code", as: :process_login_code
     get :logout
 
+    post "session-requests/:id/approve" => "session_requests#approve", as: :approve_session_request
+    delete "session-requests/:id" => "session_requests#destroy", as: :destroy_session_request
+
     resources :scouted_events
     resources :team_members
 
     get "api/preauth-info" => "device_api#preauth_info"
-    get "api/start-session" => "device_api#request_session"
+    post "api/start-session" => "device_api#request_session"
+    post "api/cancel-session-request" => "device_api#cancel_session_request"
     get "api/poke-session" => "device_api#check_session_request"
     get "api/me" => "device_api#me"
     post "api/sync" => "device_api#sync"

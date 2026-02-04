@@ -1,3 +1,7 @@
 <% @alert_cards.each do |card| %>
   <%= render card %>
 <% end %>
+
+<% if @alert_cards.empty? %>
+  <p>nothing to do but scout</p>
+<% end %>

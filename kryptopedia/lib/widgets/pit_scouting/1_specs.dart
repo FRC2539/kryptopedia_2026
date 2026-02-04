@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/util/singletons.dart';
+import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/layouts.dart';
 import 'package:kryptopedia/widgets/common/number_field.dart';
@@ -24,13 +25,17 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
           landscapeMode: LayoutMode.twoColumn,
           group1: [
             CheckboxListTile(
-              title: const Text("Robot is a Kit Bot"),
+              title: Text(
+                "Robot is a kit bot",
+                style: TextStyle(fontSize: Device.fontLabel(context)),
+              ),
               value: scoutedPitSingleton.isKitBot,
               onChanged: (value) {
                 setState(() {
                   scoutedPitSingleton.isKitBot = value!;
                 });
               },
+              contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
             ),
             NumberField(
               label: "Robot weight (lbs.)",
@@ -46,7 +51,7 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
               label: "Robot's width (in.)",
               subtitle: "with bumpers",
               minValue: 10,
-              maxValue: 50,
+              maxValue: 40,
               startValue: scoutedPitSingleton.width,
               callback: (int newValue) {
                 scoutedPitSingleton.width = newValue;
@@ -55,7 +60,7 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
             NumberField(
               label: "Robot's depth (in.)",
               minValue: 10,
-              maxValue: 50,
+              maxValue: 40,
               startValue: scoutedPitSingleton.depth,
               callback: (int newValue) {
                 scoutedPitSingleton.depth = newValue;

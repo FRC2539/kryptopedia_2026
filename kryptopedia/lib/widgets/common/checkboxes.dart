@@ -33,15 +33,21 @@ class _CheckboxListState<T> extends State<CheckboxList<T>> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          top: 15.0, bottom: 15.0, left: 20.0, right: 20.0),
+        top: 15.0,
+        bottom: 15.0,
+        left: 12.0,
+        right: 12.0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AutoSizeText(
             widget.title,
+            textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: Device.fontLabel(context),
             ),
+            maxLines: 3,
           ),
           SizedBox(height: 8),
           GridView.count(
@@ -64,7 +70,10 @@ class _CheckboxListState<T> extends State<CheckboxList<T>> {
                       });
                     },
                   ),
-                  Text(option.label, style: TextStyle(fontSize: 14)),
+                  Text(
+                    option.label,
+                    style: TextStyle(fontSize: Device.fontLabel(context)),
+                  ),
                 ],
               );
             }).toList(),

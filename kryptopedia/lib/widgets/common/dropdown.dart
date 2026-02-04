@@ -35,7 +35,11 @@ class _DropdownListState<T> extends State<DropdownList<T>> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(
-          top: 15.0, bottom: 15.0, left: 20.0, right: 20.0),
+        top: 15.0,
+        bottom: 15.0,
+        left: 12.0,
+        right: 12.0,
+      ),
       child: Row(
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/util/singletons.dart';
+import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/widgets/common/checkboxes.dart';
 import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/layouts.dart';
@@ -39,17 +40,22 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
               },
             ),
             CheckboxListTile(
-              title: const Text("Robot has a turret"),
+              title: Text(
+                "Robot has a turret",
+                style: TextStyle(fontSize: Device.fontLabel(context)),
+              ),
               value: scoutedPitSingleton.hasTurret,
               onChanged: (value) {
                 setState(() {
                   scoutedPitSingleton.hasTurret = value!;
                 });
               },
+              contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
             ),
           ],
           group2: [
-          NumberField(label: "Max Fuel Capacity",
+            NumberField(
+              label: "Max fuel capacity",
             minValue: 0,
             maxValue: 504,
             startValue: scoutedPitSingleton.maxFuelCapacity,
@@ -58,7 +64,7 @@ class _PitScoutingGameState extends State<PitScoutingGame> {
             },
           ),
             NumberField(
-              label: "Number of Shooters",
+              label: "Number of shooters",
               minValue: 0,
               maxValue: 5,
               startValue: scoutedPitSingleton.shooterNumber,

@@ -13,15 +13,15 @@ class Event {
     _lastSync = value.millisecondsSinceEpoch;
   }
 
-  static final String tableName = "events";
-  static final String idKey = "id";
-  static final String codeKey = "code";
-  static final String nameKey = "name";
-  static final String yearKey = "year";
-  static final String serverURLKey = "server_URL";
-  static final String authTokenKey = "auth_token";
-  static final String teamNumberKey = "team_number";
-  static final String lastSyncKey = "last_sync";
+  static const String tableName = "events";
+  static const String idKey = "id";
+  static const String codeKey = "code";
+  static const String nameKey = "name";
+  static const String yearKey = "year";
+  static const String serverURLKey = "server_URL";
+  static const String authTokenKey = "auth_token";
+  static const String teamNumberKey = "team_number";
+  static const String lastSyncKey = "last_sync";
 
   Event(
     this.id,

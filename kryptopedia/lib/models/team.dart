@@ -2,9 +2,9 @@ class Team {
   final int _number;
   final String _nickname;
 
-  static final String tableName = "teams";
-  static final String numberKey = "number";
-  static final String nicknameKey = "nickname";
+  static const String tableName = "teams";
+  static const String numberKey = "number";
+  static const String nicknameKey = "nickname";
 
   Team(this._number, this._nickname);
 

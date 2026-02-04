@@ -71,22 +71,22 @@ class ScoutedPit {
     generalComments = "";
   }
 
-  static final tableName = "scouted_pits";
-  static final teamNumberKey = "team_number";
-  static final localKey = "local";
-  static final weightKey = "weight";
-  static final widthKey = "width";
-  static final depthKey = "depth";
-  static final startingHeightKey = "starting_height";
-  static final extendedHeightKey = "extended_height";
-  static final isKitBotKey = "is_kit_bot";
-  static final drivetrainKey = "drivetrain";
-  static final fuelPickupMethodsKey = "fuel_pickup_methods";
-  static final hasTurretKey = "has_turret";
-  static final shooterNumberKey = "shooter_number";
-  static final maxFuelCapacityKey = "max_fuel_capacity";
-  static final autoCommentsKey = "auto_comments";
-  static final generalCommentsKey = "general_comments";
+  static const tableName = "scouted_pits";
+  static const teamNumberKey = "team_number";
+  static const localKey = "local";
+  static const weightKey = "weight";
+  static const widthKey = "width";
+  static const depthKey = "depth";
+  static const startingHeightKey = "starting_height";
+  static const extendedHeightKey = "extended_height";
+  static const isKitBotKey = "is_kit_bot";
+  static const drivetrainKey = "drivetrain";
+  static const fuelPickupMethodsKey = "fuel_pickup_methods";
+  static const hasTurretKey = "has_turret";
+  static const shooterNumberKey = "shooter_number";
+  static const maxFuelCapacityKey = "max_fuel_capacity";
+  static const autoCommentsKey = "auto_comments";
+  static const generalCommentsKey = "general_comments";
 
   ScoutedPit();
 

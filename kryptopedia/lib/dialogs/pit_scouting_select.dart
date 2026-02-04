@@ -23,9 +23,9 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
   DbTeams dbTeams = DbTeams();
 
   late int _selectedTeam;
-  late Future<List<Team>?> teams;
+  late Future<List<Team>> teams;
 
-  Future<List<Team>?> _getTeamList() async {
+  Future<List<Team>> _getTeamList() async {
     DbScoutedPits dbScoutedPits = DbScoutedPits();
 
     List<Team> teams = await dbTeams.getTeams();

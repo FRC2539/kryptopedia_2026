@@ -48,4 +48,18 @@ class DbScoutedPits {
 
     return scoutedPit;
   }
+
+  Future<List<ScoutedPit>> getScoutedPits() async {
+    Database db = await dbHelper.db;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      ScoutedPit.tableName,
+    );
+
+    List<ScoutedPit> scoutedPits = result
+        .map((e) => ScoutedPit.fromMap(e))
+        .toList();
+
+    return scoutedPits;
+  }
 }

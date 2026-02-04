@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/db/setup.dart';
+import 'package:kryptopedia/dialogs/db/viewer.dart';
 import 'package:kryptopedia/dialogs/generic_confirmation.dart';
 import 'package:kryptopedia/dialogs/notification.dart';
-import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/helper.dart';
 
@@ -14,12 +14,16 @@ class SyncPopup extends StatefulWidget {
 }
 
 class _SyncPopupState extends State<SyncPopup> {
-  late Future<Event> _event;
+  bool syncEnabled = false;
 
   @override
   void initState() {
     DbEvents dbEvents = DbEvents();
-    _event = (dbEvents.getEvent());
+    dbEvents.getEvent().then((value) {
+      setState(() {
+        syncEnabled = value.syncEnabled;
+      });
+    });
     super.initState();
   }
 
@@ -40,41 +44,40 @@ class _SyncPopupState extends State<SyncPopup> {
       content: Column(
         spacing: 8,
         children: [
-          FutureBuilder<Event>(
-            future: _event,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return Container();
-              if (!snapshot.data!.syncEnabled) {
-                return Text("local-only: sync is not set up");
-              }
-              bool buttonEnabled = true;
-              return ElevatedButton.icon(
-                onPressed: buttonEnabled
-                    ? () async {
-                        setState(() {
-                          buttonEnabled = false;
-                        });
-                        DbHelper dbHelper = DbHelper();
-                        String? error = await dbHelper.syncData();
-                        setState(() {
-                          buttonEnabled = true;
-                        });
-                        if (error != null) {
-                          if (!context.mounted) return;
-                          await showDialog(
-                            context: context,
-                            builder: (context) => NotificationDialog(
-                              title: "Sync Error",
-                              body: error,
-                            ),
-                          );
-                        }
-                      }
-                    : null,
-                label: Text("Sync Data"),
-                icon: Icon(Icons.sync),
-              );
-            },
+          ElevatedButton.icon(
+            onPressed: syncEnabled
+                ? () async {
+                    setState(() {
+                      syncEnabled = false;
+                    });
+                    DbHelper dbHelper = DbHelper();
+                    String? error = await dbHelper.syncData();
+                    if (error != null) {
+                      if (!context.mounted) return;
+                      await showDialog(
+                        context: context,
+                        builder: (context) => NotificationDialog(
+                          title: "Sync Error",
+                          body: error,
+                        ),
+                      );
+                    } else {
+                      if (!context.mounted) return;
+                      await showDialog(
+                        context: context,
+                        builder: (context) => NotificationDialog(
+                          title: "Sync Complete",
+                          body: "Data synced successfully! woohoo",
+                        ),
+                      );
+                    }
+                    setState(() {
+                      syncEnabled = true;
+                    });
+                  }
+                : null,
+            label: Text("Sync Data"),
+            icon: Icon(Icons.sync),
           ),
           Spacer(),
           Row(
@@ -94,6 +97,7 @@ class _SyncPopupState extends State<SyncPopup> {
                   DbHelper dbHelper = DbHelper();
                   await dbHelper.recreateDatabase();
                   if (!context.mounted) return;
+                  Navigator.pop(context);
                   await showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -104,7 +108,12 @@ class _SyncPopupState extends State<SyncPopup> {
               ),
               Spacer(),
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => DbViewerDialog(),
+                  );
+                },
                 label: Text("Inspect Database"),
                 icon: Icon(Icons.search),
               ),

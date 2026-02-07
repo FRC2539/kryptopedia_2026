@@ -34,6 +34,9 @@ class _AutoMatchScoutingState extends State<AutoMatchScouting> {
                 scoutedMatchSingleton.autoFuelScored = newValue;
               },
             ),
+          ],
+          group2: [
+            
             CheckboxListTile(
               title: const Text("Robot climbed at end of auto"),
               value: scoutedMatchSingleton.autoClimbed,
@@ -43,9 +46,7 @@ class _AutoMatchScoutingState extends State<AutoMatchScouting> {
                 });
               },
             ),
-          ],
-          group2: [
-            SuperNumberField(
+            /*SuperNumberField(
               label: "Fuel held at end of auto",
               minValue: 0,
               maxValue: 6767,
@@ -54,7 +55,7 @@ class _AutoMatchScoutingState extends State<AutoMatchScouting> {
               callback: (int newValue) {
                 scoutedMatchSingleton.autoFuelFinal = newValue;
               },
-            ),
+            ),*/
           ],
         ),
       ],

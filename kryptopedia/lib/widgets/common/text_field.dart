@@ -6,6 +6,7 @@ class TextInputField extends StatefulWidget {
   final String hint;
   final bool isMultiline;
   final String initialValue;
+  final TextEditingController? controller;
 
   final ValueChanged<String> callback;
 
@@ -14,6 +15,7 @@ class TextInputField extends StatefulWidget {
       required this.hint,
       required this.isMultiline,
       required this.initialValue,
+    this.controller,
       required this.callback});
 
   @override
@@ -28,13 +30,21 @@ class _TextInputFieldState extends State<TextInputField> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialValue);
+    _controller =
+        widget.controller ?? TextEditingController(text: widget.initialValue);
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void setValue(String newValue) {
+    setState(() {
+      value = newValue;
+      _controller = TextEditingController(text: value);
+    });
   }
 
   @override

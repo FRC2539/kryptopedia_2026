@@ -4,25 +4,26 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:kryptopedia/util/deviceinfo.dart';
 
-class DropdownList<T> extends StatefulWidget {
-  final List<MultiSelectOption<T>> options;
+class DynamicDropdownList<T> extends StatefulWidget {
+  final List<DynamicMultiSelectOption<T>> options;
   final String label;
   final T initialValue;
 
   final ValueChanged<T> callback;
 
-  const DropdownList(
-      {super.key,
-      required this.label,
-      required this.options,
-      required this.initialValue,
-      required this.callback});
+  const DynamicDropdownList({
+    super.key,
+    required this.label,
+    required this.options,
+    required this.initialValue,
+    required this.callback,
+  });
 
   @override
-  State<DropdownList> createState() => _DropdownListState<T>();
+  State<DynamicDropdownList> createState() => _DynamicDropdownListState<T>();
 }
 
-class _DropdownListState<T> extends State<DropdownList<T>> {
+class _DynamicDropdownListState<T> extends State<DynamicDropdownList<T>> {
   T? _selectedOption;
 
   @override
@@ -47,9 +48,7 @@ class _DropdownListState<T> extends State<DropdownList<T>> {
             child: AutoSizeText(
               widget.label,
               textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: Device.fontLabel(context),
-              ),
+              style: TextStyle(fontSize: Device.fontLabel(context)),
               maxLines: 3,
             ),
           ),
@@ -60,21 +59,21 @@ class _DropdownListState<T> extends State<DropdownList<T>> {
               onChanged: (newValue) {
                 if (newValue == null) return;
                 setState(() {
-                  _selectedOption = newValue;
                   widget.callback(newValue);
+                  _selectedOption = newValue;
+                  _selectedOption = widget.initialValue;
                 });
               },
               items: widget.options.map<DropdownMenuItem<T>>((option) {
                 return DropdownMenuItem(
-                    value: option.value,
-                    child: AutoSizeText(
-                      "   ${option.label}   ",
-                      style: TextStyle(
-                        fontSize: Device.fontLabel(context),
-                      ),
-                    ));
+                  value: option.value,
+                  child: AutoSizeText(
+                    "   ${option.label}   ",
+                    style: TextStyle(fontSize: Device.fontLabel(context)),
+                  ),
+                );
               }).toList(),
-/*
+              /*
       6666   777777
     66           77
     666666      77
@@ -89,9 +88,9 @@ class _DropdownListState<T> extends State<DropdownList<T>> {
   }
 }
 
-class MultiSelectOption<T> {
+class DynamicMultiSelectOption<T> {
   final T value;
   final String label;
 
-  const MultiSelectOption({required this.value, required this.label});
+  const DynamicMultiSelectOption({required this.value, required this.label});
 }

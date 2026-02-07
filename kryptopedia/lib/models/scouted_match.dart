@@ -25,6 +25,12 @@ class ScoutedMatch {
     _climbLevel = value.index;
   }
 
+  int _penalties = 0;
+  Penalties get penalties => Penalties.values[_penalties];
+  set penalties(Penalties value) {
+    _penalties = value.index;
+  }
+
   String autoComments = "";
   String defenseComments = "";
   String generalComments = "";
@@ -71,7 +77,7 @@ class ScoutedMatch {
       autoClimbedKey: autoClimbed,
       teleopFuelScoredKey: teleopFuelScored,
       teleopFuelFedKey: teleopFuelFed,
-      climbLevelKey: climbLevelKey,
+      climbLevelKey: climbLevel,
       autoCommentsKey: autoComments,
       defenseCommentsKey: defenseComments,
       generalCommentsKey: generalComments,
@@ -93,3 +99,4 @@ class ScoutedMatch {
 }
 
 enum ClimbLevel { none, L1, L2, L3 }
+enum Penalties { empty, pin, major, minor }

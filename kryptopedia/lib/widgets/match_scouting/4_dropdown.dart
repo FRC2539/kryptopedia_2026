@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/scouted_match.dart';
+import 'package:kryptopedia/util/singletons.dart';
+import 'package:kryptopedia/widgets/common/dropdown.dart';
+import 'package:kryptopedia/widgets/common/dynamicdropdown.dart';
+import 'package:kryptopedia/widgets/common/layouts.dart';
+import 'package:kryptopedia/widgets/common/scouting_section.dart';
+import 'package:kryptopedia/widgets/common/text_field.dart';
+
+class Dropdown extends StatefulWidget {
+  const Dropdown({super.key});
+
+  @override
+  State<Dropdown> createState() => _Dropdown();
+}
+
+class _Dropdown extends State<Dropdown> {
+  late TextEditingController _penaltiesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _penaltiesController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _penaltiesController.dispose();
+    super.dispose();
+  }
+
+  late TextInputField textInputField = TextInputField(
+    hint: "penalties",
+    isMultiline: true,
+    initialValue: "",
+    controller: _penaltiesController,
+    callback: (value) {
+      scoutedMatchSingleton.generalComments = value;
+    },
+  );
+  @override
+  Widget build(BuildContext context) {
+    return ScoutingSection(
+      title: 'Penalties (beta)',
+      children: [
+        ResponsiveLayout(
+          portraitMode: LayoutMode.singleColumn,
+          landscapeMode: LayoutMode.twoColumn,
+          group1: [
+            DynamicDropdownList(
+              label: 'Penalties',
+              initialValue: Penalties.empty,
+              options: [
+                DynamicMultiSelectOption(value: Penalties.empty, label: ''),
+                DynamicMultiSelectOption(value: Penalties.pin, label: 'pin'),
+                DynamicMultiSelectOption(
+                  value: Penalties.minor,
+                  label: 'minor',
+                ),
+                DynamicMultiSelectOption(
+                  value: Penalties.major,
+                  label: 'major',
+                ),
+              ],
+              callback: (newValue) {
+                _penaltiesController.text += " ";
+                _penaltiesController.text += newValue.toString().replaceRange(
+                  0,
+                  10,
+                  "",
+                );
+              },
+            ),
+          ],
+          group2: [textInputField],
+        ),
+      ],
+    );
+  }
+}

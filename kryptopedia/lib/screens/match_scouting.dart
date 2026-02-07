@@ -10,6 +10,7 @@ import 'package:kryptopedia/widgets/common/save.dart';
 import 'package:kryptopedia/widgets/match_scouting/1_auto.dart';
 import 'package:kryptopedia/widgets/match_scouting/2_teleop.dart';
 import 'package:kryptopedia/widgets/match_scouting/3_endgame-summary.dart';
+import 'package:kryptopedia/widgets/match_scouting/4_dropdown.dart';
 
 class MatchScouting extends StatefulWidget {
   final Team team;
@@ -60,6 +61,7 @@ class _MatchScoutingState extends State<MatchScouting> {
                 AutoMatchScouting(),
                 TeleopMatchScouting(),
                 EndgameMatchScouting(),
+                Dropdown(),
                 ScoutingSave(
                   saveFunction: () async {
                     DbScoutedMatches dbScoutedMatch = DbScoutedMatches();

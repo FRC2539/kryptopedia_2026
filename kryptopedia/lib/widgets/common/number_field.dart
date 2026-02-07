@@ -78,7 +78,7 @@ class _NumberFieldState extends State<NumberField> {
       child:
           Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
         Expanded(
-          flex: 2,
+            flex: 2,
           child: Column(
             children: [
               Align(
@@ -86,7 +86,7 @@ class _NumberFieldState extends State<NumberField> {
                 child: AutoSizeText(
                   widget.label,
                   style: TextStyle(
-                    fontSize: Device.fontLabel(context),
+                      fontSize: Device.fontSize(context, 25.0, 40.0),
                   ),
                 ),
               ),

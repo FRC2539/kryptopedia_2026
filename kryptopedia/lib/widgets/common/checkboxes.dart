@@ -45,7 +45,7 @@ class _CheckboxListState<T> extends State<CheckboxList<T>> {
             widget.title,
             textAlign: TextAlign.left,
             style: TextStyle(
-              fontSize: Device.fontLabel(context),
+              fontSize: Device.fontSize(context, 25.0, 40.0),
             ),
             maxLines: 3,
           ),
@@ -72,7 +72,9 @@ class _CheckboxListState<T> extends State<CheckboxList<T>> {
                   ),
                   Text(
                     option.label,
-                    style: TextStyle(fontSize: Device.fontLabel(context)),
+                    style: TextStyle(
+                      fontSize: Device.fontSize(context, 25.0, 40.0),
+                    ),
                   ),
                 ],
               );

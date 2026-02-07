@@ -16,6 +16,7 @@ class EndgameMatchScouting extends StatefulWidget {
 }
 
 class _EndgameMatchScoutingState extends State<EndgameMatchScouting> {
+
   @override
   Widget build(BuildContext context) {
     return ScoutingSection(

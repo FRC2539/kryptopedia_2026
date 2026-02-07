@@ -53,14 +53,16 @@ class _SuperNumberFieldState extends State<SuperNumberField> {
     // int flexValue = widget.maxValue > 99 ? 5 : 6;
 
     var tooHighSnackbar = SnackBar(
-      content: Text('Must be <= ${widget.maxValue}',
+      content: Text(
+        '${widget.label} must be <= ${widget.maxValue}',
           style: const TextStyle(fontSize: 20)),
       duration: const Duration(seconds: 4),
       backgroundColor: Colors.redAccent,
       showCloseIcon: true,
     );
     var tooLowSnackbar = SnackBar(
-      content: Text('Must be >= ${widget.minValue}',
+      content: Text(
+        '${widget.label} must be >= ${widget.minValue}',
           style: const TextStyle(fontSize: 20)),
       duration: const Duration(seconds: 4),
       backgroundColor: Colors.redAccent,
@@ -123,6 +125,7 @@ class _SuperNumberFieldState extends State<SuperNumberField> {
                 widget.callback(currentValue);
               });
             } else {
+                ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(tooLowSnackbar);
             }
           },
@@ -162,6 +165,7 @@ class _SuperNumberFieldState extends State<SuperNumberField> {
                 _controller.text = (widget.minValue.toString());
                 widget.callback(widget.minValue);
               });
+                ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(nanSnackbar);
               return;
             }
@@ -171,12 +175,14 @@ class _SuperNumberFieldState extends State<SuperNumberField> {
               setState(() {
                 _controller.text = (widget.minValue.toString());
               });
+                ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(tooLowSnackbar);
             }
             if (value > widget.maxValue) {
               setState(() {
                 _controller.text = (widget.maxValue.toString());
               });
+                ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(tooHighSnackbar);
             }
 
@@ -208,6 +214,7 @@ class _SuperNumberFieldState extends State<SuperNumberField> {
                 widget.callback(currentValue);
               });
             } else {
+                ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(tooHighSnackbar);
             }
           },
@@ -235,6 +242,7 @@ class _SuperNumberFieldState extends State<SuperNumberField> {
                 widget.callback(currentValue);
               });
             } else {
+                ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(tooHighSnackbar);
             }
           },

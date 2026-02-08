@@ -1,11 +1,18 @@
+import 'package:kryptopedia/models/team_member.dart';
+import 'package:kryptopedia/util/api.dart';
+import 'package:uuid/uuid.dart';
+
 class ScoutedPit {
-  int teamNumber = 0;
+  String uid = "";
+  String scouterId = "";
 
   int _local = 0;
   bool get local => _local == 1;
   set local(bool value) {
     _local = value ? 1 : 0;
   }
+
+  int teamNumber = 0;
 
   int weight = 0;
   int width = 0;
@@ -50,7 +57,12 @@ class ScoutedPit {
 
   String generalComments = "";
 
-  void setToDefaults(int team) {
+  Uuid uuid = Uuid();
+
+  void setToDefaults(int team, TeamMember scouter) {
+    uid = uuid.v1();
+    scouterId = scouter.id;
+
     teamNumber = team;
     local = true;
 
@@ -72,8 +84,10 @@ class ScoutedPit {
   }
 
   static const tableName = "scouted_pits";
-  static const teamNumberKey = "team_number";
+  static const uidKey = "uid";
+  static const scouterIdKey = "scouter_id";
   static const localKey = "local";
+  static const teamNumberKey = "team_number";
   static const weightKey = "weight";
   static const widthKey = "width";
   static const depthKey = "depth";
@@ -92,8 +106,10 @@ class ScoutedPit {
 
   Map<String, dynamic> toMap() {
     return {
-      teamNumberKey: teamNumber,
+      uidKey: uid,
+      scouterIdKey: scouterId,
       localKey: _local,
+      teamNumberKey: teamNumber,
       weightKey: weight,
       widthKey: width,
       depthKey: depth,
@@ -111,8 +127,10 @@ class ScoutedPit {
   }
 
   ScoutedPit.fromMap(Map<String, dynamic> map)
-    : teamNumber = map[teamNumberKey],
-      _local = map[localKey],
+    : uid = map[uidKey],
+      scouterId = map[scouterIdKey],
+      _local = map[localKey] == 1 ? 1 : 0,
+      teamNumber = map[teamNumberKey],
       weight = map[weightKey],
       width = map[widthKey],
       depth = map[depthKey],
@@ -126,6 +144,10 @@ class ScoutedPit {
       shooterNumber = map[shooterNumberKey],
       autoComments = map[autoCommentsKey],
       generalComments = map[generalCommentsKey];
+
+  SyncDataItem toSyncDataItem() {
+    return SyncDataItem(type: "scouted_pit", data: toMap()..[localKey] = 0);
+  }
 }
 
 enum FuelPickupMethod { ground, top }

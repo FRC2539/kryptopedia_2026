@@ -1,0 +1,20 @@
+name: update-game-manual
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+jobs:
+  update-manual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Manual
+        run: curl -o assets/pdfs/2026GameManual.pdf https://firstfrc.blob.core.windows.net/frc2026/Manual/2026GameManual.pdf
+      - name: commit
+        continue-on-error: true
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+          git add assets/pdfs/2026GameManual.pdf
+          git commit -m "Update Game Manual"
+          git push

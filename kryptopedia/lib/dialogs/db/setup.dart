@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/team.dart';
+import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/api.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/sync.dart';
+import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/widgets/common/number_field.dart';
@@ -174,6 +176,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       token,
       teamNumber,
       0,
+      null,
     );
     DbEvents dbEvents = DbEvents();
     await dbEvents.insertEvent(eventData);
@@ -328,6 +331,7 @@ class _TestDataFormState extends State<TestDataForm> {
   String teamNickname = "Krypton Cougars";
   int numberOfTeams = 6;
   int numberOfMatches = 5;
+  int numberOfTeamMembers = 3;
 
   bool submitEnabled = true;
   void submit() async {
@@ -351,6 +355,7 @@ class _TestDataFormState extends State<TestDataForm> {
       null,
       teamNumber,
       0,
+      null,
     );
 
     DbEvents dbEvents = DbEvents();
@@ -369,6 +374,14 @@ class _TestDataFormState extends State<TestDataForm> {
     await Future.wait(teams.map((t) => dbTeams.upsertTeam(t)));
 
     //TODO add test matches
+
+    DbTeamMembers dbTeamMembers = DbTeamMembers();
+
+    List<TeamMember> members = [TeamMember(id: "1", name: "Dominic")];
+    for (int i = 1; i < numberOfTeamMembers; i++) {
+      members.add(TeamMember(id: "${i + 1}", name: "Team Member ${i + 1}"));
+    }
+    await Future.wait(members.map((m) => dbTeamMembers.upsertTeamMember(m)));
 
     if (!mounted) return;
     Navigator.pop(context);
@@ -409,6 +422,13 @@ class _TestDataFormState extends State<TestDataForm> {
             },
           ),
           SizedBox(height: 20), //hides that the padding is all off
+          NumberField(
+            label: "# of team members",
+            minValue: 1,
+            maxValue: 10,
+            startValue: numberOfTeamMembers,
+            callback: (v) => numberOfTeamMembers = v,
+          ),
           NumberField(
             label: "# of test teams",
             minValue: 6,

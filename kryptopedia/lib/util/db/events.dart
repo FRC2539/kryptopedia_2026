@@ -17,7 +17,8 @@ class DbEvents {
       "${Event.serverURLKey} TEXT, "
       "${Event.authTokenKey} TEXT, "
       "${Event.teamNumberKey} INTEGER NOT NULL, "
-      "${Event.lastSyncKey} INTEGER NOT NULL)",
+      "${Event.lastSyncKey} INTEGER NOT NULL, "
+      "${Event.lastScouterKey} TEXT)",
     );
   }
 
@@ -54,6 +55,16 @@ class DbEvents {
 
     int result = await db.update(Event.tableName, {
       Event.lastSyncKey: syncTime.millisecondsSinceEpoch,
+    }, where: "${Event.idKey} = 0");
+
+    return result;
+  }
+
+  Future<int> updateLastScouter(String scouterID) async {
+    Database db = await dbHelper.db;
+
+    int result = await db.update(Event.tableName, {
+      Event.lastScouterKey: scouterID,
     }, where: "${Event.idKey} = 0");
 
     return result;

@@ -3,7 +3,7 @@
   <p>
     <b><%= session_request.device.name %></b>
     waiting since <%= time_ago_in_words(session_request.created_at) %> ago. Request ID
-    <b><%= session_request.hashid %></b>.
+    <b><%= session_request.hashid %></b>. Selected event <b><%= session_request.scouted_event.name %></b>.
   </p>
 
   <% if session_request.device.session.present? %>
@@ -11,7 +11,7 @@
       This device has an existing session- approving this one will invalidate the other!
     </p>
   <% end %>
-  
+
   <div class="buttons">
     <%= button_to "approve", team_approve_session_request_path(@team, session_request), data: { turbo_confirm: 'Approve this session?' } %>
     <%= button_to "no!", team_destroy_session_request_path(@team, session_request), method: :delete, data: { turbo_confirm: 'Delete this session request?' } %>

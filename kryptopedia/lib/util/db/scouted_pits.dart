@@ -9,8 +9,10 @@ class DbScoutedPits {
     if (await dbHelper.tableExists(db, ScoutedPit.tableName)) return;
     await db.execute(
       "CREATE TABLE ${ScoutedPit.tableName}("
-      "${ScoutedPit.teamNumberKey} INTEGER NOT NULL, "
+      "${ScoutedPit.uidKey} TEXT PRIMARY KEY, "
+      "${ScoutedPit.scouterIdKey} TEXT NOT NULL, "
       "${ScoutedPit.localKey} INTEGER NOT NULL, "
+      "${ScoutedPit.teamNumberKey} INTEGER NOT NULL, "
       "${ScoutedPit.weightKey} INTEGER NOT NULL, "
       "${ScoutedPit.widthKey} INTEGER NOT NULL, "
       "${ScoutedPit.depthKey} INTEGER NOT NULL, "
@@ -27,9 +29,14 @@ class DbScoutedPits {
     );
   }
 
-  Future<int> insertScoutedPit(ScoutedPit scoutedPit) async {
+
+Future<int> upsertScoutedPit(ScoutedPit scoutedPit) async {
     Database db = await dbHelper.db;
-    int result = await db.insert(ScoutedPit.tableName, scoutedPit.toMap());
+    int result = await db.insert(
+      ScoutedPit.tableName,
+      scoutedPit.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return result;
   }
 
@@ -61,5 +68,45 @@ class DbScoutedPits {
         .toList();
 
     return scoutedPits;
+  }
+
+  Future<List<ScoutedPit>> getLocalScoutedPits() async {
+    Database db = await dbHelper.db;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      ScoutedPit.tableName,
+      where: "${ScoutedPit.localKey} = 1",
+    );
+
+    List<ScoutedPit> scoutedPits = result
+        .map((e) => ScoutedPit.fromMap(e))
+        .toList();
+
+    return scoutedPits;
+  }
+
+  Future<int> deleteScoutedPit(String uid) async {
+    Database db = await dbHelper.db;
+
+    int result = await db.delete(
+      ScoutedPit.tableName,
+      where: "${ScoutedPit.uidKey} = ?",
+      whereArgs: [uid],
+    );
+
+    return result;
+  }
+
+  Future<int> markScoutedPitSynced(String uid) async {
+    Database db = await dbHelper.db;
+
+    int result = await db.update(
+      ScoutedPit.tableName,
+      {ScoutedPit.localKey: 0},
+      where: "${ScoutedPit.uidKey} = ?",
+      whereArgs: [uid],
+    );
+
+    return result;
   }
 }

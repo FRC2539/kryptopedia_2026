@@ -14,4 +14,10 @@ json.items do
     json.id member.hashid
     json.name member.name
   end
+
+  json.array! @scouting_data_items do |item|
+    json.type item.data_type
+    json.deleted !!item.deleted_at
+    json.data JSON.parse(item.data)
+  end
 end

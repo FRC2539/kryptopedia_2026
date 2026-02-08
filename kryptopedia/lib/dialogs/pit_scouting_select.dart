@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/screens/pit_scouting.dart';
 
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
+import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 
 import 'package:kryptopedia/util/deviceinfo.dart';
@@ -23,30 +25,36 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
   DbTeams dbTeams = DbTeams();
 
   late int _selectedTeam;
-  late Future<List<Team>> teams;
+  late String _selectedScouter;
+  late Future<FutureResponse> data;
 
-  Future<List<Team>> _getTeamList() async {
+  Future<FutureResponse> _future() async {
     DbScoutedPits dbScoutedPits = DbScoutedPits();
 
     List<Team> teams = await dbTeams.getTeams();
 
-    final results = await Future.wait(
+    final teamsWithScoutedPits = await Future.wait(
       teams.map((t) async {
         final pit = await dbScoutedPits.getScoutedPit(t.number);
         return pit == null ? t : null;
       }),
     );
-    teams = results.whereType<Team>().toList();
+    teams = teamsWithScoutedPits.whereType<Team>().toList();
 
     _selectedTeam = teams[0].number;
 
-    return teams;
+    DbTeamMembers dbTeamMembers = DbTeamMembers();
+    List<TeamMember> teamMembers = await dbTeamMembers.getTeamMembers();
+
+    _selectedScouter = teamMembers[0].id;
+
+    return FutureResponse(teams: teams, scouters: teamMembers);
   }
 
   @override
   void initState() {
     super.initState();
-    teams = _getTeamList();
+    data = _future();
   }
 
   @override
@@ -70,33 +78,77 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
                 maxLines: 1,
               ),
             ),
-            FutureBuilder<List<Team>?>(
-              future: teams,
+            FutureBuilder<FutureResponse>(
+              future: data,
               builder: (context, snapshot) {
-                if (!snapshot.hasData &&
+                if (snapshot.hasError) return Text("${snapshot.error}");
+                if (!snapshot.hasData) return CircularProgressIndicator();
+                if (snapshot.data!.teams.isEmpty &&
                     snapshot.connectionState == ConnectionState.done) {
                   return Text("no teams left to scout!");
                 }
-                if (!snapshot.hasData) return CircularProgressIndicator();
-                if (snapshot.hasError) return Text("${snapshot.error}");
                 return Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
+                    spacing: 8,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: AutoSizeText(
-                              "Select a team to scout:",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: Device.fontSize(context, 15.0, 25.0),
-                              ),
-                              maxLines: 1,
-                            ),
+                      Align(
+                        alignment: AlignmentGeometry.topLeft,
+                        child: AutoSizeText(
+                          "Who's scouting?",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: Device.fontSize(context, 15.0, 25.0),
                           ),
-                        ],
+                          maxLines: 1,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: DropdownButton<String>(
+                          value: _selectedScouter,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedScouter = newValue!;
+                            });
+                          },
+                          items: snapshot.data!.scouters
+                              .map<DropdownMenuItem<String>>((
+                                TeamMember scouter,
+                              ) {
+                                return DropdownMenuItem<String>(
+                                  value: scouter.id,
+                                  child: SizedBox(
+                                    width: Device.isTablet(context)
+                                        ? 425.0
+                                        : 225.0,
+                                    child: AutoSizeText(
+                                      scouter.name,
+                                      style: TextStyle(
+                                        fontSize: Device.fontSize(
+                                          context,
+                                          12.0,
+                                          22.0,
+                                        ),
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                );
+                              })
+                              .toList(),
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentGeometry.topLeft,
+                        child: AutoSizeText(
+                          "Select a team to scout:",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: Device.fontSize(context, 15.0, 25.0),
+                          ),
+                          maxLines: 1,
+                        ),
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
@@ -107,49 +159,47 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
                               _selectedTeam = newValue!;
                             });
                           },
-                          items: snapshot.data!.map<DropdownMenuItem<int>>((
-                            Team team,
-                          ) {
-                            return DropdownMenuItem<int>(
-                              value: team.number,
-                              child: SizedBox(
-                                width: Device.isTablet(context) ? 425.0 : 225.0,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 5.0,
-                                    right: 5.0,
-                                  ),
-                                  child: AutoSizeText(
-                                    "  ${team.number} - ${team.nickname}  ",
-                                    style: TextStyle(
-                                      fontSize: Device.fontSize(
-                                        context,
-                                        12.0,
-                                        22.0,
+                          items: snapshot.data!.teams
+                              .map<DropdownMenuItem<int>>((Team team) {
+                                return DropdownMenuItem<int>(
+                                  value: team.number,
+                                  child: SizedBox(
+                                    width: Device.isTablet(context)
+                                        ? 425.0
+                                        : 225.0,
+                                    child: AutoSizeText(
+                                      "${team.number} - ${team.nickname}",
+                                      style: TextStyle(
+                                        fontSize: Device.fontSize(
+                                          context,
+                                          12.0,
+                                          22.0,
+                                        ),
                                       ),
+                                      maxLines: 2,
                                     ),
-                                    maxLines: 2,
+                                    
                                   ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
+                                );
+                              })
+                              .toList(),
                         ),
                       ),
-                      const SizedBox(height: 10),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () async {
+                          onPressed: () {
                             Navigator.pop(context);
-
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PopScope(
                                   canPop: false,
                                   child: PitScouting(
-                                    team: snapshot.data!.firstWhere(
+                                    team: snapshot.data!.teams.firstWhere(
                                       (t) => t.number == _selectedTeam,
+                                    ),
+                                    scouter: snapshot.data!.scouters.firstWhere(
+                                      (s) => s.id == _selectedScouter,
                                     ),
                                   ),
                                 ),
@@ -178,4 +228,11 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
       ),
     );
   }
+}
+
+class FutureResponse {
+  final List<Team> teams;
+  final List<TeamMember> scouters;
+
+  FutureResponse({required this.teams, required this.scouters});
 }

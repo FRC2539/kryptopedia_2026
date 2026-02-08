@@ -3,9 +3,10 @@
 # Table name: scouting_data_items
 #
 #  id               :bigint           not null, primary key
-#  data             :string
-#  type             :string
-#  uid              :string
+#  data             :jsonb            not null
+#  data_type        :string           not null
+#  deleted_at       :datetime
+#  uid              :string           not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  scouted_event_id :bigint           not null
@@ -24,4 +25,21 @@
 class ScoutingDataItem < ApplicationRecord
   belongs_to :team_member
   belongs_to :scouted_event
+
+  validates :uid, presence: true, uniqueness: { scope: :scouted_event_id }
+
+  def destroy
+    soft_delete
+  end
+
+  def delete
+    soft_delete
+  end
+
+  def soft_delete
+    return if deleted_at.present?
+    update!(deleted_at: Time.current)
+  end
+
+  scope :alive, -> { where(deleted_at: nil) }
 end

@@ -3404,6 +3404,78 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="sentry-rails (v6.3.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="sentry-rails" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-rails-6.3.0" />
+          <option name="version" value="6.3.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-rails-6.3.0/app" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-rails-6.3.0/bin" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-rails-6.3.0/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-rails-6.3.0/app" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-rails-6.3.0/bin" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-rails-6.3.0/lib" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-rails-6.3.0/bin" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="sentry-ruby (v6.3.0) [path][gem]" type="rubylib">
+        <properties>
+          <option name="additionalInfo">
+            <AdditionalInfo>
+              <option name="authors" value="N/A" />
+              <option name="email" value="N/A" />
+              <option name="homepage" value="N/A" />
+              <option name="summary" value="N/A" />
+            </AdditionalInfo>
+          </option>
+          <option name="fromPath" value="true" />
+          <option name="name" value="sentry-ruby" />
+          <option name="requirePaths">
+            <list>
+              <option value="lib" />
+            </list>
+          </option>
+          <option name="url" value="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-ruby-6.3.0" />
+          <option name="version" value="6.3.0" />
+        </properties>
+        <CLASSES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-ruby-6.3.0/bin" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-ruby-6.3.0/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-ruby-6.3.0/bin" />
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-ruby-6.3.0/lib" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$USER_HOME$/.gems_cache/ruby/3.4.0/gems/sentry-ruby-6.3.0/bin" />
+        </excluded>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="solid_cable (v3.0.12) [path][gem]" type="rubylib">
         <properties>
           <option name="additionalInfo">

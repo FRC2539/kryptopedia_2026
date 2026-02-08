@@ -63,3 +63,6 @@ end
 gem "faraday", "~> 2.14"
 
 gem "hashid-rails", "~> 1.0"
+
+gem "sentry-ruby"
+gem "sentry-rails"

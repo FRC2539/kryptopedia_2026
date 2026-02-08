@@ -94,7 +94,7 @@ class Api {
     return await _makeRequest(
       "$serverURL/$teamNumber/api/sync?since=$lastSync",
       token: authToken,
-      body: jsonEncode(data),
+      body: json.encode(data.map((d) => d.toMap()).toList()),
     );
   }
 }
@@ -109,7 +109,10 @@ class APIResponse<T> {
 class SyncDataItem {
   final String type;
   final dynamic data;
-  final String? uid;
 
-  SyncDataItem({required this.type, required this.data, this.uid});
+  SyncDataItem({required this.type, required this.data});
+
+  Map<String, dynamic> toMap() {
+    return {"type": type, "data": data};
+  }
 }

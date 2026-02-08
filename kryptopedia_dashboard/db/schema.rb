@@ -47,11 +47,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_04_014245) do
 
   create_table "scouting_data_items", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "data"
+    t.jsonb "data", null: false
+    t.string "data_type", null: false
+    t.datetime "deleted_at"
     t.bigint "scouted_event_id", null: false
     t.bigint "team_member_id", null: false
-    t.string "type"
-    t.string "uid"
+    t.string "uid", null: false
     t.datetime "updated_at", null: false
     t.index ["scouted_event_id"], name: "index_scouting_data_items_on_scouted_event_id"
     t.index ["team_member_id"], name: "index_scouting_data_items_on_team_member_id"

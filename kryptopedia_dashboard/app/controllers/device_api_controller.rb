@@ -45,12 +45,26 @@ class DeviceApiController < ApplicationController
   def sync
     render json: { error: "no" }, status: :forbidden and return if current_user.is_a? TeamMember # very good protection im so good at this
 
-    since = params[:since] ? Time.parse(params[:since]).. : (10.years.ago..)
     event = current_user.active_event
+
+    body = JSON.parse(request.body.read) rescue nil
+    render json: { error: "invalid json" }, status: :bad_request and return unless body.is_a?(Array)
+
+    body.each do |item|
+      data = item["data"]
+      puts data.pretty_print_inspect
+      ScoutingDataItem.find_or_create_by!(data_type: item["type"], uid: data["uid"], scouted_event: event, team_member: TeamMember.find_by_hashid!(data["scouter_id"]), data: data.to_json)
+    end
+
+    # ACCEPT/PUSH ^^
+    # SEND/PULL vv
+
+    since = params[:since] ? Time.parse(params[:since]).. : (10.years.ago..)
 
     @synced_to = Time.current
     @teams = ScoutedEventTeam.where(updated_at: since, scouted_event: event)
     @team_members = TeamMember.where(updated_at: since, team: current_user.team)
+    @scouting_data_items = ScoutingDataItem.where(updated_at: since, scouted_event: event)
   end
 
 end

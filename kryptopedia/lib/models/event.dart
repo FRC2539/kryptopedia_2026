@@ -6,6 +6,7 @@ class Event {
   String? serverURL;
   String? authToken;
   int teamNumber;
+  String? lastScouter;
 
   int _lastSync;
   DateTime get lastSync => DateTime.fromMillisecondsSinceEpoch(_lastSync);
@@ -22,6 +23,7 @@ class Event {
   static const String authTokenKey = "auth_token";
   static const String teamNumberKey = "team_number";
   static const String lastSyncKey = "last_sync";
+  static const String lastScouterKey = "last_scouter";
 
   Event(
     this.id,
@@ -32,6 +34,7 @@ class Event {
     this.authToken,
     this.teamNumber,
     this._lastSync,
+    this.lastScouter,
   );
 
   bool get syncEnabled => (serverURL != null && authToken != null);
@@ -46,6 +49,7 @@ class Event {
       authTokenKey: authToken,
       teamNumberKey: teamNumber,
       lastSyncKey: _lastSync,
+      lastScouterKey: lastScouter,
     };
   }
 
@@ -57,5 +61,6 @@ class Event {
       serverURL = map[serverURLKey],
       authToken = map[authTokenKey],
       teamNumber = map[teamNumberKey],
-      _lastSync = map[lastSyncKey];
+      _lastSync = map[lastSyncKey],
+      lastScouter = map[lastScouterKey];
 }

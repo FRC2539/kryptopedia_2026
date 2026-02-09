@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/util/singletons.dart';
-import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/layouts.dart';
-import 'package:kryptopedia/widgets/common/number_field.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/super_number_field.dart';
 

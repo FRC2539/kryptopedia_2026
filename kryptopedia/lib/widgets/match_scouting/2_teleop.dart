@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/widgets/common/dropdown.dart';
-import 'package:kryptopedia/widgets/common/dynamicdropdown.dart';
 import 'package:kryptopedia/widgets/common/layouts.dart';
-import 'package:kryptopedia/widgets/common/number_field.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/super_number_field.dart';
-import 'package:kryptopedia/widgets/common/text_field.dart';
-import 'package:kryptopedia/widgets/match_scouting/3_endgame-summary.dart';
 
 class TeleopMatchScouting extends StatefulWidget {
+  const TeleopMatchScouting({super.key});
+
 
   @override
   State<TeleopMatchScouting> createState() => _TeleopMatchScoutingState();

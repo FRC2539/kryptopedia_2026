@@ -86,7 +86,7 @@ class _NumberFieldState extends State<NumberField> {
                 child: AutoSizeText(
                   widget.label,
                   style: TextStyle(
-                      fontSize: Device.fontSize(context, 25.0, 40.0),
+                      fontSize: Device.fontLabel(context),
                   ),
                 ),
               ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
@@ -24,6 +26,7 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     DropdownMenuItem(value: Team.tableName, child: Text("Teams")),
     DropdownMenuItem(value: ScoutedPit.tableName, child: Text("Scouted Pits")),
     DropdownMenuItem(value: TeamMember.tableName, child: Text("Team Members")),
+    DropdownMenuItem(value: EventMatch.tableName, child: Text("Matches")),
   ];
 
   Future<Map<String, List<dynamic>>> getData() async {
@@ -44,6 +47,10 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     DbTeamMembers dbTeamMembers = DbTeamMembers();
     List<TeamMember> teamMembers = await dbTeamMembers.getTeamMembers();
     result[TeamMember.tableName] = teamMembers;
+
+    DbMatches dbMatches = DbMatches();
+    List<EventMatch> matches = await dbMatches.getMatches();
+    result[EventMatch.tableName] = matches;
 
     return result;
   }
@@ -121,6 +128,14 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
                             return ListTile(
                               title: Text("Team Member: ${member.name}"),
                               subtitle: Text("ID: ${member.id}"),
+                            );
+                          case EventMatch.tableName:
+                            EventMatch match = tableData[index] as EventMatch;
+                            return ListTile(
+                              title: Text(
+                                "Match: ${match.compLevel} ${match.number}",
+                              ),
+                              subtitle: Text(match.toMap().toString()),
                             );
                           default:
                             return ListTile(title: Text("Unknown Table"));

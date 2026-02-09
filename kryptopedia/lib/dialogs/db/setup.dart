@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/api.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/sync.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
@@ -373,7 +375,24 @@ class _TestDataFormState extends State<TestDataForm> {
     }
     await Future.wait(teams.map((t) => dbTeams.upsertTeam(t)));
 
-    //TODO add test matches
+    DbMatches dbMatches = DbMatches();
+    List<EventMatch> matches = [];
+    for (int i = 1; i <= numberOfMatches; i++) {
+      // TODO cycle through teams more
+      matches.add(
+        EventMatch(
+          i,
+          "qm",
+          teams[0].number,
+          teams[1].number,
+          teams[2].number,
+          teams[3].number,
+          teams[4].number,
+          teams[5].number,
+        ),
+      );
+    }
+    await Future.wait(matches.map((m) => dbMatches.upsertMatch(m)));
 
     DbTeamMembers dbTeamMembers = DbTeamMembers();
 

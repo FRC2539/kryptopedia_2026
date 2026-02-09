@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
@@ -59,12 +60,14 @@ class DbHelper {
     DbEvents dbEvents = DbEvents();
     DbScoutedPits dbScoutedPits = DbScoutedPits();
     DbTeamMembers dbTeamMembers = DbTeamMembers();
+    DbMatches dbMatches = DbMatches();
 
     await Future.wait([
       dbTeams.ensureTableExists(db),
       dbEvents.ensureTableExists(db),
       dbScoutedPits.ensureTableExists(db),
       dbTeamMembers.ensureTableExists(db),
+      dbMatches.ensureTableExists(db),
     ]);
   }
 

@@ -333,7 +333,7 @@ class _TestDataFormState extends State<TestDataForm> {
   String teamNickname = "Krypton Cougars";
   int numberOfTeams = 6;
   int numberOfMatches = 5;
-  int numberOfTeamMembers = 3;
+  int numberOfTeamMembers = 5;
 
   bool submitEnabled = true;
   void submit() async {
@@ -396,8 +396,12 @@ class _TestDataFormState extends State<TestDataForm> {
 
     DbTeamMembers dbTeamMembers = DbTeamMembers();
 
-    List<TeamMember> members = [TeamMember(id: "1", name: "Dominic")];
-    for (int i = 1; i < numberOfTeamMembers; i++) {
+    List<TeamMember> members = [
+      TeamMember(id: "1", name: "Dominic"),
+      TeamMember(id: "2", name: "Aaron"),
+      TeamMember(id: "3", name: "Adam"),
+    ];
+    for (int i = 3; i < numberOfTeamMembers; i++) {
       members.add(TeamMember(id: "${i + 1}", name: "Team Member ${i + 1}"));
     }
     await Future.wait(members.map((m) => dbTeamMembers.upsertTeamMember(m)));
@@ -443,7 +447,7 @@ class _TestDataFormState extends State<TestDataForm> {
           SizedBox(height: 20), //hides that the padding is all off
           NumberField(
             label: "# of team members",
-            minValue: 1,
+            minValue: 3,
             maxValue: 10,
             startValue: numberOfTeamMembers,
             callback: (v) => numberOfTeamMembers = v,

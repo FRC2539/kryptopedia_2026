@@ -76,148 +76,150 @@ class _NumberFieldState extends State<NumberField> {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child:
-          Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-        Expanded(
+        Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
             flex: 2,
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: AutoSizeText(
-                  widget.label,
-                  style: TextStyle(
-                      fontSize: Device.fontLabel(context),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: AutoSizeText(
+                    widget.label,
+                    style: TextStyle(fontSize: Device.fontLabel(context)),
                   ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(widget.subtitle,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.subtitle,
                     style: TextStyle(
                       fontSize: Device.fontSize(context, 10.0, 13.0),
-                    )),
-              ),
-            ],
-          ),
-        ),
-        InkWell(
-          child: Container(
-            height: 50.0,
-            width: (Device.isTablet(context)) ? 100.0 : 50.0,
-            alignment: Alignment.center,
-            child: Text(
-              " - ",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: Device.fontSize(context, 25.0, 40.0),
-              ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          onTap: () {
-            int currentValue = int.parse(_controller.text);
-            if (currentValue > widget.minValue) {
-              setState(() {
-                currentValue--;
-                _controller.text =
-                    (currentValue).toString(); // incrementing value
-                widget.callback(currentValue);
-              });
-            } else {
-                ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(tooLowSnackbar);
-            }
-          },
-        ),
-        Focus(
-          child: SizedBox(
-            width: (Device.isTablet(context)) ? 60.0 : 50.0,
-            child: TextFormField(
-              enabled: widget.allowDirectEditing,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: Device.fontSize(context, 15.0, 20.0),
+          InkWell(
+            child: Container(
+              height: 50.0,
+              width: (Device.isTablet(context)) ? 100.0 : 50.0,
+              alignment: Alignment.center,
+              child: Text(
+                " - ",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: Device.fontSize(context, 25.0, 40.0),
+                ),
               ),
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(8.0),
-                enabledBorder: OutlineInputBorder(
+            ),
+            onTap: () {
+              int currentValue = int.parse(_controller.text);
+              if (currentValue > widget.minValue) {
+                setState(() {
+                  currentValue--;
+                  _controller.text = (currentValue)
+                      .toString(); // incrementing value
+                  widget.callback(currentValue);
+                });
+              } else {
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(tooLowSnackbar);
+              }
+            },
+          ),
+          Focus(
+            child: SizedBox(
+              width: (Device.isTablet(context)) ? 60.0 : 50.0,
+              child: TextFormField(
+                enabled: widget.allowDirectEditing,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: Device.fontSize(context, 15.0, 20.0),
+                ),
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(8.0),
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                     borderSide: const BorderSide(
                       color: Colors.blueGrey,
                       width: 0.5,
-                    )),
-              ),
-              controller: _controller,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: false,
-                signed: true,
-              ),
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-            ),
-          ),
-          onFocusChange: (focus) {
-            if ((_controller.text == "") ||
-                (int.tryParse(_controller.text) == null)) {
-              setState(() {
-                _controller.text = (widget.minValue.toString());
-                widget.callback(widget.minValue);
-              });
-                ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(nanSnackbar);
-              return;
-            }
-            int value = int.parse(_controller.text);
-
-            if (value < widget.minValue) {
-              setState(() {
-                _controller.text = (widget.minValue.toString());
-              });
-                ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(tooLowSnackbar);
-            }
-            if (value > widget.maxValue) {
-              setState(() {
-                _controller.text = (widget.maxValue.toString());
-              });
-                ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(tooHighSnackbar);
-            }
-
-            setState(() {
-              widget.callback(int.parse(_controller.text));
-            });
-          },
-        ),
-        InkWell(
-          child: Container(
-            height: 50.0,
-            width: (Device.isTablet(context)) ? 100.0 : 50.0,
-            alignment: Alignment.center,
-            child: Text(
-              " + ",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: Device.fontSize(context, 25.0, 40.0),
+                    ),
+                  ),
+                ),
+                controller: _controller,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: false,
+                  signed: true,
+                ),
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
             ),
-          ),
-          onTap: () {
-            int currentValue = int.parse(_controller.text);
-            if (currentValue < widget.maxValue) {
-              setState(() {
-                currentValue++;
-                _controller.text = (currentValue > 0 ? currentValue : 0)
-                    .toString(); // decrementing value
-                widget.callback(currentValue);
-              });
-            } else {
+            onFocusChange: (focus) {
+              if ((_controller.text == "") ||
+                  (int.tryParse(_controller.text) == null)) {
+                setState(() {
+                  _controller.text = (widget.minValue.toString());
+                  widget.callback(widget.minValue);
+                });
                 ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(tooHighSnackbar);
-            }
-          },
-        ),
-      ]),
+                ScaffoldMessenger.of(context).showSnackBar(nanSnackbar);
+                return;
+              }
+              int value = int.parse(_controller.text);
+
+              if (value < widget.minValue) {
+                setState(() {
+                  _controller.text = (widget.minValue.toString());
+                });
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(tooLowSnackbar);
+              }
+              if (value > widget.maxValue) {
+                setState(() {
+                  _controller.text = (widget.maxValue.toString());
+                });
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(tooHighSnackbar);
+              }
+
+              setState(() {
+                widget.callback(int.parse(_controller.text));
+              });
+            },
+          ),
+          InkWell(
+            child: Container(
+              height: 50.0,
+              width: (Device.isTablet(context)) ? 100.0 : 50.0,
+              alignment: Alignment.center,
+              child: Text(
+                " + ",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: Device.fontSize(context, 25.0, 40.0),
+                ),
+              ),
+            ),
+            onTap: () {
+              int currentValue = int.parse(_controller.text);
+              if (currentValue < widget.maxValue) {
+                setState(() {
+                  currentValue++;
+                  _controller.text = (currentValue > 0 ? currentValue : 0)
+                      .toString(); // decrementing value
+                  widget.callback(currentValue);
+                });
+              } else {
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(tooHighSnackbar);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

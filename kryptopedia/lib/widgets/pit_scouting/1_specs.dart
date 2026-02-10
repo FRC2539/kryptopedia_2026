@@ -98,6 +98,19 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
                 scoutedPitSingleton.drivetrain = newValue;
               },
             ),
+            DropdownList(
+              label: 'Robot\'s wheel type',
+              options: [
+                MultiSelectOption(value: WheelType.colson, label: 'Colson'),
+                MultiSelectOption(value: WheelType.billet, label: 'Billet'),
+                MultiSelectOption(value: WheelType.spike, label: 'Spike'),
+                MultiSelectOption(value: WheelType.other, label: 'Other'),
+              ],
+              initialValue: scoutedPitSingleton.wheelType,
+              callback: (newValue) {
+                scoutedPitSingleton.wheelType = newValue;
+              },
+            ),
           ],
         )
       ],

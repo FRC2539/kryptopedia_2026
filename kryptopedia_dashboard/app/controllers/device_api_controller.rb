@@ -52,8 +52,12 @@ class DeviceApiController < ApplicationController
 
     body.each do |item|
       data = item["data"]
-      puts data.pretty_print_inspect
-      ScoutingDataItem.upsert(data_type: item["type"], uid: data["uid"], scouted_event: event, team_member: TeamMember.find_by_hashid!(data["scouter_id"]), data: data.to_json)
+      if item["deleted"]
+        ScoutingDataItem.where(data_type: item["type"], uid: data["uid"], scouted_event_id: event.id).update_all(deleted_at: Time.current)
+        next
+      end
+      team_member = TeamMember.find_by_hashid(data["scouter_id"]) if data["scouter_id"]
+      ScoutingDataItem.upsert({ data_type: item["type"], uid: data["uid"], scouted_event_id: event.id, team_member_id: team_member&.id, data: data.to_json, deleted_at: nil })
     end
 
     # ACCEPT/PUSH ^^

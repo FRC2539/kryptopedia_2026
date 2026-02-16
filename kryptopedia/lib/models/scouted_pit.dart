@@ -155,7 +155,10 @@ class ScoutedPit {
       generalComments = map[generalCommentsKey];
 
   SyncDataItem toSyncDataItem() {
-    return SyncDataItem(type: "scouted_pit", data: toMap()..[localKey] = 0);
+    Map<String, dynamic> map = toMap();
+    map.remove(localKey);
+
+    return SyncDataItem(type: "scouted_pit", data: map);
   }
 }
 

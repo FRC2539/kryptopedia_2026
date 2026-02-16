@@ -41,6 +41,15 @@ class TeamFlagApplication {
       _deleted = map[deletedKey];
 
   SyncDataItem toSyncDataItem() {
-    return SyncDataItem(type: "flag_application", data: toMap());
+    Map<String, dynamic> map = toMap();
+    map.remove(localKey);
+    map.remove(deletedKey);
+    map["uid"] = "$name-$teamNumber";
+
+    return SyncDataItem(
+      type: "team_flag_application",
+      data: map,
+      deleted: deleted,
+    );
   }
 }

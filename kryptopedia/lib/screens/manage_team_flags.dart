@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/generic_confirmation.dart';
 import 'package:kryptopedia/main.dart';
 import 'package:kryptopedia/models/team_flag_application.dart';
+import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/sync.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/widgets/common/banners.dart';
 import 'package:kryptopedia/widgets/team_select_grid.dart';
+import 'package:relative_time/relative_time.dart';
 
 class ManageTeamFlags extends StatefulWidget {
   const ManageTeamFlags({super.key});
@@ -17,11 +20,26 @@ class ManageTeamFlags extends StatefulWidget {
 
 class _ManageTeamFlagsState extends State<ManageTeamFlags> {
   late Future<List<TeamFlagApplication>> data;
+  String lastSync = "Never";
+  bool syncEnabled = false;
 
   @override
   void initState() {
     super.initState();
     data = getTeamFlagApplications();
+    getLastSync();
+  }
+
+  Future<void> getLastSync() async {
+    DbEvents dbEvents = DbEvents();
+    dbEvents.getEvent().then((value) {
+      setState(() {
+        syncEnabled = value.syncEnabled;
+        lastSync = RelativeTime.locale(
+          const Locale('en'),
+        ).format(value.lastSync);
+      });
+    });
   }
 
   Future<List<TeamFlagApplication>> getTeamFlagApplications() async {
@@ -40,8 +58,33 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
             color: cougarOrange,
             children: [
               Text(
-                "Sync before and after editing flags to avoid conflicts! Flags are especially prone to sync conflicts. Could be bad!! yet to be implemented though",
+                "Sync before and after editing flags to avoid conflicts!",
+                style: TextStyle(fontSize: 20),
               ),
+              Text(
+                "Flags are especially prone to sync conflicts since everyone is working with the same set of data :) there's some conflict resolution, but disagreements could still get messy.",
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 8,
+                children: [
+                  Text("Last Sync: $lastSync"),
+                  ElevatedButton.icon(
+                    onPressed: syncEnabled
+                        ? () async {
+                            setState(() {
+                              syncEnabled = false;
+                            });
+                            await syncDataFlow(context);
+                            getLastSync();
+                          }
+                        : null,
+                    label: Text("Sync Data"),
+                    icon: Icon(Icons.sync),
+                  ),
+                ],
+              ),
+            
             ],
           ),
           FutureBuilder(
@@ -168,23 +211,68 @@ class _ModifyFlagDialogState extends State<ModifyFlagDialog> {
       }
 
       DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
-      for (int teamNumber in selectedTeamNumbers) {
-        await dbTeamFlagApplications.upsertTeamFlagApplication(
-          TeamFlagApplication(flagName!, teamNumber, true, false),
-        );
+      
+      List<TeamFlagApplication> existingFlags = await dbTeamFlagApplications
+          .getTeamFlagApplicationsForFlag(flagName!);
+
+      //teams not set deleted, in the local db.
+      Set<int> existingTeams = existingFlags
+          .where((f) => !f.deleted)
+          .map((f) => f.teamNumber)
+          .toSet();
+
+      //teams that need deletion synced
+      Set<int> syncedTeams = existingFlags
+          .where((f) => !f.local && !f.deleted)
+          .map((f) => f.teamNumber)
+          .toSet();
+
+      //teams that were deleted locally and not yet synced, so if they are added we can just remove that flag
+      //will only occur for teams that exist on the server, if a team was added and deleted locally it would be removed from the local db
+      Set<int> locallyDeletedTeams = existingFlags
+          .where((f) => f.deleted && f.local)
+          .map((f) => f.teamNumber)
+          .toSet();
+
+      //teams selected in the grid
+      Set<int> finalTeams = Set.from(selectedTeamNumbers);
+
+      Set<int> addedTeams = finalTeams.difference(existingTeams);
+      Set<int> removedTeams = existingTeams.difference(finalTeams);
+
+      // Add new teams- only sync addition if team wasn't on server already
+      for (int teamNumber in addedTeams) {
+        if (locallyDeletedTeams.contains(teamNumber)) {
+          // team was deleted locally but not yet synced, just remove the deletion mark.
+          //not local anymore! server currently thinks this team has the flag, no sync needed
+          await dbTeamFlagApplications.upsertTeamFlagApplication(
+            TeamFlagApplication(flagName!, teamNumber, false, false),
+          );
+        } else {
+          // Team is truly new, add it with local = true so it gets synced
+          await dbTeamFlagApplications.upsertTeamFlagApplication(
+            TeamFlagApplication(flagName!, teamNumber, true, false),
+          );
+        }
+
       }
 
-      List<int> removedTeams =
-          widget.selectedTeamNumbers
-              ?.where((teamNumber) => !selectedTeamNumbers.contains(teamNumber))
-              .toList() ??
-          [];
+      // Remove teams- only sync deletion if team was on server
       for (int teamNumber in removedTeams) {
-        await dbTeamFlagApplications.upsertTeamFlagApplication(
-          TeamFlagApplication(flagName!, teamNumber, true, true),
-        );
+        if (syncedTeams.contains(teamNumber)) {
+          // team exists on server, need to sync the deletion
+          await dbTeamFlagApplications.upsertTeamFlagApplication(
+            TeamFlagApplication(flagName!, teamNumber, true, true),
+          );
+        } else {
+          // Team was never synced, just delete locally
+          await dbTeamFlagApplications.deleteTeamFlagApplication(
+            flagName!,
+            teamNumber,
+          );
+        }
       }
-
+      
       if (!context.mounted) return;
       Navigator.pop(context);
     }

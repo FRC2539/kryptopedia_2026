@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_04_014245) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_16_210035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,11 +51,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_04_014245) do
     t.string "data_type", null: false
     t.datetime "deleted_at"
     t.bigint "scouted_event_id", null: false
-    t.bigint "team_member_id", null: false
+    t.bigint "team_member_id"
     t.string "uid", null: false
     t.datetime "updated_at", null: false
     t.index ["scouted_event_id"], name: "index_scouting_data_items_on_scouted_event_id"
     t.index ["team_member_id"], name: "index_scouting_data_items_on_team_member_id"
+    t.index ["uid", "scouted_event_id"], name: "index_scouting_data_items_on_uid_and_scouted_event_id", unique: true
   end
 
   create_table "session_requests", force: :cascade do |t|

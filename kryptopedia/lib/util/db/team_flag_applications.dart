@@ -39,6 +39,18 @@ class DbTeamFlagApplications {
     return result.map((map) => TeamFlagApplication.fromMap(map)).toList();
   }
 
+  Future<List<TeamFlagApplication>> getLocalTeamFlagApplications() async {
+    Database db = await dbHelper.db;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      TeamFlagApplication.tableName,
+      where: "${TeamFlagApplication.localKey} = ?",
+      whereArgs: [1],
+    );
+
+    return result.map((map) => TeamFlagApplication.fromMap(map)).toList();
+  }
+
   Future<List<TeamFlagApplication>> getActiveTeamFlagApplications() async {
     Database db = await dbHelper.db;
 
@@ -65,4 +77,58 @@ class DbTeamFlagApplications {
 
     return result.map((map) => TeamFlagApplication.fromMap(map)).toList();
   }
+
+  Future<List<TeamFlagApplication>> getActiveTeamFlagApplicationsForFlag(
+    String flagName,
+  ) async {
+    Database db = await dbHelper.db;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      TeamFlagApplication.tableName,
+      where:
+          "${TeamFlagApplication.nameKey} = ? AND ${TeamFlagApplication.deletedKey} = ?",
+      whereArgs: [flagName, 0],
+    );
+
+    return result.map((map) => TeamFlagApplication.fromMap(map)).toList();
+  }
+
+  Future<List<TeamFlagApplication>> getTeamFlagApplicationsForFlag(
+    String flagName,
+  ) async {
+    Database db = await dbHelper.db;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      TeamFlagApplication.tableName,
+      where: "${TeamFlagApplication.nameKey} = ?",
+      whereArgs: [flagName],
+    );
+
+    return result.map((map) => TeamFlagApplication.fromMap(map)).toList();
+  }
+
+  Future<int> deleteTeamFlagApplication(String name, int teamNumber) async {
+    Database db = await dbHelper.db;
+    int result = await db.delete(
+      TeamFlagApplication.tableName,
+      where:
+          "${TeamFlagApplication.nameKey} = ? AND ${TeamFlagApplication.teamNumberKey} = ?",
+      whereArgs: [name, teamNumber],
+    );
+    return result;
+  }
+
+  Future<int> markTeamFlagApplicationSynced(String name, int teamNumber) async {
+    Database db = await dbHelper.db;
+    int result = await db.update(
+      TeamFlagApplication.tableName,
+      {TeamFlagApplication.localKey: 0},
+      where:
+          "${TeamFlagApplication.nameKey} = ? AND ${TeamFlagApplication.teamNumberKey}  = ?",
+      whereArgs: [name, teamNumber],
+    );
+    return result;
+  }
+
+  //is this too many helper methods
 }

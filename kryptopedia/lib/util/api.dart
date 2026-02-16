@@ -106,13 +106,15 @@ class APIResponse<T> {
   APIResponse({required this.success, required this.data});
 }
 
+/// param data MUST INCLUDE "uid"
 class SyncDataItem {
   final String type;
   final dynamic data;
+  final bool deleted;
 
-  SyncDataItem({required this.type, required this.data});
+  SyncDataItem({required this.type, required this.data, this.deleted = false});
 
   Map<String, dynamic> toMap() {
-    return {"type": type, "data": data};
+    return {"type": type, "data": data, "deleted": deleted};
   }
 }

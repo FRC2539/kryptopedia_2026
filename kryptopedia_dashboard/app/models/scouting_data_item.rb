@@ -10,12 +10,13 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  scouted_event_id :bigint           not null
-#  team_member_id   :bigint           not null
+#  team_member_id   :bigint
 #
 # Indexes
 #
-#  index_scouting_data_items_on_scouted_event_id  (scouted_event_id)
-#  index_scouting_data_items_on_team_member_id    (team_member_id)
+#  index_scouting_data_items_on_scouted_event_id          (scouted_event_id)
+#  index_scouting_data_items_on_team_member_id            (team_member_id)
+#  index_scouting_data_items_on_uid_and_scouted_event_id  (uid,scouted_event_id) UNIQUE
 #
 # Foreign Keys
 #

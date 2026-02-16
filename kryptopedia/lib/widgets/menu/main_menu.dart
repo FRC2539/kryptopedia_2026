@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/match_scouting_select.dart';
 import 'package:kryptopedia/dialogs/pit_scouting_select.dart';
+import 'package:kryptopedia/screens/manage_team_flags.dart';
 import 'package:kryptopedia/screens/pdf_viewer.dart';
 import 'package:kryptopedia/widgets/menu/section.dart';
 import 'package:kryptopedia/widgets/menu/version_number.dart';
@@ -31,6 +32,11 @@ class MainMenu extends StatelessWidget {
               builder: (context) => ScoutmatchSelectionDialog(),
             ),
           ),
+          MenuItemDefinition(
+            title: "Manage Flags",
+            icon: Icons.flag,
+            landscapeWidget: ManageTeamFlags(),
+          )
         ]),
 
         // Resources

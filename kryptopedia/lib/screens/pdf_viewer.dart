@@ -86,13 +86,11 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
               if (link.url != null) {
                 bool? confirmed = await showDialog(
                   context: context,
-                  builder: (context) {
-                    return ConfirmationDialog(
+                  builder: (context) => ConfirmationDialog(
                       title: "Open URL?",
                       body: "${link.url}",
                       confirmText: "Open",
-                    );
-                  },
+                  )
                 );
                 if (confirmed != true) return;
                 launchUrl(link.url!);

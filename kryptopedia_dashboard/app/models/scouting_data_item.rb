@@ -23,10 +23,12 @@
 #  fk_rails_...  (team_member_id => team_members.id)
 #
 class ScoutingDataItem < ApplicationRecord
-  belongs_to :team_member
+  belongs_to :team_member, optional: true
   belongs_to :scouted_event
 
   validates :uid, presence: true, uniqueness: { scope: :scouted_event_id }
+  validates :data_type, presence: true
+  validates :data, presence: true
 
   def destroy
     soft_delete

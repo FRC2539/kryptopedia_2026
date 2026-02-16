@@ -27,6 +27,7 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
   late int _selectedTeam;
   late String _selectedScouter;
   late Future<FutureResponse> data;
+  bool noTeams = false;
 
   Future<FutureResponse> _future() async {
     DbScoutedPits dbScoutedPits = DbScoutedPits();
@@ -40,6 +41,11 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
       }),
     );
     teams = teamsWithScoutedPits.whereType<Team>().toList();
+
+    if (teams.isEmpty) {
+      noTeams = true;
+      return FutureResponse(teams: [], scouters: []);
+    }
 
     _selectedTeam = teams[0].number;
 
@@ -83,7 +89,7 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
               builder: (context, snapshot) {
                 if (snapshot.hasError) return Text("${snapshot.error}");
                 if (!snapshot.hasData) return CircularProgressIndicator();
-                if (snapshot.data!.teams.isEmpty &&
+                if (noTeams &&
                     snapshot.connectionState == ConnectionState.done) {
                   return Text("no teams left to scout!");
                 }

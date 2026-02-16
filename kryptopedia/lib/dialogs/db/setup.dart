@@ -117,15 +117,13 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
-        return NotificationDialog(
+      builder: (context) => NotificationDialog(
           title: "Awaiting confirmation",
           body:
               "Confirmation is required- log into the dashboard to authorize this device.\n"
               "Request ID: ${sessionRequest.data["request_id"]}",
           okButtonText: "Cancel",
-        );
-      },
+      )
     ).then((value) {
       dialogOpen = false;
     });

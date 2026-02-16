@@ -26,7 +26,17 @@ class MainApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: MainScreen(),
+      //this little dance with a scaffold and another navigator
+      //is needed to let snackbars show up on top of dialogs!
+      //see https://stackoverflow.com/a/68446126/17675751
+      home: Scaffold(
+        body: Navigator(
+          initialRoute: "/",
+          onGenerateRoute: (setting) {
+            return MaterialPageRoute(builder: (context) => MainScreen());
+          },
+        ),
+      )
     );
   }
 }
@@ -57,8 +67,9 @@ class _MainScreenState extends State<MainScreen> {
       if (!event) {
         showDialog(
           context: context,
-          builder: (c) => EventSetupDialog(),
           barrierDismissible: false,
+          useRootNavigator: false,
+          builder: (c) => EventSetupDialog(),
         );
       }
     });

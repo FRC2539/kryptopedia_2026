@@ -53,7 +53,7 @@ class DeviceApiController < ApplicationController
     body.each do |item|
       data = item["data"]
       puts data.pretty_print_inspect
-      ScoutingDataItem.find_or_create_by!(data_type: item["type"], uid: data["uid"], scouted_event: event, team_member: TeamMember.find_by_hashid!(data["scouter_id"]), data: data.to_json)
+      ScoutingDataItem.upsert(data_type: item["type"], uid: data["uid"], scouted_event: event, team_member: TeamMember.find_by_hashid!(data["scouter_id"]), data: data.to_json)
     end
 
     # ACCEPT/PUSH ^^

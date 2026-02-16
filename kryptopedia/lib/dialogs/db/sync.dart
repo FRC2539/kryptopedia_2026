@@ -89,6 +89,7 @@ class _SyncPopupState extends State<SyncPopup> {
                   await showDialog(
                     context: context,
                     barrierDismissible: false,
+                    useRootNavigator: false,
                     builder: (context) => EventSetupDialog(),
                   );
                 },

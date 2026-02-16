@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/models/team_flag_application.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
@@ -27,6 +29,10 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     DropdownMenuItem(value: ScoutedPit.tableName, child: Text("Scouted Pits")),
     DropdownMenuItem(value: TeamMember.tableName, child: Text("Team Members")),
     DropdownMenuItem(value: EventMatch.tableName, child: Text("Matches")),
+    DropdownMenuItem(
+      value: TeamFlagApplication.tableName,
+      child: Text("Flag Applications"),
+    ),
   ];
 
   Future<Map<String, List<dynamic>>> getData() async {
@@ -51,6 +57,11 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     DbMatches dbMatches = DbMatches();
     List<EventMatch> matches = await dbMatches.getMatches();
     result[EventMatch.tableName] = matches;
+
+    DbTeamFlagApplications dbFlagApplications = DbTeamFlagApplications();
+    List<TeamFlagApplication> flagApplications = await dbFlagApplications
+        .getTeamFlagApplications();
+    result[TeamFlagApplication.tableName] = flagApplications;
 
     return result;
   }
@@ -136,6 +147,17 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
                                 "Match: ${match.compLevel} ${match.number}",
                               ),
                               subtitle: Text(match.toMap().toString()),
+                            );
+                          case TeamFlagApplication.tableName:
+                            TeamFlagApplication flagApplication =
+                                tableData[index] as TeamFlagApplication;
+                            return ListTile(
+                              title: Text(
+                                "Flag Application - Team: ${flagApplication.teamNumber}, Flag: ${flagApplication.name}",
+                              ),
+                              subtitle: Text(
+                                flagApplication.toMap().toString(),
+                              ),
                             );
                           default:
                             return ListTile(title: Text("Unknown Table"));

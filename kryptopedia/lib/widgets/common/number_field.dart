@@ -48,7 +48,6 @@ class _NumberFieldState extends State<NumberField> {
 
   @override
   Widget build(BuildContext context) {
-    // int flexValue = widget.maxValue > 99 ? 5 : 6;
 
     var tooHighSnackbar = SnackBar(
       content: Text(
@@ -58,7 +57,7 @@ class _NumberFieldState extends State<NumberField> {
       backgroundColor: Colors.redAccent,
       showCloseIcon: true,
     );
-    var tooLowSnackbar = SnackBar(
+    SnackBar tooLowSnackbar = SnackBar(
       content: Text(
         '${widget.label} must be >= ${widget.minValue}',
           style: const TextStyle(fontSize: 20)),
@@ -66,9 +65,9 @@ class _NumberFieldState extends State<NumberField> {
       backgroundColor: Colors.redAccent,
       showCloseIcon: true,
     );
-    const nanSnackbar = SnackBar(
+    SnackBar nanSnackbar = SnackBar(
       content: Text('That\'s not a number.', style: TextStyle(fontSize: 20)),
-      duration: Duration(seconds: 4),
+      duration: const Duration(seconds: 4),
       backgroundColor: Colors.redAccent,
       showCloseIcon: true,
     );

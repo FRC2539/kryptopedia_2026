@@ -41,7 +41,7 @@ class _TeamSelectGridState extends State<TeamSelectGrid> {
         return GridView.builder(
           scrollDirection: Axis.vertical,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: Device.isMobile ? 2 : 5,
+            crossAxisCount: landscape(context) ? 5 : 2,
           ),
           itemCount: teams.length,
           itemBuilder: (context, index) {

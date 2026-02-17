@@ -35,7 +35,9 @@ Future<String?> syncData() async {
     event.serverURL!,
     event.teamNumber,
     event.authToken!,
-    event.lastSync.toIso8601String(),
+    event.lastSync == null
+        ? DateTime.fromMillisecondsSinceEpoch(0).toIso8601String()
+        : event.lastSync!.toIso8601String(),
     dataToPush,
   );
   if (!pulledData.success) {

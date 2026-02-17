@@ -26,8 +26,8 @@ class TeamMember < ApplicationRecord
   belongs_to :team
 
   validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :team_id }
-  validates :email, length: { maximum: 255 }, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { scope: :team_id }
-  normalizes :email, with: -> email { email.strip.downcase }
+  validates :email, length: { maximum: 255 }, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { scope: :team_id }, allow_blank: true
+  normalizes :email, with: ->(email) { email&.strip&.downcase }
   enum :role, [:scouter, :admin], default: :scouter
   validates :email, uniqueness: { scope: :team_id }
 

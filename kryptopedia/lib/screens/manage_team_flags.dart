@@ -35,16 +35,20 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
     dbEvents.getEvent().then((value) {
       setState(() {
         syncEnabled = value.syncEnabled;
+        if (value.lastSync == null) {
+          lastSync = "Never";
+          return;
+        }
         lastSync = RelativeTime.locale(
           const Locale('en'),
-        ).format(value.lastSync);
+        ).format(value.lastSync!);
       });
     });
   }
 
-  Future<List<TeamFlagApplication>> getTeamFlagApplications() async {
+  Future<List<TeamFlagApplication>> getTeamFlagApplications() {
     DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
-    return await dbTeamFlagApplications.getActiveTeamFlagApplications();
+    return dbTeamFlagApplications.getActiveTeamFlagApplications();
   }
 
   @override
@@ -64,6 +68,7 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
               Text(
                 "Flags are especially prone to sync conflicts since everyone is working with the same set of data :) there's some conflict resolution, but disagreements could still get messy.",
               ),
+              SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 8,

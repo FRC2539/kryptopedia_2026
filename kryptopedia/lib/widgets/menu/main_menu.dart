@@ -36,6 +36,7 @@ class MainMenu extends StatelessWidget {
             title: "Manage Flags",
             icon: Icons.flag,
             landscapeWidget: ManageTeamFlags(),
+            portraitWidget: ManageTeamFlags(),
           )
         ]),
 

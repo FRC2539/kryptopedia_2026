@@ -9,7 +9,8 @@ class Event {
   String? lastScouter;
 
   int _lastSync;
-  DateTime get lastSync => DateTime.fromMillisecondsSinceEpoch(_lastSync);
+  DateTime? get lastSync =>
+      _lastSync == 0 ? null : DateTime.fromMillisecondsSinceEpoch(_lastSync);
   set lastSync(DateTime value) {
     _lastSync = value.millisecondsSinceEpoch;
   }

@@ -23,9 +23,13 @@ class _SyncPopupState extends State<SyncPopup> {
     dbEvents.getEvent().then((value) {
       setState(() {
         syncEnabled = value.syncEnabled;
+        if (value.lastSync == null) {
+          lastSync = "Never";
+          return;
+        }
         lastSync = RelativeTime.locale(
           const Locale('en'),
-        ).format(value.lastSync);
+        ).format(value.lastSync!);
       });
     });
   }

@@ -1,0 +1,65 @@
+name: build-upload-apk
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+        paths:
+            - "kryptopedia/pubspec.yaml"
+
+jobs:
+    check-version:
+        runs-on: ubuntu-latest
+        outputs:
+            version_changed: ${{ steps.check_version.outputs.version_changed }}
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 5
+            - name: Get previous version
+              id: get_prev_version
+              run: |
+                  git fetch --depth=2
+                  PREV_VERSION=$(git show HEAD~1:pubspec.yaml | grep '^version:' | awk '{print $2}')
+                  echo "prev_version=$PREV_VERSION" >> "$GITHUB_OUTPUT"
+            - name: Get current version
+              id: get_curr_version
+              run: |
+                  CURR_VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+                  echo "curr_version=$CURR_VERSION" >> "$GITHUB_OUTPUT"
+            - name: Check version change
+              id: check_version
+              run: |
+                  if [ "${{ steps.get_prev_version.outputs.prev_version }}" != "${{ steps.get_curr_version.outputs.curr_version }}" ]; then
+                    echo "Version changed"
+                    echo "version_changed=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "Version not changed"
+                    echo "version_changed=false" >> "$GITHUB_OUTPUT"
+                  fi
+
+    build-release:
+        needs: check-version
+        if: ${{ github.event_name == 'workflow_dispatch' || needs.check-version.outputs.version_changed == 'true' }}
+        runs-on: ubuntu-latest
+        container: ghcr.io/cirruslabs/flutter:3.41.0
+        defaults:
+            run:
+                working-directory: ./kryptopedia
+        steps:
+            - uses: actions/checkout@v3
+            - name: Install firebase-tools
+              run: |
+                  curl -sL https://firebase.tools | bash
+            - name: Build APK
+              run: |
+                  flutter build apk
+            - name: set up firebase token
+              run: |
+                  echo "${{ secrets.FIREBASE_DISTRIBUTION_SERVICE_ACCOUNT_KEY }}" > firebase_key
+            - name: Upload APK
+              run: |
+                  GOOGLE_APPLICATION_CREDENTIALS=firebase_key firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+                  --app ${{ secrets.FIREBASE_APP_ID }} \
+                  --groups "team" \
+                  --release-notes-file ".releasenotes"

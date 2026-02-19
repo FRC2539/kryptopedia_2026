@@ -31,16 +31,14 @@ class DbMatches {
     return result;
   }
 
-  Future<List<EventMatch>> getMatches() async {
+  Future<EventMatch> getMatch() async {
     Database db = await dbHelper.db;
 
-    final List<Map<String, dynamic>> matches = await db.query(
+    final dynamic match = await db.query( // Adam wrote this code and is pretty suspicious of it.
       EventMatch.tableName,
     );
 
-    return List.generate(matches.length, (i) {
-      return EventMatch.fromMap(matches[i]);
-    });
+    return EventMatch.fromMap(match);
   }
 
   Future<List<EventMatch>> getQualificationMatches() async {
@@ -82,4 +80,6 @@ class DbMatches {
 
     return result;
   }
+
+  
 }

@@ -9,6 +9,8 @@ class EventMatch {
   int blue2number;
   int blue3number;
 
+  String get id => "$compLevel/$number";
+
   static const String tableName = "matches";
   static const String numberKey = "number";
   static const String compLevelKey = "comp_level";

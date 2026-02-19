@@ -44,4 +44,9 @@ class DbScoutedMatches {
 
     return scoutedMatch;
   }
+
+  //Future<bool> existsScoutedMatchWithTeam(String id, int teamID) async {
+  //  Database db = await dbHelper.db;
+  //  bool result = await db.;
+  //}
 }

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/singletons.dart';
@@ -13,13 +14,13 @@ import 'package:kryptopedia/widgets/match_scouting/4_dropdown.dart';
 
 class MatchScouting extends StatefulWidget {
   final Team team;
-  final String alliance;
-  final String match;
+  final EventMatch match;
+  final String alliancePosition;
 
   const MatchScouting({
     super.key,
     required this.team,
-    required this.alliance,
+    required this.alliancePosition,
     required this.match,
   });
 
@@ -52,7 +53,7 @@ class _MatchScoutingState extends State<MatchScouting> {
           MatchBanner(
             team: widget.team.nickname,
             match: widget.match,
-            alliance: widget.alliance,
+            alliancePosition: widget.alliancePosition,
           ),
           Expanded(
             child: ListView(

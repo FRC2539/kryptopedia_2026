@@ -55,8 +55,8 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     result[TeamMember.tableName] = teamMembers;
 
     DbMatches dbMatches = DbMatches();
-    List<EventMatch> matches = await dbMatches.getMatches();
-    result[EventMatch.tableName] = matches;
+    EventMatch matches = await dbMatches.getMatch();
+    result[EventMatch.tableName] = [matches];
 
     DbTeamFlagApplications dbFlagApplications = DbTeamFlagApplications();
     List<TeamFlagApplication> flagApplications = await dbFlagApplications

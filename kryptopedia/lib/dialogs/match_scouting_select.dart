@@ -1,183 +1,360 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/screens/match_scouting.dart';
 
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/teams.dart';
+import 'package:kryptopedia/util/db/matches.dart';
+import 'package:kryptopedia/util/db/helper.dart';
 
 import 'package:kryptopedia/util/deviceinfo.dart';
 
-class ScoutmatchSelectionDialog extends StatefulWidget {
-  const ScoutmatchSelectionDialog({super.key});
+class ScoutedMatchSelectionDialog extends StatefulWidget {
+  const ScoutedMatchSelectionDialog({super.key});
 
   @override
-  State<ScoutmatchSelectionDialog> createState() =>
-      _ScoutmatchSelectionDialogState();
+  State<ScoutedMatchSelectionDialog> createState() =>
+      _ScoutedMatchSelectionDialogState();
 }
 
-class _ScoutmatchSelectionDialogState extends State<ScoutmatchSelectionDialog> {
-  DbEvents dbEvents = DbEvents();
-  DbTeams dbTeams = DbTeams();
+class _ScoutedMatchSelectionDialogState
+    extends State<ScoutedMatchSelectionDialog> {
+  var dbHelper = DbHelper();
+  var dbEvent = DbEvents();
+  var dbMatch = DbMatches();
+  var dbScoutedMatch = DbScoutedMatches();
+  var dbTeam = DbTeams();
 
-  late int _selectedTeam;
-  late Future<List<Team>?> teams;
+  List<EventMatch> _matchList = [];
 
-  Future<List<Team>?> _getTeamList() async {
-    DbScoutedMatches dbScoutedmatches = DbScoutedMatches();
+  final List<String> _alliancePositions = [
+    'Blue 1',
+    'Blue 2',
+    'Blue 3',
+    'Red 1',
+    'Red 2',
+    'Red 3'
+  ];
 
-    List<Team> teams = await dbTeams.getTeams();
+  int? selectedEvent;
+  String? _selectedMatch;
+  int? _selectedTeam;
+  String? _selectedAlliancePosition;
 
-    final results = await Future.wait(
-      teams.map((t) async {
-        final match = await dbScoutedmatches.getScoutedMatch(t.number);
-        return match == null ? t : null;
-      }),
-    );
-    teams = results.whereType<Team>().toList();
+  //-----------------------------------------------------------------------------
+  Future<bool> _getMatchList() async {
+      
+    var selectedEvent = await dbEvent.getEvent();
 
-    _selectedTeam = teams[0].number;
+    // Pull application defaults from database
 
-    return teams;
+    if (_selectedAlliancePosition == null) {
+      _selectedAlliancePosition = selectedEvent.defaultAlliancePosition;
+    } else {
+      await dbEvent.updateAlliancePosition(_selectedAlliancePosition!);
+    }
+
+    // Get Match Information
+    if (_selectedMatch == null) {
+      _matchList = [];
+      EventMatch tempMatch =
+          await dbMatch.getMatch();
+
+        if (tempMatch.number == 0) {
+          int teamID;
+
+          switch (_selectedAlliancePosition) {
+            case "Blue 1":
+              teamID = tempMatch.blue1number;
+              break;
+            case "Blue 2":
+              teamID = tempMatch.blue2number;
+              break;
+            case "Blue 3":
+              teamID = tempMatch.blue3number;
+              break;
+            case "Red 1":
+              teamID = tempMatch.red1number;
+              break;
+            case "Red 2":
+              teamID = tempMatch.red2number;
+              break;
+            default:
+              teamID = tempMatch.red3number;
+              break;
+          }
+
+        //  if (!(await dbScoutedMatch.existsScoutedMatchWithTeam(  <--- Still needs to be defined
+        //      tempMatch.id, teamID))) {
+        //    _matchList.add(tempMatch);
+        //  }
+        //}
+
+      _matchList.sort((a, b) {
+        int matchid1 = a.number;
+        int matchid2 = b.number;
+
+        return (matchid1).compareTo(matchid2);
+      });
+
+      if (_matchList.isNotEmpty) {
+        bool matchFound = false;
+        for (int i = _matchList.length - 1; i > 0 && !matchFound; i--) {
+          int matchid1 = _matchList[i].number;
+          int matchid2 = _matchList[i - 1].number;
+
+          if (matchid2 + 1 != matchid1) {
+            matchFound = true;
+            _selectedMatch = _matchList[i].id;
+          }
+        }
+
+        if (!matchFound) {
+          _selectedMatch = _matchList[0].id;
+        }
+      } else {
+        _selectedMatch = null;
+      }
+      }
+      }
+
+    return true;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    teams = _getTeamList();
-  }
-
+  //-----------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: SizedBox(
-        height: 350,
-        width: 550,
+        height: 600,
+        width: 500,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: AutoSizeText(
-                "match Scouting",
+                "Match Scouting",
                 textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: Device.fontSize(context, 20.0, 30.0),
-                ),
+                style:
+                    TextStyle(fontSize: Device.fontSize(context, 20.0, 30.0)),
                 maxLines: 1,
               ),
             ),
-            FutureBuilder<List<Team>?>(
-              future: teams,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData &&
-                    snapshot.connectionState == ConnectionState.done) {
-                  return Text("no teams left to scout!");
-                }
-                if (!snapshot.hasData) return CircularProgressIndicator();
-                if (snapshot.hasError) return Text("${snapshot.error}");
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
+            FutureBuilder(
+                future: _getMatchList(),
+                builder: (context, snapshot) {
+                  if (snapshot.data != null) {
+                    return Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
                         children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: AutoSizeText(
-                              "Select a team to scout:",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: Device.fontSize(context, 15.0, 25.0),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      0.0, 40.0, 0.0, 5.0),
+                                  child: AutoSizeText(
+                                    "Select an Alliance Member:",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontSize: Device.fontSize(
+                                            context, 15.0, 25.0)),
+                                    maxLines: 1,
+                                  ),
+                                ),
                               ),
-                              maxLines: 1,
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: DropdownButton<String>(
+                              value: _selectedAlliancePosition,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _selectedAlliancePosition = newValue!;
+                                  _selectedMatch = null;
+                                });
+                              },
+                              items: _alliancePositions
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 15.0, right: 15.0),
+                                        child: AutoSizeText(
+                                          "   $value   ",
+                                          style: TextStyle(
+                                            fontSize: Device.fontSize(
+                                                context, 15.0, 20.0),
+                                            // color: (value.indexOf("B") == 0) ? Colors.blue : Colors.red,
+                                          ),
+                                          maxLines: 1,
+                                        )));
+                              }).toList(),
                             ),
                           ),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: DropdownButton<int>(
-                          value: _selectedTeam,
-                          onChanged: (int? newValue) {
-                            setState(() {
-                              _selectedTeam = newValue!;
-                            });
-                          },
-                          items: snapshot.data!.map<DropdownMenuItem<int>>((
-                            Team team,
-                          ) {
-                            return DropdownMenuItem<int>(
-                              value: team.number,
-                              child: SizedBox(
-                                width: Device.isTablet(context) ? 425.0 : 225.0,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 5.0,
-                                    right: 5.0,
-                                  ),
-                                  child: AutoSizeText(
-                                    "  ${team.number} - ${team.nickname}  ",
-                                    style: TextStyle(
-                                      fontSize: Device.fontSize(
-                                        context,
-                                        12.0,
-                                        22.0,
+                          (_matchList.isNotEmpty)
+                              ? Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0.0, 40.0, 0.0, 5.0),
+                                        child: AutoSizeText(
+                                          "Select a match:",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: Device.fontSize(
+                                                  context, 15.0, 25.0)),
+                                          maxLines: 1,
+                                        ),
                                       ),
                                     ),
-                                    maxLines: 2,
+                                  ],
+                                )
+                              : Container(),
+                          (_matchList.isNotEmpty)
+                              ? Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: DropdownButton<String>(
+                                    value: _selectedMatch,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _selectedMatch = newValue;
+                                      });
+                                    },
+                                    items: _matchList
+                                        .map<DropdownMenuItem<String>>(
+                                            (EventMatch match) {
+                                      return DropdownMenuItem<String>(
+                                          value: match.id,
+                                          child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15.0, right: 15.0),
+                                              child: AutoSizeText(
+                                                (_selectedAlliancePosition ==
+                                                        "Blue 1")
+                                                    ? "   ${match.number} - ${match.blue1number}"
+                                                    : (_selectedAlliancePosition ==
+                                                            "Blue 2")
+                                                        ? "   ${match.number} - ${match.blue2number}"
+                                                        : (_selectedAlliancePosition ==
+                                                                "Blue 3")
+                                                            ? "   ${match.number} - ${match.blue3number}"
+                                                            : (_selectedAlliancePosition ==
+                                                                    "Red 1")
+                                                                ? "   ${match.number} - ${match.red1number}"
+                                                                : (_selectedAlliancePosition ==
+                                                                        "Red 2")
+                                                                    ? "   ${match.number} - ${match.red2number}"
+                                                                    : "   ${match.number} - ${match.red3number}",
+                                                style: TextStyle(
+                                                    fontSize: Device.fontSize(
+                                                        context, 15.0, 20.0)),
+                                                maxLines: 1,
+                                              )));
+                                    }).toList(),
                                   ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                                )
+                              : Container(),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            Navigator.pop(context);
+                    );
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.all(10.0),
+                    );
+                  }
+                }),
+            const Padding(
+              padding: EdgeInsets.all(10),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  Navigator.pop(context);
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PopScope(
-                                  canPop: false,
-                                  child: MatchScouting(
-                                    team: snapshot.data!.firstWhere(
-                                      (t) => t.number == _selectedTeam,
-                                    ),
-                                    alliance: "",
-                                    match: "",
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange[500],
-                          ),
-                          child: Text(
-                            "Scout match",
-                            style: TextStyle(
-                              fontSize: Device.fontSize(context, 15.0, 25.0),
-                              color: Colors.black,
-                            ),
+                  MatchScoutingSelections selections = await getSelectedTeam();
+
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PopScope(
+                          canPop: false,
+                          child: MatchScouting(
+                            team: selections.team,
+                            match: selections.match,
+                            alliancePosition: _selectedAlliancePosition!,
                           ),
                         ),
                       ),
-                    ],
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange[500],
+                ),
+                child: AutoSizeText(
+                  "Scout Match",
+                  style: TextStyle(
+                    fontSize: Device.fontSize(context, 15.0, 25.0),
+                    color: Colors.black,
                   ),
-                );
-              },
+                  maxLines: 1,
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
   }
+
+  Future<MatchScoutingSelections> getSelectedTeam() async {
+    EventMatch match = await dbMatch.getMatch();
+
+    switch (_selectedAlliancePosition) {
+      case "Blue 1":
+        _selectedTeam = match.blue1number;
+        break;
+      case "Blue 2":
+        _selectedTeam = match.blue2number;
+        break;
+      case "Blue 3":
+        _selectedTeam = match.blue3number;
+        break;
+      case "Red 1":
+        _selectedTeam = match.red1number;
+        break;
+      case "Red 2":
+        _selectedTeam = match.red2number;
+        break;
+      default:
+        _selectedTeam = match.red3number;
+        break;
+    }
+
+    Team team = await dbTeam.getTeam(_selectedTeam!);
+    return MatchScoutingSelections(team: team, match: match);
+  }
+}
+
+class MatchScoutingSelections {
+  final Team team;
+  final EventMatch match;
+
+  const MatchScoutingSelections(
+      {required this.team, required this.match});
 }

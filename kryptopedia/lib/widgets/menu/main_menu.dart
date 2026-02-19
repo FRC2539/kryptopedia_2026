@@ -29,7 +29,7 @@ class MainMenu extends StatelessWidget {
             icon: Icons.person_4,
             onTap: (context) => showDialog(
               context: context,
-              builder: (context) => ScoutmatchSelectionDialog(),
+              builder: (context) => ScoutedMatchSelectionDialog(),
             ),
           ),
           MenuItemDefinition(

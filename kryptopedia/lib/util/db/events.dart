@@ -18,7 +18,9 @@ class DbEvents {
       "${Event.authTokenKey} TEXT, "
       "${Event.teamNumberKey} INTEGER NOT NULL, "
       "${Event.lastSyncKey} INTEGER NOT NULL, "
-      "${Event.lastScouterKey} TEXT)",
+      "${Event.lastScouterKey} TEXT, "
+      "${Event.defaultAlliancePositionKey} TEXT), "
+      "${Event.alliancePositionKey} TEXT",
     );
   }
 
@@ -67,6 +69,16 @@ class DbEvents {
       Event.lastScouterKey: scouterID,
     }, where: "${Event.idKey} = 0");
 
+    return result;
+  }
+
+  Future<String> updateAlliancePosition(String alliancePosition) async {
+    Database db = await dbHelper.db;
+
+    String result = db.update(Event.tableName, {
+      Event.alliancePositionKey: alliancePosition,
+    }, where: "${Event.idKey} = 0").toString();
+    
     return result;
   }
 }

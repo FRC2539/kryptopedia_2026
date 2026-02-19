@@ -7,6 +7,8 @@ class Event {
   String? authToken;
   int teamNumber;
   String? lastScouter;
+  String? defaultAlliancePosition;
+  String? alliancePosition;
 
   int _lastSync;
   DateTime? get lastSync =>
@@ -25,6 +27,8 @@ class Event {
   static const String teamNumberKey = "team_number";
   static const String lastSyncKey = "last_sync";
   static const String lastScouterKey = "last_scouter";
+  static const String defaultAlliancePositionKey = "default_alliance_position";
+  static String alliancePositionKey = "alliance_position";
 
   Event(
     this.id,
@@ -36,6 +40,8 @@ class Event {
     this.teamNumber,
     this._lastSync,
     this.lastScouter,
+    this.defaultAlliancePosition,
+    this.alliancePosition,
   );
 
   bool get syncEnabled => (serverURL != null && authToken != null);
@@ -51,6 +57,8 @@ class Event {
       teamNumberKey: teamNumber,
       lastSyncKey: _lastSync,
       lastScouterKey: lastScouter,
+      defaultAlliancePositionKey: defaultAlliancePosition,
+      alliancePositionKey: alliancePosition,
     };
   }
 
@@ -63,5 +71,7 @@ class Event {
       authToken = map[authTokenKey],
       teamNumber = map[teamNumberKey],
       _lastSync = map[lastSyncKey],
-      lastScouter = map[lastScouterKey];
+      lastScouter = map[lastScouterKey],
+      defaultAlliancePosition = map[defaultAlliancePositionKey],
+      alliancePosition = map[alliancePositionKey];
 }

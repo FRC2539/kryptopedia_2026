@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 
 
@@ -27,20 +28,20 @@ class PageBanner extends StatelessWidget {
 }
 
 class MatchBanner extends StatelessWidget {
-  final String match;
+  final EventMatch match;
   final String team;
-  final String alliance;
+  final String alliancePosition;
 
   const MatchBanner({
     super.key,
     required this.team,
     required this.match,
-    required this.alliance,
+    required this.alliancePosition,
   });
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = alliance == "red" ? Colors.red : Colors.blue;
+    Color backgroundColor = alliancePosition == "red" ? Colors.red : Colors.blue;
     // Color textBackgroundColor =
     //     alliance == "red" ? Colors.red.shade600 : Colors.blue.shade600;
 
@@ -57,7 +58,7 @@ class MatchBanner extends StatelessWidget {
           maxLines: 1,
         ),
         AutoSizeText(
-          match,
+          match.number.toString(),
           style: TextStyle(
             fontSize: Device.fontHeader2(context),
             color: Colors.white,

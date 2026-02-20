@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kryptopedia/dialogs/match_scouting_select.dart';
 import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/match.dart';
@@ -177,6 +178,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       teamNumber,
       0,
       null,
+      alliancePositions.first
     );
     DbEvents dbEvents = DbEvents();
     await dbEvents.insertEvent(eventData);
@@ -356,6 +358,7 @@ class _TestDataFormState extends State<TestDataForm> {
       teamNumber,
       0,
       null,
+      alliancePositions.first
     );
 
     DbEvents dbEvents = DbEvents();

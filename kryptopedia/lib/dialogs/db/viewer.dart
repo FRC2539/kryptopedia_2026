@@ -55,8 +55,8 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     result[TeamMember.tableName] = teamMembers;
 
     DbMatches dbMatches = DbMatches();
-    EventMatch matches = await dbMatches.getMatch();
-    result[EventMatch.tableName] = [matches];
+    List<EventMatch> matches = await dbMatches.getMatches();
+    result[EventMatch.tableName] = matches;
 
     DbTeamFlagApplications dbFlagApplications = DbTeamFlagApplications();
     List<TeamFlagApplication> flagApplications = await dbFlagApplications
@@ -115,19 +115,19 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
                       itemBuilder: (context, index) {
                         switch (selectedTable) {
                           case Event.tableName:
-                            Event event = tableData[index] as Event;
+                            Event event = tableData[index];
                             return ListTile(
                               title: Text("Event: ${event.name}"),
                               subtitle: Text(event.toMap().toString()),
                             );
                           case Team.tableName:
-                            Team team = tableData[index] as Team;
+                            Team team = tableData[index];
                             return ListTile(
                               title: Text("Team: ${team.number}"),
                               subtitle: Text("Nickname: ${team.nickname}"),
                             );
                           case ScoutedPit.tableName:
-                            ScoutedPit pit = tableData[index] as ScoutedPit;
+                            ScoutedPit pit = tableData[index];
                             return ListTile(
                               title: Text(
                                 "Scouted Pit - Team: ${pit.teamNumber}",
@@ -135,13 +135,13 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
                               subtitle: Text(pit.toMap().toString()),
                             );
                           case TeamMember.tableName:
-                            TeamMember member = tableData[index] as TeamMember;
+                            TeamMember member = tableData[index];
                             return ListTile(
                               title: Text("Team Member: ${member.name}"),
                               subtitle: Text("ID: ${member.id}"),
                             );
                           case EventMatch.tableName:
-                            EventMatch match = tableData[index] as EventMatch;
+                            EventMatch match = tableData[index];
                             return ListTile(
                               title: Text(
                                 "Match: ${match.compLevel} ${match.number}",
@@ -150,7 +150,7 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
                             );
                           case TeamFlagApplication.tableName:
                             TeamFlagApplication flagApplication =
-                                tableData[index] as TeamFlagApplication;
+                                tableData[index];
                             return ListTile(
                               title: Text(
                                 "Flag Application - Team: ${flagApplication.teamNumber}, Flag: ${flagApplication.name}",

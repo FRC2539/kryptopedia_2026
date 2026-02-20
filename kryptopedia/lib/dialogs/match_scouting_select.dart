@@ -21,6 +21,15 @@ class ScoutedMatchSelectionDialog extends StatefulWidget {
       _ScoutedMatchSelectionDialogState();
 }
 
+final List<String> alliancePositions = [
+  'Blue 1',
+  'Blue 2',
+  'Blue 3',
+  'Red 1',
+  'Red 2',
+  'Red 3',
+];
+
 class _ScoutedMatchSelectionDialogState
     extends State<ScoutedMatchSelectionDialog> {
   var dbHelper = DbHelper();
@@ -30,15 +39,6 @@ class _ScoutedMatchSelectionDialogState
   var dbTeam = DbTeams();
 
   List<EventMatch> _matchList = [];
-
-  final List<String> _alliancePositions = [
-    'Blue 1',
-    'Blue 2',
-    'Blue 3',
-    'Red 1',
-    'Red 2',
-    'Red 3'
-  ];
 
   int? selectedEvent;
   String? _selectedMatch;
@@ -62,7 +62,7 @@ class _ScoutedMatchSelectionDialogState
     if (_selectedMatch == null) {
       _matchList = [];
       EventMatch tempMatch =
-          await dbMatch.getMatch();
+        (await dbMatch.getMatches()).first;
 
         if (tempMatch.number == 0) {
           int teamID;
@@ -183,7 +183,7 @@ class _ScoutedMatchSelectionDialogState
                                   _selectedMatch = null;
                                 });
                               },
-                              items: _alliancePositions
+                            items: alliancePositions
                                   .map<DropdownMenuItem<String>>(
                                       (String value) {
                                 return DropdownMenuItem<String>(
@@ -323,7 +323,7 @@ class _ScoutedMatchSelectionDialogState
   }
 
   Future<MatchScoutingSelections> getSelectedTeam() async {
-    EventMatch match = await dbMatch.getMatch();
+    EventMatch match = (await dbMatch.getMatches()).first;
 
     switch (_selectedAlliancePosition) {
       case "Blue 1":

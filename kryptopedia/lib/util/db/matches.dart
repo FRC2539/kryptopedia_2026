@@ -30,16 +30,19 @@ class DbMatches {
     );
     return result;
   }
-
-  Future<EventMatch> getMatch() async {
+  
+  Future<List<EventMatch>> getMatches() async {
     Database db = await dbHelper.db;
 
-    final dynamic match = await db.query( // Adam wrote this code and is pretty suspicious of it.
+    final List<Map<String, dynamic>> matches = await db.query(
       EventMatch.tableName,
     );
 
-    return EventMatch.fromMap(match);
+    return List.generate(matches.length, (i) {
+      return EventMatch.fromMap(matches[i]);
+    });
   }
+
 
   Future<List<EventMatch>> getQualificationMatches() async {
     Database db = await dbHelper.db;

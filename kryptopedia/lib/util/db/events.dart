@@ -19,8 +19,7 @@ class DbEvents {
       "${Event.teamNumberKey} INTEGER NOT NULL, "
       "${Event.lastSyncKey} INTEGER NOT NULL, "
       "${Event.lastScouterKey} TEXT, "
-      "${Event.defaultAlliancePositionKey} TEXT), "
-      "${Event.alliancePositionKey} TEXT",
+      "${Event.defaultAlliancePositionKey} TEXT)"
     );
   }
 
@@ -76,7 +75,7 @@ class DbEvents {
     Database db = await dbHelper.db;
 
     String result = db.update(Event.tableName, {
-      Event.alliancePositionKey: alliancePosition,
+      Event.defaultAlliancePositionKey: alliancePosition,
     }, where: "${Event.idKey} = 0").toString();
     
     return result;

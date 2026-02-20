@@ -48,6 +48,14 @@ jobs:
                 working-directory: ./kryptopedia
         steps:
             - uses: actions/checkout@v3
+            - name: cache android and gradle things
+              uses: actions/cache@v4
+              with:
+                  key: android-sdk-${{ hashFiles('android/**') }}
+                  path: |
+                      /opt/android-sdk-linux
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper
             - name: Install firebase-tools
               run: |
                   curl -sL https://firebase.tools | bash

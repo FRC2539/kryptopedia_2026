@@ -1,3 +1,2 @@
-<% @team_members.each do |team_member| %>
-  <%= team_member.name %>
-<% end %>
+<%= link_to "create team member", new_team_team_member_path(@team) %>
+<%= render @team_members %>

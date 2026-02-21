@@ -1,0 +1,14 @@
+<% content_for :inner_content do %>
+  <div class="event-header">
+    <nav class="menu">
+      <h3> <%= @scouted_event.name %> </h3>
+      <%= link_to "Configuration", edit_team_scouted_event_path(@scouted_event.owner, @scouted_event) %>
+      <%= link_to "Teams", team_scouted_event_teams_path(@scouted_event.owner, @scouted_event) %>
+      <%= link_to "Matches", team_scouted_event_matches_path(@scouted_event.owner, @scouted_event) %>
+    </nav>
+  </div>
+
+  <%= yield %>
+<% end %>
+
+<%= render template: "layouts/teams" %>

@@ -5,6 +5,7 @@
 #  id         :bigint           not null, primary key
 #  code       :string
 #  name       :string
+#  tba_sync   :boolean          default(FALSE), not null
 #  test       :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -28,6 +29,8 @@ class ScoutedEvent < ApplicationRecord
            through: :scouted_event_teams,
            before_add: :revive_or_create_join,
            before_remove: :soft_remove_team_from_event
+  has_many :scouting_data_items
+  has_many :matches
 
   validates :name, presence: true, uniqueness: { scope: :team_id }
   validates :code, presence: true, uniqueness: { scope: :team_id }

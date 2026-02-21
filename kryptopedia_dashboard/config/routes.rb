@@ -24,8 +24,16 @@ Rails.application.routes.draw do
     post "session-requests/:id/approve" => "session_requests#approve", as: :approve_session_request
     delete "session-requests/:id" => "session_requests#destroy", as: :destroy_session_request
 
-    resources :scouted_events
+    resources :scouted_events do
+      resources :matches
+      post "matches/download-from-tba" => "matches#download_matches_from_tba", as: :download_matches_from_tba
+      get "teams" => "scouted_events#index_teams", as: :teams
+      post "teams/download-from-tba" => "scouted_events#download_teams", as: :download_teams_from_tba
+      resources :scouting_data_items
+    end
+
     resources :team_members
+    resources :devices
 
     get "api/preauth-info" => "device_api#preauth_info"
     post "api/start-session" => "device_api#request_session"

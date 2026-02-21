@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/api.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class ScoutedPit {
@@ -159,6 +162,15 @@ class ScoutedPit {
     map.remove(localKey);
 
     return SyncDataItem(type: "scouted_pit", data: map);
+  }
+
+  Future<String> get photoPath async {
+    final Directory appDir = await getApplicationDocumentsDirectory();
+    Directory robotPicsDir = await Directory(
+      "${appDir.path}/Robot_Pics",
+    ).create();
+
+    return join(robotPicsDir.path, "pitscout_${uid}.jpg");
   }
 }
 

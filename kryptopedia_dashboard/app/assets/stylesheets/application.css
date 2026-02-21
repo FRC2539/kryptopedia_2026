@@ -28,3 +28,12 @@ body {
 .notice {
     background-color: darkgreen;
 }
+
+p {
+    margin: 0;
+}
+
+.error {
+    color: red;
+}
+

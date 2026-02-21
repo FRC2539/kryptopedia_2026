@@ -60,16 +60,38 @@
 }
 
 
-.action-card {
+.card {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 1rem;
-    margin-bottom: 1rem;
+    margin: .5rem 0;
     background-color: #f9f9f9;
 
     .buttons {
         margin-top: 1rem;
         display: flex;
         gap: 0.5rem;
+    }
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+
+    border-bottom: 1px solid #ddd;
+    margin: 0 0 1rem 0;
+
+    h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .menu {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
     }
 }

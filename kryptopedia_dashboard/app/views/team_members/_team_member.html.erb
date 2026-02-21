@@ -1,0 +1,9 @@
+<div class="card">
+  <p> 👤 <%= link_to team_member.name, edit_team_team_member_path(team_member.team, team_member) %> </p>
+  <% if team_member.email.present? %>
+    <p> 📧 <em> <%= team_member.email %> </em></p>
+  <% end %>
+  <% if team_member.admin? %>
+    <p> ✨ admin user! </p>
+  <% end %>
+</div>

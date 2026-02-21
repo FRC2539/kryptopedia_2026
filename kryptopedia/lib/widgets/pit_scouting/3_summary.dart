@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kryptopedia/util/robot_picture_path.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/text_field.dart';
@@ -14,7 +13,7 @@ class PitScoutingSummary extends StatelessWidget {
       title: 'Summary',
       children: [
         FutureBuilder<String>(
-          future: robotPicturePath(scoutedPitSingleton.teamNumber),
+          future: scoutedPitSingleton.photoPath,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(child: CircularProgressIndicator());

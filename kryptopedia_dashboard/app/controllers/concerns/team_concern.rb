@@ -3,6 +3,7 @@ module TeamConcern
 
   included do
     before_action :set_team
+    layout "teams"
   end
 
   def set_team

@@ -31,9 +31,9 @@ class _EventSetupDialogState extends State<EventSetupDialog>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 3,
+      length: 2,
       vsync: this,
-      initialIndex: kDebugMode ? 2 : 1,
+      initialIndex: kDebugMode ? 1 : 0,
     );
   }
 
@@ -53,7 +53,7 @@ class _EventSetupDialogState extends State<EventSetupDialog>
           TabBar(
             controller: _tabController,
             tabs: [
-              Tab(text: "Personal device"),
+              // Tab(text: "Personal device"),
               Tab(text: "Team shared device"),
               Tab(text: "Local-only testing setup"),
             ],
@@ -63,7 +63,7 @@ class _EventSetupDialogState extends State<EventSetupDialog>
             width: 500,
             child: TabBarView(
               controller: _tabController,
-              children: [Placeholder(), TeamDeviceForm(), TestDataForm()],
+              children: [TeamDeviceForm(), TestDataForm()],
             ),
           ),
         ],
@@ -118,6 +118,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     showDialog(
       context: context,
       barrierDismissible: false,
+      useRootNavigator: false,
       builder: (context) => NotificationDialog(
           title: "Awaiting confirmation",
           body:
@@ -145,6 +146,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       }
       if (pokeResponse.data == 404) {
         //request was denied
+        //todo will not work well if cancelled from device mid-check where it finds out its been denied
         if (!mounted) return;
         submitEnabled = true;
         Navigator.pop(context);

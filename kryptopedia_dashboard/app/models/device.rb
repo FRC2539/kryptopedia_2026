@@ -3,6 +3,7 @@
 # Table name: devices
 #
 #  id              :bigint           not null, primary key
+#  last_sync       :datetime
 #  name            :string
 #  owner_type      :string
 #  created_at      :datetime         not null
@@ -28,6 +29,8 @@ class Device < ApplicationRecord
 
   has_one :session, as: :owner, dependent: :destroy
   belongs_to :active_event, class_name: "ScoutedEvent", optional: true
+
+  default_scope { order(:name) }
 
   def team
     owner.is_a?(Team) ? owner : owner.team

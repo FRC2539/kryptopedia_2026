@@ -1,0 +1,15 @@
+<%= form_with model: [team_member.team, team_member] do |f| %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <%= error_messages_for team_member, :name %>
+  </div>
+  <div>
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+    <%= error_messages_for team_member, :email %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

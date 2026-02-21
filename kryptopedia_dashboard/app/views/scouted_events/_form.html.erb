@@ -1,0 +1,20 @@
+<%= form_with model: [scouted_event.owner, scouted_event] do |f| %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <%= error_messages_for scouted_event, :name %>
+  </div>
+  <div>
+    <%= f.label :code %>
+    <%= f.text_field :code %>
+    <%= error_messages_for scouted_event, :code %>
+  </div>
+  <div>
+    <%= f.label :tba_sync %>
+    <%= f.check_box :tba_sync %>
+    <%= error_messages_for scouted_event, :tba_sync %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -12,10 +12,10 @@
           <h2><%= @team.number %> - <%= @team.nickname %></h2>
         </div>
       <% end %>
-      
+
       <nav class="menu">
         <%= link_to "Events", team_scouted_events_path(@team) %>
-        <%= link_to "Devices", "#" %>
+        <%= link_to "Devices", team_devices_path(@team) %>
         <%= link_to "Scouters", team_team_members_path(@team) %>
         <%= link_to "Settings?", "#" %>
       </nav>
@@ -31,7 +31,7 @@
     <div class="flash-message notice"><%= flash[:notice] %></div>
   <% end %>
   <div class="content">
-    <%= yield %>
+    <%= content_for?(:inner_content) ? yield(:inner_content) : yield %>
   </div>
 <% end %>
 

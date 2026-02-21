@@ -1,0 +1,9 @@
+<div class="card">
+  <p> 📱 <%= link_to device.name, edit_team_device_path(device.team, device) %> </p>
+  <% if device.session.present? %>
+    <p> 🔗 has an active session at <em> <%= device.active_event.name %> </em></p>
+    <% if device.last_sync.present? %>
+      <p> ⌛ last data sync <em> <%= time_ago_in_words(device.last_sync) %> ago </em></p>
+    <% end %>
+  <% end %>
+</div>

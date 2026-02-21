@@ -10,19 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_16_210035) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_21_163119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "devices", force: :cascade do |t|
     t.bigint "active_event_id"
     t.datetime "created_at", null: false
+    t.datetime "last_sync"
     t.string "name"
     t.bigint "owner_id"
     t.string "owner_type"
     t.datetime "updated_at", null: false
     t.index ["active_event_id"], name: "index_devices_on_active_event_id"
     t.index ["owner_type", "owner_id"], name: "index_devices_on_owner"
+  end
+
+  create_table "matches", force: :cascade do |t|
+    t.bigint "blue1_id"
+    t.bigint "blue2_id"
+    t.bigint "blue3_id"
+    t.string "comp_level", null: false
+    t.datetime "created_at", null: false
+    t.integer "number", null: false
+    t.bigint "red1_id"
+    t.bigint "red2_id"
+    t.bigint "red3_id"
+    t.bigint "scouted_event_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blue1_id"], name: "index_matches_on_blue1_id"
+    t.index ["blue2_id"], name: "index_matches_on_blue2_id"
+    t.index ["blue3_id"], name: "index_matches_on_blue3_id"
+    t.index ["comp_level", "number"], name: "index_matches_on_comp_level_and_number", unique: true
+    t.index ["red1_id"], name: "index_matches_on_red1_id"
+    t.index ["red2_id"], name: "index_matches_on_red2_id"
+    t.index ["red3_id"], name: "index_matches_on_red3_id"
+    t.index ["scouted_event_id"], name: "index_matches_on_scouted_event_id"
   end
 
   create_table "scouted_event_teams", force: :cascade do |t|
@@ -39,6 +62,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_210035) do
     t.string "code"
     t.datetime "created_at", null: false
     t.string "name"
+    t.boolean "tba_sync", default: false, null: false
     t.bigint "team_id", null: false
     t.boolean "test"
     t.datetime "updated_at", null: false
@@ -100,6 +124,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_210035) do
   end
 
   add_foreign_key "devices", "scouted_events", column: "active_event_id"
+  add_foreign_key "matches", "scouted_events"
+  add_foreign_key "matches", "teams", column: "blue1_id"
+  add_foreign_key "matches", "teams", column: "blue2_id"
+  add_foreign_key "matches", "teams", column: "blue3_id"
+  add_foreign_key "matches", "teams", column: "red1_id"
+  add_foreign_key "matches", "teams", column: "red2_id"
+  add_foreign_key "matches", "teams", column: "red3_id"
   add_foreign_key "scouted_events", "teams"
   add_foreign_key "scouting_data_items", "scouted_events"
   add_foreign_key "scouting_data_items", "team_members"

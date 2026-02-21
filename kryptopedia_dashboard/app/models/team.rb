@@ -58,6 +58,8 @@ class Team < ApplicationRecord
     number.to_s
   end
 
+  default_scope { order(:number) }
+
   private
 
   def tba_info

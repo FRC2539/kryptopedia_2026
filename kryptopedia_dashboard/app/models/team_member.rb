@@ -25,13 +25,15 @@ class TeamMember < ApplicationRecord
 
   belongs_to :team
 
-  validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :team_id }
+  validates :name, presence: true, length: { minimum: 2, maximum: 100 }, uniqueness: { scope: :team_id }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { scope: :team_id }, allow_nil: true
-  normalizes :email, with: ->(email) { email&.strip&.downcase }
+  normalizes :email, with: ->(email) { email.strip.downcase.presence }
   enum :role, [:scouter, :admin], default: :scouter
 
   has_many :sessions, as: :owner, dependent: :destroy
   has_many :devices, as: :owner, dependent: :destroy
+
+  default_scope { order(:name) }
 
   def send_email_code!
     self.email_code = rand(100000..999999)

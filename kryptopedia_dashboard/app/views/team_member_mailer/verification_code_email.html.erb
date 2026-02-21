@@ -1,4 +1,4 @@
-<h1>Hi, <%= @team_member.name %></h1>
+<h1>Hi <%= @team_member.name %>!</h1>
 <p>Here's your verification code: <strong><%= @team_member.email_code %></strong></p>
 <p>If you prefer, you
   can <%= link_to "click this link instead", team_verify_login_code_url(@team_member.team, code: @team_member.email_code) %>

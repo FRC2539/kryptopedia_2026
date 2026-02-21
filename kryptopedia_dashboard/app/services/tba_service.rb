@@ -18,5 +18,13 @@ module TBAService
     def team_events_for_year(team_number, year)
       _conn.get("team/frc#{team_number}/events/#{year}/simple").body
     end
+
+    def event_matches(year, event_code)
+      _conn.get("event/#{year}#{event_code}/matches").body
+    end
+
+    def event_teams(year, event_code)
+      _conn.get("event/#{year}#{event_code}/teams/simple").body
+    end
   end
 end

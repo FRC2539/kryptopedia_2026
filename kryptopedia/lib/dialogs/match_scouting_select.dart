@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:kryptopedia/models/match.dart';
+import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/screens/match_scouting.dart';
 
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
+import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/helper.dart';
@@ -287,6 +289,11 @@ class _ScoutedMatchSelectionDialogState
 
                   MatchScoutingSelections selections = await getSelectedTeam();
 
+                  //placeholder before select menu is added
+                  DbTeamMembers dbTeamMembers = DbTeamMembers();
+                  TeamMember scouter =
+                      (await dbTeamMembers.getTeamMembers()).first;
+
                   if (context.mounted) {
                     Navigator.push(
                       context,
@@ -297,6 +304,7 @@ class _ScoutedMatchSelectionDialogState
                             team: selections.team,
                             match: selections.match,
                             alliancePosition: _selectedAlliancePosition!,
+                            scouter: scouter,
                           ),
                         ),
                       ),

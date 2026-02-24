@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/team.dart';
+import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
@@ -16,12 +17,14 @@ class MatchScouting extends StatefulWidget {
   final Team team;
   final EventMatch match;
   final String alliancePosition;
+  final TeamMember scouter;
 
   const MatchScouting({
     super.key,
     required this.team,
     required this.alliancePosition,
     required this.match,
+    required this.scouter,
   });
 
   @override
@@ -34,17 +37,31 @@ class _MatchScoutingState extends State<MatchScouting> {
   @override
   void initState() {
     super.initState();
-    scoutedMatchSingleton.setToDefaults(widget.team.number);
+    scoutedMatchSingleton.setToDefaults(
+      widget.match,
+      widget.team.number,
+      widget.scouter,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: AutoSizeText(
-          "Kryptopedia - Match Scouting",
-          style: TextStyle(fontSize: Device.fontHeader(context)),
-          maxLines: 1,
+        title: Row(
+          children: [
+            AutoSizeText(
+              "Kryptopedia - Match Scouting",
+              style: TextStyle(fontSize: Device.fontHeader(context)),
+              maxLines: 1,
+            ),
+            Spacer(),
+            AutoSizeText(
+              "Scouter: ${widget.scouter.name}",
+              style: TextStyle(fontSize: Device.fontHeader(context) * 0.7),
+              maxLines: 1,
+            ),
+          ],
         ),
         leading: Container(),
       ),
@@ -65,7 +82,7 @@ class _MatchScoutingState extends State<MatchScouting> {
                 ScoutingSave(
                   saveFunction: () async {
                     DbScoutedMatches dbScoutedMatch = DbScoutedMatches();
-                    await dbScoutedMatch.insertScoutedMatch(
+                    await dbScoutedMatch.upsertScoutedMatch(
                       scoutedMatchSingleton,
                     );
                     return "Team: ${widget.team.number}\n${widget.team.nickname}";

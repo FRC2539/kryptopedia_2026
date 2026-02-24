@@ -22,14 +22,8 @@ class _Dropdown extends State<Dropdown> {
     _penaltiesController = TextEditingController();
   }
 
-  @override
-  void dispose() {
-    _penaltiesController.dispose();
-    super.dispose();
-  }
-
   late TextInputField textInputField = TextInputField(
-    hint: "penalties",
+    label: "penalties",
     isMultiline: true,
     initialValue: "",
     controller: _penaltiesController,
@@ -48,26 +42,16 @@ class _Dropdown extends State<Dropdown> {
           group1: [
             DynamicDropdownList(
               label: 'Penalties',
-              initialValue: Penalties.empty,
+              initialValue: "none",
               options: [
-                DynamicMultiSelectOption(value: Penalties.empty, label: ''),
-                DynamicMultiSelectOption(value: Penalties.pin, label: 'pin'),
-                DynamicMultiSelectOption(
-                  value: Penalties.minor,
-                  label: 'minor',
-                ),
-                DynamicMultiSelectOption(
-                  value: Penalties.major,
-                  label: 'major',
-                ),
+                DynamicMultiSelectOption(value: "none", label: 'none'),
+                DynamicMultiSelectOption(value: "pin", label: 'pin'),
+                DynamicMultiSelectOption(value: "minor", label: 'minor'),
+                DynamicMultiSelectOption(value: "major", label: 'major'),
               ],
               callback: (newValue) {
                 _penaltiesController.text += " ";
-                _penaltiesController.text += newValue.toString().replaceRange(
-                  0,
-                  10,
-                  "",
-                );
+                _penaltiesController.text += newValue;
               },
             ),
           ],

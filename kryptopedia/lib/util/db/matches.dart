@@ -30,7 +30,7 @@ class DbMatches {
     );
     return result;
   }
-  
+
   Future<List<EventMatch>> getMatches() async {
     Database db = await dbHelper.db;
 
@@ -42,7 +42,6 @@ class DbMatches {
       return EventMatch.fromMap(matches[i]);
     });
   }
-
 
   Future<List<EventMatch>> getQualificationMatches() async {
     Database db = await dbHelper.db;
@@ -83,6 +82,4 @@ class DbMatches {
 
     return result;
   }
-
-  
 }

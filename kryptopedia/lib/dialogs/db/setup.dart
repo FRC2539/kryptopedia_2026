@@ -120,12 +120,12 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       barrierDismissible: false,
       useRootNavigator: false,
       builder: (context) => NotificationDialog(
-          title: "Awaiting confirmation",
-          body:
-              "Confirmation is required- log into the dashboard to authorize this device.\n"
-              "Request ID: ${sessionRequest.data["request_id"]}",
-          okButtonText: "Cancel",
-      )
+        title: "Awaiting confirmation",
+        body:
+            "Confirmation is required- log into the dashboard to authorize this device.\n"
+            "Request ID: ${sessionRequest.data["request_id"]}",
+        okButtonText: "Cancel",
+      ),
     ).then((value) {
       dialogOpen = false;
     });
@@ -180,15 +180,29 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       teamNumber,
       0,
       null,
-      alliancePositions.first
+      alliancePositions.first,
     );
     DbEvents dbEvents = DbEvents();
     await dbEvents.insertEvent(eventData);
 
     if (!mounted) return;
-    Navigator.pop(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: false,
+      builder: (context) => NotificationDialog(
+        title: "Syncing data",
+        body: "Syncing data with server...",
+        showOkButton: false,
+      ),
+    );
 
+    if (!mounted) return;
     await syncDataFlow(context);
+
+    if (!mounted) return;
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   String? apiError;
@@ -360,7 +374,7 @@ class _TestDataFormState extends State<TestDataForm> {
       teamNumber,
       0,
       null,
-      alliancePositions.first
+      alliancePositions.first,
     );
 
     DbEvents dbEvents = DbEvents();

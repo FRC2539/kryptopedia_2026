@@ -73,13 +73,6 @@ class _DynamicDropdownListState<T> extends State<DynamicDropdownList<T>> {
                   ),
                 );
               }).toList(),
-              /*
-      6666   777777
-    66           77
-    666666      77
-    66  66     77
-     6666     77
-*/
             ),
           ),
         ],

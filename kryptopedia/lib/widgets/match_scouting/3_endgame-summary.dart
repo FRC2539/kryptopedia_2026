@@ -18,39 +18,17 @@ class _EndgameMatchScoutingState extends State<EndgameMatchScouting> {
     return ScoutingSection(
       title: 'Endgame/Summary',
       children: [
-        ResponsiveLayout(
-          portraitMode: LayoutMode.singleColumn,
-          landscapeMode: LayoutMode.twoColumn,
-          group1: [
             TextInputField(
-              hint: "auto comments",
-              isMultiline: true,
-              initialValue: "",
-              callback: (value) {
-                scoutedMatchSingleton.autoComments = value;
-              },
-            ),
-            TextInputField(
-              hint: "defense comments",
-              isMultiline: true,
-              initialValue: "",
-              callback: (value) {
-                scoutedMatchSingleton.defenseComments = value;
-              },
-            ),
-          ],
-          group2: [
-            TextInputField(
-              hint: "general comments: penalties, strategies, issues",
+          label: "Comments",
+          hint:
+              "general comments: describe anything eventful, mostly.\nparticularly, please be sure to describe any penalties, issues, or defense.",
               isMultiline: true,
               initialValue: "",
               callback: (value) {
                 scoutedMatchSingleton.generalComments = value;
               },
             ),
-          ],
-        ),
-      ],
+      ]
     );
   }
 }

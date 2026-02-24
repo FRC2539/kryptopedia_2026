@@ -23,7 +23,7 @@ class PitScoutingSummary extends StatelessWidget {
           },
         ),
         TextInputField(
-          hint: "General Comments",
+          label: "General Comments",
           isMultiline: true,
           initialValue: scoutedPitSingleton.generalComments,
           callback: (String newValue) {

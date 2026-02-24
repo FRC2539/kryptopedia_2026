@@ -68,7 +68,8 @@ class DeviceApiController < ApplicationController
     @synced_to = Time.current
     @teams = ScoutedEventTeam.where(updated_at: since, scouted_event: event)
     @team_members = TeamMember.where(updated_at: since, team: current_user.team)
-    @scouting_data_items = ScoutingDataItem.where(updated_at: since, scouted_event: event)
+    @scouting_data_items = event.scouting_data_items.where(updated_at: since)
+    @matches = event.matches.where(updated_at: since)
 
     current_user.update! last_sync: @synced_to
   end

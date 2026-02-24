@@ -17,6 +17,7 @@ class SyncPopup extends StatefulWidget {
 
 class _SyncPopupState extends State<SyncPopup> {
   late Future<Event> event;
+  bool syncDisabled = false;
 
   Future<Event> getEvent() {
     DbEvents dbEvents = DbEvents();
@@ -78,6 +79,10 @@ class _SyncPopupState extends State<SyncPopup> {
                           syncEnabled = false;
                         });
                         await syncDataFlow(context);
+                        this.event = getEvent();
+                        setState(() {
+                          syncEnabled = true;
+                        });
                       }
                     : null,
                 label: Text("Sync Data"),

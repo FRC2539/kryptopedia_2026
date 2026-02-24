@@ -1,4 +1,14 @@
+import 'package:kryptopedia/models/match.dart';
+import 'package:kryptopedia/models/team_member.dart';
+import 'package:kryptopedia/util/api.dart';
+import 'package:uuid/uuid.dart';
+
 class ScoutedMatch {
+  String scouterId = "";
+  String uid = "";
+
+  String matchCompLevel = "q";
+  int matchNumber = 0;
   int teamNumber = 0;
 
   int _local = 0;
@@ -25,18 +35,24 @@ class ScoutedMatch {
     _climbLevel = value.index;
   }
 
-  int _penalties = 0;
+  int _penalties = 0; //enum index
   Penalties get penalties => Penalties.values[_penalties];
   set penalties(Penalties value) {
     _penalties = value.index;
   }
 
-  String autoComments = "";
-  String defenseComments = "";
   String generalComments = "";
 
-  void setToDefaults(int team) {
-    teamNumber = team;
+  Uuid uuid = Uuid();
+
+  void setToDefaults(EventMatch match, int teamNumber, TeamMember scouter) {
+    matchCompLevel = match.compLevel;
+    matchNumber = match.number;
+    this.teamNumber = teamNumber;
+
+    scouterId = scouter.id;
+    uid = uuid.v1();
+
     local = true;
 
     autoFuelScored = 0;
@@ -48,12 +64,14 @@ class ScoutedMatch {
 
     climbLevel = ClimbLevel.none;
 
-    autoComments = "";
-    defenseComments = "";
     generalComments = "";
   }
 
-  static final tableName = "scouted_pits";
+  static final tableName = "scouted_matches";
+  static final matchCompLevelKey = "match_comp_level";
+  static final matchNumberKey = "match_number";
+  static final uidKey = "uid";
+  static final scouterIdKey = "scouter_id";
   static final teamNumberKey = "team_number";
   static final localKey = "local";
   static final autoFuelScoredKey = "auto_fuel_scored";
@@ -70,7 +88,11 @@ class ScoutedMatch {
 
   Map<String, dynamic> toMap() {
     return {
+      matchCompLevelKey: matchCompLevel,
+      matchNumberKey: matchNumber,
       teamNumberKey: teamNumber,
+      uidKey: uid,
+      scouterIdKey: scouterId,
       localKey: _local,
       autoFuelScoredKey: autoFuelScored,
       autoFuelFinalKey: autoFuelFinal,
@@ -78,14 +100,16 @@ class ScoutedMatch {
       teleopFuelScoredKey: teleopFuelScored,
       teleopFuelFedKey: teleopFuelFed,
       climbLevelKey: climbLevel,
-      autoCommentsKey: autoComments,
-      defenseCommentsKey: defenseComments,
       generalCommentsKey: generalComments,
     };
   }
 
   ScoutedMatch.fromMap(Map<String, dynamic> map)
-    : teamNumber = map[teamNumberKey],
+    : matchCompLevel = map[matchCompLevelKey],
+      matchNumber = map[matchNumberKey],
+      teamNumber = map[teamNumberKey],
+      uid = map[uidKey],
+      scouterId = map[scouterIdKey],
       _local = map[localKey],
       autoFuelScored = map[autoFuelScoredKey],
       autoFuelFinal = map[autoFuelFinalKey],
@@ -93,10 +117,16 @@ class ScoutedMatch {
       teleopFuelScored = map[teleopFuelScoredKey],
       teleopFuelFed = map[teleopFuelFedKey],
       _climbLevel = map[climbLevelKey],
-      autoComments = map[autoCommentsKey],
-      defenseComments = map[defenseCommentsKey],
       generalComments = map[generalCommentsKey];
+
+  SyncDataItem toSyncDataItem() {
+    Map<String, dynamic> map = toMap();
+    map.remove(localKey);
+
+    return SyncDataItem(type: "scouted_match", data: map);
+  }
 }
 
 enum ClimbLevel { none, L1, L2, L3 }
-enum Penalties { empty, pin, major, minor }
+
+enum Penalties { none, one, few, many }

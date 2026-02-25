@@ -5,7 +5,7 @@ import 'package:kryptopedia/screens/manage_team_flags.dart';
 import 'package:kryptopedia/screens/pdf_viewer.dart';
 import 'package:kryptopedia/widgets/menu/section.dart';
 import 'package:kryptopedia/widgets/menu/version_number.dart';
-
+import 'package:kryptopedia/screens/team_info.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({super.key});
@@ -38,6 +38,16 @@ class MainMenu extends StatelessWidget {
             landscapeWidget: ManageTeamFlags(),
             portraitWidget: ManageTeamFlags(),
           )
+        ]),
+
+        // Info
+        MenuSection([
+          MenuItemDefinition(
+            title: "Team Info",
+            icon: Icons.info,
+            landscapeWidget: TeamInfo(),
+            portraitWidget: TeamInfo(),
+          ),
         ]),
 
         // Resources

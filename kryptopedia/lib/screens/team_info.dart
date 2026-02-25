@@ -1,14 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:kryptopedia/widgets/team_info/team_chooser.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 
-class TeamInfo extends StatelessWidget {
+class TeamInfo extends StatefulWidget {
   const TeamInfo({super.key});
 
   @override
+  State<TeamInfo> createState() => _TeamInfoState();
+}
+
+class _TeamInfoState extends State<TeamInfo> {
+  dynamic _futureTeams;
+  List<Team> _teams = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTeams();
+  }
+
+  Future<void> _loadTeams() async {
+    try {
+      final teams = await DbTeams().getTeams();
+      setState(() {
+        _teams = teams;
+        _isLoading = false;
+      });
+    } catch (e) {
+      // Handle error, e.g., show a snackbar or log the error
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ValueNotifier<int> teamChangeNotifier = ValueNotifier(0);
     return Scaffold(
       appBar: AppBar(
         title: AutoSizeText(
@@ -24,12 +56,25 @@ class TeamInfo extends StatelessWidget {
             child: ListView(
               children: [
                 TeamInfoChooser(
-                  teamList: DbTeams.getTeams(),
-                  teamChangedNotifier: teamChangedNotifier,
+                  teamList: _teams,
+                  teamChangedNotifier: teamChangeNotifier,
                 ),
               ],
             ),
           ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: AutoSizeText(
+              "Exit",
+              style: TextStyle(
+                fontSize: Device.fontSize(context, 15.0, 20.0),
+                color: Colors.black,
+              ),
+              maxLines: 1,
+            ),
+          )
         ],
       ),
     );

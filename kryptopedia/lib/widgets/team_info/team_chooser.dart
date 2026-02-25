@@ -25,7 +25,29 @@ class _TeamInfoChooserState extends State<TeamInfoChooser> {
       return PitBanner(
         "${widget.teamList[0].number} - ${widget.teamList[0].nickname}",
       );
+    } else if (widget.teamList.isEmpty) {
+      return PitBanner("No Teams Found");
     } else {
+      
+      final List<Team> uniqueTeams = {
+        for (var team in widget.teamList) team.number: team,
+      }.values.toList();
+
+      int dropdownValue = widget.teamChangedNotifier.value;
+      final bool valueExists = uniqueTeams.any(
+        (t) => t.number == dropdownValue,
+      );
+
+      if (!valueExists && uniqueTeams.isNotEmpty) {
+        dropdownValue = uniqueTeams.first.number;
+
+        Future.microtask(() {
+          if (mounted) {
+            widget.teamChangedNotifier.value = dropdownValue;
+          }
+        });
+      }
+
       return Container(
         margin: const EdgeInsets.only(
           top: 15.0,
@@ -58,14 +80,14 @@ class _TeamInfoChooserState extends State<TeamInfoChooser> {
             ),
             Container(
               padding: const EdgeInsets.all(5.0),
-              child: DropdownButton(
-                value: widget.teamChangedNotifier.value,
+              child: DropdownButton<int>(
+                value: dropdownValue,
                 onChanged: (newValue) {
                   setState(() {
                     widget.teamChangedNotifier.value = newValue!;
                   });
                 },
-                items: widget.teamList.map<DropdownMenuItem<int>>((Team team) {
+                items: uniqueTeams.map<DropdownMenuItem<int>>((Team team) {
                   return DropdownMenuItem<int>(
                     value: team.number,
                     child: Padding(

@@ -80,7 +80,6 @@ class ScoutedMatch {
   static final teleopFuelScoredKey = "teleop_fuel_scored";
   static final teleopFuelFedKey = "teleop_fuel_fed";
   static final climbLevelKey = "climb_level";
-  static final autoCommentsKey = "auto_comments";
   static final defenseCommentsKey = "defense_comments";
   static final generalCommentsKey = "general_comments";
 

@@ -164,7 +164,7 @@ class ScoutedPit {
       "${appDir.path}/Robot_Pics",
     ).create();
 
-    return join(robotPicsDir.path, "pitscout_${uid}.jpg");
+    return join(robotPicsDir.path, "pitscout_$uid.jpg");
   }
 }
 

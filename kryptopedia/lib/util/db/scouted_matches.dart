@@ -19,7 +19,6 @@ class DbScoutedMatches {
       "${ScoutedMatch.teleopFuelScoredKey} INTEGER NOT NULL,"
       "${ScoutedMatch.teleopFuelFedKey} INTEGER NOT NULL,"
       "${ScoutedMatch.climbLevelKey} INTEGER NOT NULL,"
-      "${ScoutedMatch.autoCommentsKey} TEXT NOT NULL, "
       "${ScoutedMatch.defenseCommentsKey} TEXT NOT NULL, "
       "${ScoutedMatch.generalCommentsKey} TEXT NOT NULL)",
     );

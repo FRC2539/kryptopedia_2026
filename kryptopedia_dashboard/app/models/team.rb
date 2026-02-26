@@ -63,8 +63,6 @@ class Team < ApplicationRecord
   private
 
   def tba_info
-    Rails.cache.fetch("#{cache_key}/tba_info", expires_in: 7.days) do
-      TBAService.team(number)
-    end
+    TBAService.team(number)
   end
 end

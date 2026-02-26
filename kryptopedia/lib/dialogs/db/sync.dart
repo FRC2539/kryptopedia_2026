@@ -17,7 +17,7 @@ class SyncPopup extends StatefulWidget {
 
 class _SyncPopupState extends State<SyncPopup> {
   late Future<Event> event;
-  bool syncDisabled = false;
+  bool syncEnabled = false;
 
   Future<Event> getEvent() {
     DbEvents dbEvents = DbEvents();
@@ -63,7 +63,7 @@ class _SyncPopupState extends State<SyncPopup> {
               const Locale('en'),
             ).format(event.lastSync!);
           }
-          bool syncEnabled = event.syncEnabled;
+          syncEnabled = event.syncEnabled;
 
           return Column(
             spacing: 8,
@@ -87,6 +87,36 @@ class _SyncPopupState extends State<SyncPopup> {
                     : null,
                 label: Text("Sync Data"),
                 icon: Icon(Icons.sync),
+              ),
+              Spacer(),
+              ElevatedButton(
+                onPressed: syncEnabled
+                    ? () async {
+                        setState(() {
+                          syncEnabled = false;
+                        });
+                        await syncDataFlow(context, hard: true);
+                        this.event = getEvent();
+                        setState(() {
+                          syncEnabled = true;
+                        });
+                      }
+                    : null,
+                child: Text("amnesia sync"),
+              ),
+              ElevatedButton(
+                onPressed: syncEnabled
+                    ? () {
+                        Navigator.pop(context);
+                        showDialog(
+                          context: context,
+                          useRootNavigator: false,
+                          builder: (context) =>
+                              EventSetupDialog(authOnly: true),
+                        );
+                      }
+                    : null,
+                child: Text("redo auth setup"),
               ),
               Spacer(),
               Row(

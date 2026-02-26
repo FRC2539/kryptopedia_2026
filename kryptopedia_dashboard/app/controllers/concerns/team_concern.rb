@@ -37,7 +37,7 @@ module TeamConcern
 
   def restrict_to_team_member
     unless current_user&.team == @team
-      redirect_to root_path, alert: "no access!! go away!"
+      redirect_to root_path, alert: "no access!! go away!", status: :forbidden
     end
   end
 

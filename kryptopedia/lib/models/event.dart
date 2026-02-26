@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 class Event {
-  int id;
+  int id = 0;
   String code;
   String name;
   int year;
@@ -8,6 +10,10 @@ class Event {
   int teamNumber;
   String? lastScouter;
   String? defaultAlliancePosition;
+
+  String? _pitMapDataJSON;
+  Map<String, dynamic>? get pitMapDataJSON =>
+      _pitMapDataJSON == null ? null : jsonDecode(_pitMapDataJSON!);
 
   int _lastSync;
   DateTime? get lastSync =>
@@ -27,9 +33,9 @@ class Event {
   static const String lastSyncKey = "last_sync";
   static const String lastScouterKey = "last_scouter";
   static const String defaultAlliancePositionKey = "default_alliance_position";
+  static const String pitMapDataJSONKey = "pit_map_data_json";
 
   Event(
-    this.id,
     this.name,
     this.code,
     this.year,
@@ -55,6 +61,7 @@ class Event {
       lastSyncKey: _lastSync,
       lastScouterKey: lastScouter,
       defaultAlliancePositionKey: defaultAlliancePosition,
+      pitMapDataJSONKey: _pitMapDataJSON,
     };
   }
 
@@ -68,5 +75,6 @@ class Event {
       teamNumber = map[teamNumberKey],
       _lastSync = map[lastSyncKey],
       lastScouter = map[lastScouterKey],
-      defaultAlliancePosition = map[defaultAlliancePositionKey];
+      defaultAlliancePosition = map[defaultAlliancePositionKey],
+      _pitMapDataJSON = map[pitMapDataJSONKey];
 }

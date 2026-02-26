@@ -45,7 +45,7 @@ class DeviceApiController < ApplicationController
   def sync
     render json: { error: "no" }, status: :forbidden and return if current_user.is_a? TeamMember # very good protection im so good at this
 
-    event = current_user.active_event
+    @event = current_user.active_event
 
     body = JSON.parse(request.body.read) rescue nil
     render json: { error: "invalid json" }, status: :bad_request and return unless body.is_a?(Array)
@@ -53,11 +53,11 @@ class DeviceApiController < ApplicationController
     body.each do |item|
       data = item["data"]
       if item["deleted"]
-        ScoutingDataItem.where(data_type: item["type"], uid: data["uid"], scouted_event_id: event.id).update_all(deleted_at: Time.current)
+        ScoutingDataItem.where(data_type: item["type"], uid: data["uid"], scouted_event_id: @event.id).update_all(deleted_at: Time.current)
         next
       end
       team_member = TeamMember.find_by_hashid(data["scouter_id"]) if data["scouter_id"]
-      ScoutingDataItem.upsert({ data_type: item["type"], uid: data["uid"], scouted_event_id: event.id, team_member_id: team_member&.id, data: data.to_json, deleted_at: nil })
+      ScoutingDataItem.upsert({ data_type: item["type"], uid: data["uid"], scouted_event_id: @event.id, team_member_id: team_member&.id, data: data.to_json, deleted_at: nil })
     end
 
     # ACCEPT/PUSH ^^
@@ -66,10 +66,11 @@ class DeviceApiController < ApplicationController
     since = params[:since] ? Time.parse(params[:since]).. : (10.years.ago..)
 
     @synced_to = Time.current
-    @teams = ScoutedEventTeam.where(updated_at: since, scouted_event: event)
+    @teams = ScoutedEventTeam.where(updated_at: since, scouted_event: @event)
     @team_members = TeamMember.where(updated_at: since, team: current_user.team)
-    @scouting_data_items = event.scouting_data_items.where(updated_at: since)
-    @matches = event.matches.where(updated_at: since)
+    @scouting_data_items = @event.scouting_data_items.where(updated_at: since)
+    @matches = @event.matches.where(updated_at: since)
+    @should_update_pit_map = since.include?(@event.pit_map_cache_updated)
 
     current_user.update! last_sync: @synced_to
   end

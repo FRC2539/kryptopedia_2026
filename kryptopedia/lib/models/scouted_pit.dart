@@ -146,6 +146,7 @@ class ScoutedPit {
       _isKitBot = map[isKitBotKey],
       _drivetrain = map[drivetrainKey],
       _wheelType = map[wheelTypeKey],
+      _fuelPickupMethods = map[fuelPickupMethodsKey],
       _hasTurret = map[hasTurretKey],
       maxFuelCapacity = map[maxFuelCapacityKey],
       shooterNumber = map[shooterNumberKey],

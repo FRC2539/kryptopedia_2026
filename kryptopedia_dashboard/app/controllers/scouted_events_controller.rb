@@ -30,10 +30,10 @@ class ScoutedEventsController < ApplicationController
 
   def download_teams
     @scouted_event = @team.scouted_events.find_by_hashid!(params[:scouted_event_id])
-    redirect_to edit_team_scouted_event_path(@scouted_event.owner, @scouted_event), alert: "TBA Sync is disabled" unless @scouted_event.tba_sync?
+    redirect_to edit_team_scouted_event_path(@scouted_event.owner, @scouted_event), alert: "TBA Sync is disabled" and return unless @scouted_event.tba_sync?
 
     teams_numbers = TBAService.event_teams(2026, @scouted_event.code).map { |team_data| team_data["team_number"] }
-    teams = Team.where(number: teams_numbers)
+    teams = teams_numbers.map { |num| Team.find_or_create_by!(number: num) }
 
     @scouted_event.teams = teams
 

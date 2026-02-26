@@ -33,7 +33,6 @@ class _AutoMatchScoutingState extends State<AutoMatchScouting> {
             ),
           ],
           group2: [
-            
             CheckboxListTile(
               title: const Text("Robot climbed at end of auto"),
               value: scoutedMatchSingleton.autoClimbed,

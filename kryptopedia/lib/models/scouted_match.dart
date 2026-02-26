@@ -18,7 +18,7 @@ class ScoutedMatch {
   }
 
   int autoFuelScored = 0;
-  int autoFuelFinal = 0;
+  //int autoFuelFinal = 0;
 
   int _autoClimbed = 0;
   bool get autoClimbed => _autoClimbed == 1;
@@ -46,17 +46,17 @@ class ScoutedMatch {
   Uuid uuid = Uuid();
 
   void setToDefaults(EventMatch match, int teamNumber, TeamMember scouter) {
+    scouterId = scouter.id;
+    uid = uuid.v1();
+
     matchCompLevel = match.compLevel;
     matchNumber = match.number;
     this.teamNumber = teamNumber;
 
-    scouterId = scouter.id;
-    uid = uuid.v1();
-
     local = true;
 
     autoFuelScored = 0;
-    autoFuelFinal = 0;
+    //autoFuelFinal = 0;
     autoClimbed = false;
 
     teleopFuelScored = 0;
@@ -67,51 +67,50 @@ class ScoutedMatch {
     generalComments = "";
   }
 
+  static final scouterIdKey = "scouter_id";
+  static final uidKey = "uid";
   static final tableName = "scouted_matches";
   static final matchCompLevelKey = "match_comp_level";
   static final matchNumberKey = "match_number";
-  static final uidKey = "uid";
-  static final scouterIdKey = "scouter_id";
   static final teamNumberKey = "team_number";
   static final localKey = "local";
   static final autoFuelScoredKey = "auto_fuel_scored";
-  static final autoFuelFinalKey = "auto_fuel_final";
+  //static final autoFuelFinalKey = "auto_fuel_final";
   static final autoClimbedKey = "auto_climbed";
   static final teleopFuelScoredKey = "teleop_fuel_scored";
   static final teleopFuelFedKey = "teleop_fuel_fed";
   static final climbLevelKey = "climb_level";
-  static final defenseCommentsKey = "defense_comments";
   static final generalCommentsKey = "general_comments";
 
   ScoutedMatch();
 
   Map<String, dynamic> toMap() {
     return {
+      scouterIdKey: scouterId,
+      uidKey: uid,
       matchCompLevelKey: matchCompLevel,
       matchNumberKey: matchNumber,
       teamNumberKey: teamNumber,
-      uidKey: uid,
-      scouterIdKey: scouterId,
       localKey: _local,
       autoFuelScoredKey: autoFuelScored,
-      autoFuelFinalKey: autoFuelFinal,
+      //autoFuelFinalKey: autoFuelFinal,
       autoClimbedKey: autoClimbed,
       teleopFuelScoredKey: teleopFuelScored,
       teleopFuelFedKey: teleopFuelFed,
-      climbLevelKey: climbLevel,
+      climbLevelKey: _climbLevel,
       generalCommentsKey: generalComments,
     };
   }
 
   ScoutedMatch.fromMap(Map<String, dynamic> map)
-    : matchCompLevel = map[matchCompLevelKey],
+    : scouterId = map[scouterIdKey],
+      uid = map[uidKey],
+      matchCompLevel = map[matchCompLevelKey],
       matchNumber = map[matchNumberKey],
       teamNumber = map[teamNumberKey],
-      uid = map[uidKey],
-      scouterId = map[scouterIdKey],
       _local = map[localKey],
       autoFuelScored = map[autoFuelScoredKey],
-      autoFuelFinal = map[autoFuelFinalKey],
+      //autoFuelFinal = map[autoFuelFinalKey],
       _autoClimbed = map[autoClimbedKey],
       teleopFuelScored = map[teleopFuelScoredKey],
       teleopFuelFed = map[teleopFuelFedKey],

@@ -41,7 +41,9 @@ class MatchBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = alliancePosition == "red" ? Colors.red : Colors.blue;
+    Color backgroundColor = alliancePosition.startsWith("Red")
+        ? Colors.red
+        : Colors.blue;
     // Color textBackgroundColor =
     //     alliance == "red" ? Colors.red.shade600 : Colors.blue.shade600;
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/screens/pit_scouting.dart';
 
@@ -52,7 +53,8 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
     DbTeamMembers dbTeamMembers = DbTeamMembers();
     List<TeamMember> teamMembers = await dbTeamMembers.getTeamMembers();
 
-    _selectedScouter = teamMembers[0].id;
+    Event event = await dbEvents.getEvent();
+    _selectedScouter = event.lastScouter ?? teamMembers[0].id;
 
     return FutureResponse(teams: teams, scouters: teamMembers);
   }
@@ -68,7 +70,7 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: SizedBox(
-        height: 350,
+        height: 400,
         width: 550,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -116,6 +118,7 @@ class _ScoutPitSelectionDialogState extends State<ScoutPitSelectionDialog> {
                           onChanged: (String? newValue) {
                             setState(() {
                               _selectedScouter = newValue!;
+                              dbEvents.updateLastScouter(_selectedScouter);
                             });
                           },
                           items: snapshot.data!.scouters

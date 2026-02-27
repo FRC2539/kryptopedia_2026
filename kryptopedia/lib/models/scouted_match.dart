@@ -94,7 +94,7 @@ class ScoutedMatch {
       localKey: _local,
       autoFuelScoredKey: autoFuelScored,
       //autoFuelFinalKey: autoFuelFinal,
-      autoClimbedKey: autoClimbed,
+      autoClimbedKey: _autoClimbed,
       teleopFuelScoredKey: teleopFuelScored,
       teleopFuelFedKey: teleopFuelFed,
       climbLevelKey: _climbLevel,

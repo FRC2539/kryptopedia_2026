@@ -54,7 +54,6 @@ class _TeamInfoState extends State<TeamInfo> {
           style: TextStyle(fontSize: Device.fontHeader(context)),
           maxLines: 1,
         ),
-        leading: Container(),
       ),
       body: Column(
         children: [
@@ -72,22 +71,6 @@ class _TeamInfoState extends State<TeamInfo> {
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange[500],
-            ),
-            child: AutoSizeText(
-              "Exit",
-              style: TextStyle(
-                fontSize: Device.fontSize(context, 15.0, 20.0),
-                color: Colors.black,
-              ),
-              maxLines: 1,
-            ),
-          )
         ],
       ),
     );

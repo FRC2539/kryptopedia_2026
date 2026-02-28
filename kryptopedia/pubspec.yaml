@@ -21,6 +21,7 @@ dependencies:
   uuid: ^4.5.2
   pdfrx: ^2.2.24
   url_launcher: ^6.3.2
+  haptic_feedback: ^0.6.4+3
 
 dev_dependencies:
   flutter_test:

@@ -9,6 +9,7 @@ import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/screens/match_scouting.dart';
 
 import 'package:kryptopedia/models/team.dart';
+import 'package:kryptopedia/screens/match_scouting_boxes.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
@@ -147,7 +148,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
             FutureBuilder<FutureResponse>(
               future: data,
               builder: (context, snapshot) {
-                if (snapshot.hasError) return Text("${snapshot.error}");
+                if (snapshot.hasError) return Text("ohhhh ${snapshot.error}");
                 if (!snapshot.hasData) return CircularProgressIndicator();
                 if (noMatches &&
                     snapshot.connectionState == ConnectionState.done) {
@@ -208,6 +209,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                               .toList(),
                         ),
                       ),
+                      SizedBox(height: 8),
                       Align(
                         alignment: AlignmentGeometry.topLeft,
                         child: AutoSizeText(
@@ -314,6 +316,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                           }).toList(),
                         ),
                       ),
+                      SizedBox(height: 8),
                       Center(
                         child: ElevatedButton(
                           onPressed: () async {
@@ -332,13 +335,14 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                               }
                             }
 
+                            if (!context.mounted) return;
                             Navigator.pop(context);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PopScope(
-                                  canPop: false,
-                                  child: MatchScouting(
+                                  canPop: true,
+                                  child: MatchScoutingBoxesEdition(
                                     alliancePosition: _selectedPosition,
                                     match: _selectedMatch.match,
                                     team: _selectedTeam,

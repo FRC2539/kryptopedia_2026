@@ -21,6 +21,9 @@ class DbScoutedMatches {
       "${ScoutedMatch.teleopFuelScoredKey} INTEGER NOT NULL,"
       "${ScoutedMatch.teleopFuelFedKey} INTEGER NOT NULL,"
       "${ScoutedMatch.climbLevelKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.robotRolesKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.issuesKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.penaltiesKey} INTEGER NOT NULL,"
       "${ScoutedMatch.generalCommentsKey} TEXT NOT NULL)",
     );
   }
@@ -81,7 +84,7 @@ class DbScoutedMatches {
     return scoutedMatches;
   }
 
-  Future<ScoutedMatch?> getScoutedMatch(int teamNumber) async {
+  Future<List<ScoutedMatch>> getScoutedMatchesForTeam(int teamNumber) async {
     Database db = await dbHelper.db;
 
     final List<Map<String, dynamic>> result = await db.query(
@@ -90,11 +93,11 @@ class DbScoutedMatches {
       whereArgs: [teamNumber],
     );
 
-    ScoutedMatch? scoutedMatch = result.isNotEmpty
-        ? ScoutedMatch.fromMap(result.first)
-        : null;
+    List<ScoutedMatch> scoutedMatches = result
+        .map((map) => ScoutedMatch.fromMap(map))
+        .toList();
 
-    return scoutedMatch;
+    return scoutedMatches;
   }
 
   Future<int> deleteScoutedMatch(String uid) async {

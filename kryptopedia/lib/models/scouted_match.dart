@@ -18,7 +18,6 @@ class ScoutedMatch {
   }
 
   int autoFuelScored = 0;
-  //int autoFuelFinal = 0;
 
   int _autoClimbed = 0;
   bool get autoClimbed => _autoClimbed == 1;
@@ -33,6 +32,24 @@ class ScoutedMatch {
   ClimbLevel get climbLevel => ClimbLevel.values[_climbLevel];
   set climbLevel(ClimbLevel value) {
     _climbLevel = value.index;
+  }
+
+  int _robotRoles = 0; // 1 << enum index
+  List<RobotRole> get robotRoles => [
+    if (_robotRoles & 1 != 0) RobotRole.offense,
+    if (_robotRoles & 2 != 0) RobotRole.defense,
+  ];
+  set robotRoles(List<RobotRole> value) {
+    _robotRoles = 0;
+    for (var element in value) {
+      _robotRoles += 1 << element.index;
+    }
+  }
+
+  int _issues = 0;
+  bool get issues => _issues == 1;
+  set issues(bool value) {
+    _issues = value ? 1 : 0;
   }
 
   int _penalties = 0; //enum index
@@ -56,7 +73,6 @@ class ScoutedMatch {
     local = true;
 
     autoFuelScored = 0;
-    //autoFuelFinal = 0;
     autoClimbed = false;
 
     teleopFuelScored = 0;
@@ -75,11 +91,13 @@ class ScoutedMatch {
   static final teamNumberKey = "team_number";
   static final localKey = "local";
   static final autoFuelScoredKey = "auto_fuel_scored";
-  //static final autoFuelFinalKey = "auto_fuel_final";
   static final autoClimbedKey = "auto_climbed";
   static final teleopFuelScoredKey = "teleop_fuel_scored";
   static final teleopFuelFedKey = "teleop_fuel_fed";
   static final climbLevelKey = "climb_level";
+  static final robotRolesKey = "robot_roles";
+  static final issuesKey = "issues";
+  static final penaltiesKey = "penalties";
   static final generalCommentsKey = "general_comments";
 
   ScoutedMatch();
@@ -93,11 +111,13 @@ class ScoutedMatch {
       teamNumberKey: teamNumber,
       localKey: _local,
       autoFuelScoredKey: autoFuelScored,
-      //autoFuelFinalKey: autoFuelFinal,
       autoClimbedKey: _autoClimbed,
       teleopFuelScoredKey: teleopFuelScored,
       teleopFuelFedKey: teleopFuelFed,
       climbLevelKey: _climbLevel,
+      robotRolesKey: _robotRoles,
+      issuesKey: _issues,
+      penaltiesKey: _penalties,
       generalCommentsKey: generalComments,
     };
   }
@@ -108,13 +128,14 @@ class ScoutedMatch {
       matchCompLevel = map[matchCompLevelKey],
       matchNumber = map[matchNumberKey],
       teamNumber = map[teamNumberKey],
-      _local = map[localKey],
+      _local = map[localKey] == 1 ? 1 : 0,
       autoFuelScored = map[autoFuelScoredKey],
-      //autoFuelFinal = map[autoFuelFinalKey],
       _autoClimbed = map[autoClimbedKey],
       teleopFuelScored = map[teleopFuelScoredKey],
       teleopFuelFed = map[teleopFuelFedKey],
       _climbLevel = map[climbLevelKey],
+      _issues = map[issuesKey],
+      _penalties = map[penaltiesKey],
       generalComments = map[generalCommentsKey];
 
   SyncDataItem toSyncDataItem() {
@@ -128,3 +149,5 @@ class ScoutedMatch {
 enum ClimbLevel { none, L1, L2, L3 }
 
 enum Penalties { none, one, few, many }
+
+enum RobotRole { offense, defense }

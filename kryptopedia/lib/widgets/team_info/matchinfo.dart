@@ -5,11 +5,11 @@ import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/widgets/common/label.dart';
 import 'package:kryptopedia/widgets/team_info/team_tables.dart';
 
-class TeamInfoMatchesAuto extends StatelessWidget {
+class TeamInfoMatches extends StatelessWidget {
   final List<ScoutedMatch> scoutedMatches;
   //final TeamInfoSummary teamInfoSummary;
 
-  const TeamInfoMatchesAuto({
+  const TeamInfoMatches({
     super.key,
     required this.scoutedMatches,
     /*required this.teamInfoSummary*/
@@ -21,7 +21,7 @@ class TeamInfoMatchesAuto extends StatelessWidget {
       children: [
         TextLabel(label: "Match Information", headerLabel: true),
         FutureBuilder<List<TableRow>>(
-          future: createAutonomousTable(context),
+          future: createMatchInfoTable(context),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Container(
@@ -57,7 +57,7 @@ class TeamInfoMatchesAuto extends StatelessWidget {
     );
   }
 
-  Future<List<TableRow>> createAutonomousTable(BuildContext context) async {
+  Future<List<TableRow>> createMatchInfoTable(BuildContext context) async {
     DbMatches dbMatch = DbMatches();
 
     List<TableRow> autonomousTable = [];

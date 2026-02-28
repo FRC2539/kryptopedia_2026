@@ -93,8 +93,6 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
                                           return DataGrid(
                                             currentTeamStats: currentTeamStats,
                                             maxTeamStats: maxTeamStats,
-                                            // teamScorePredictions:
-                                            //     teamPredictions,
                                             maxPredictedScore:
                                                 maxPredictedScore,
                                           );
@@ -187,6 +185,54 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
           return (columnSelectorNotifier.value.ascending)
               ? (a.robotWeight.compareTo(b.robotWeight))
               : (b.robotWeight.compareTo(a.robotWeight));
+        });
+        break;
+
+      case ColType.autoFuelScored:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.autoFuelScoreTotal.compareTo(b.autoFuelScoreTotal))
+              : (b.autoFuelScoreTotal.compareTo(a.autoFuelScoreTotal));
+        });
+        break;
+
+      case ColType.autoFuelAverage:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.autoFuelScoreAverage.compareTo(b.autoFuelScoreAverage))
+              : (b.autoFuelScoreAverage.compareTo(a.autoFuelScoreAverage));
+        });
+        break;
+
+      case ColType.teleopFuelScored:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.teleopFuelScoreTotal.compareTo(b.teleopFuelScoreTotal))
+              : (b.teleopFuelScoreTotal.compareTo(a.teleopFuelScoreTotal));
+        });
+        break;
+
+      case ColType.teleopFuelAverage:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.teleopFuelScoreAverage.compareTo(b.teleopFuelScoreAverage))
+              : (b.teleopFuelScoreAverage.compareTo(a.teleopFuelScoreAverage));
+        });
+        break;
+
+      case ColType.teleopFuelFed:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.teleopFuelFedTotal.compareTo(b.teleopFuelFedTotal))
+              : (b.teleopFuelFedTotal.compareTo(a.teleopFuelFedTotal));
+        });
+        break;
+
+      case ColType.teleopFuelFedAverage:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.teleopFuelFedAverage.compareTo(b.teleopFuelFedAverage))
+              : (b.teleopFuelFedAverage.compareTo(a.teleopFuelFedAverage));
         });
         break;
 

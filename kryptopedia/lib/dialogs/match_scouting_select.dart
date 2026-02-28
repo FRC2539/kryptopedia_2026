@@ -6,8 +6,6 @@ import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/team_member.dart';
-import 'package:kryptopedia/screens/match_scouting.dart';
-
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/screens/match_scouting_boxes.dart';
 import 'package:kryptopedia/util/db/events.dart';
@@ -247,7 +245,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                                         ? 425.0
                                         : 225.0,
                                     child: AutoSizeText(
-                                      "${match.match.compLevelName} Match ${match.match.number}",
+                                      match.match.name,
                                       style: TextStyle(
                                         fontSize: Device.fontSize(
                                           context,
@@ -340,15 +338,12 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => PopScope(
-                                  canPop: true,
-                                  child: MatchScoutingBoxesEdition(
+                                builder: (context) => MatchScoutingBoxesEdition(
                                     alliancePosition: _selectedPosition,
                                     match: _selectedMatch.match,
                                     team: _selectedTeam,
                                     scouter: snapshot.data!.scouters.firstWhere(
-                                      (s) => s.id == _selectedScouter,
-                                    ),
+                                    (s) => s.id == _selectedScouter,
                                   ),
                                 ),
                               ),

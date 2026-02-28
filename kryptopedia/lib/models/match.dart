@@ -19,6 +19,7 @@ class EventMatch {
         return compLevel;
     }
   }
+  String get name => "$compLevelName Match $number";
 
   static const String tableName = "matches";
   static const String numberKey = "number";

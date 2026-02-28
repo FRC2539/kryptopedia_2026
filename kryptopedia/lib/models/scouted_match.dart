@@ -38,6 +38,7 @@ class ScoutedMatch {
   List<RobotRole> get robotRoles => [
     if (_robotRoles & 1 != 0) RobotRole.offense,
     if (_robotRoles & 2 != 0) RobotRole.defense,
+    if (_robotRoles & 4 != 0) RobotRole.feeder,
   ];
   set robotRoles(List<RobotRole> value) {
     _robotRoles = 0;
@@ -79,6 +80,9 @@ class ScoutedMatch {
     teleopFuelFed = 0;
 
     climbLevel = ClimbLevel.none;
+    robotRoles = [];
+    issues = false;
+    penalties = Penalties.none;
 
     generalComments = "";
   }
@@ -150,4 +154,4 @@ enum ClimbLevel { none, L1, L2, L3 }
 
 enum Penalties { none, one, few, many }
 
-enum RobotRole { offense, defense }
+enum RobotRole { offense, defense, feeder }

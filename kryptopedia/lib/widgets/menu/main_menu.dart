@@ -3,9 +3,10 @@ import 'package:kryptopedia/dialogs/match_scouting_select.dart';
 import 'package:kryptopedia/dialogs/pit_scouting_select.dart';
 import 'package:kryptopedia/screens/manage_team_flags.dart';
 import 'package:kryptopedia/screens/pdf_viewer.dart';
+import 'package:kryptopedia/screens/team_info.dart';
+import 'package:kryptopedia/screens/team_metrics.dart';
 import 'package:kryptopedia/widgets/menu/section.dart';
 import 'package:kryptopedia/widgets/menu/version_number.dart';
-import 'package:kryptopedia/screens/team_info.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({super.key});
@@ -48,7 +49,15 @@ class MainMenu extends StatelessWidget {
             landscapeWidget: TeamInfo(),
             portraitWidget: TeamInfo(),
           ),
+
+          MenuItemDefinition(
+            title: "All Team Metrics",
+            icon: Icons.table_view,
+            landscapeWidget: TeamMetrics(),
+            portraitWidget: TeamMetrics(),
+          ),
         ]),
+        // Info
 
         // Resources
         MenuSection([

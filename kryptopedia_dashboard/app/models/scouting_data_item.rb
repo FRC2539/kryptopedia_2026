@@ -31,6 +31,10 @@ class ScoutingDataItem < ApplicationRecord
   validates :data_type, presence: true
   validates :data, presence: true
 
+  def deleted?
+    deleted_at.present?
+  end
+
   def destroy
     soft_delete
   end

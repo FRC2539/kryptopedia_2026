@@ -17,7 +17,8 @@ import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/widgets/common/number_field.dart';
 
 class EventSetupDialog extends StatefulWidget {
-  const EventSetupDialog({super.key});
+  final bool authOnly;
+  const EventSetupDialog({super.key, this.authOnly = false});
 
   @override
   State<EventSetupDialog> createState() => _EventSetupDialogState();
@@ -27,13 +28,15 @@ class _EventSetupDialogState extends State<EventSetupDialog>
     with TickerProviderStateMixin {
   late final TabController _tabController;
 
+//widget.authOnly = "team shared device" only, in a context where only "Event" is being recreated
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 2,
+      length: widget.authOnly ? 1 : 2,
       vsync: this,
-      initialIndex: kDebugMode ? 1 : 0,
+      initialIndex: widget.authOnly ? 0 : (kDebugMode ? 1 : 0),
     );
   }
 
@@ -49,13 +52,19 @@ class _EventSetupDialogState extends State<EventSetupDialog>
       title: Text("Database Setup"),
       content: Column(
         children: [
-          Text("The event configuration is missing. Please initialize one:"),
+          widget.authOnly
+              ? Text(
+                  "The event configuration will be replaced.\nEmergency use only and only if you know what you're doing!",
+                )
+              : Text(
+                  "The event configuration is missing. Please initialize one:",
+                ),
           TabBar(
             controller: _tabController,
             tabs: [
               // Tab(text: "Personal device"),
               Tab(text: "Team shared device"),
-              Tab(text: "Local-only testing setup"),
+              if (!widget.authOnly) Tab(text: "Local-only testing setup"),
             ],
           ),
           SizedBox(
@@ -63,7 +72,10 @@ class _EventSetupDialogState extends State<EventSetupDialog>
             width: 500,
             child: TabBarView(
               controller: _tabController,
-              children: [TeamDeviceForm(), TestDataForm()],
+              children: [
+                TeamDeviceForm(),
+                if (!widget.authOnly) TestDataForm(),
+              ],
             ),
           ),
         ],
@@ -171,7 +183,6 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     Navigator.pop(context);
 
     Event eventData = Event(
-      0,
       event!["name"],
       event!["code"],
       event!["year"],
@@ -183,7 +194,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       alliancePositions.first,
     );
     DbEvents dbEvents = DbEvents();
-    await dbEvents.insertEvent(eventData);
+    await dbEvents.upsertEvent(eventData);
 
     if (!mounted) return;
     showDialog(
@@ -365,7 +376,6 @@ class _TestDataFormState extends State<TestDataForm> {
     _formKey.currentState!.save();
 
     Event event = Event(
-      0,
       "Hatboro Horsham",
       "PAHAT",
       DateTime.now().year,
@@ -378,7 +388,7 @@ class _TestDataFormState extends State<TestDataForm> {
     );
 
     DbEvents dbEvents = DbEvents();
-    await dbEvents.insertEvent(event);
+    await dbEvents.upsertEvent(event);
 
     DbTeams dbTeams = DbTeams();
 
@@ -399,7 +409,7 @@ class _TestDataFormState extends State<TestDataForm> {
       matches.add(
         EventMatch(
           i,
-          "qm",
+          "q",
           teams[0].number,
           teams[1].number,
           teams[2].number,

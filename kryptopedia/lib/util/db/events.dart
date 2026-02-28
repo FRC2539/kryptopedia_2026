@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:kryptopedia/models/event.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -19,13 +21,18 @@ class DbEvents {
       "${Event.teamNumberKey} INTEGER NOT NULL, "
       "${Event.lastSyncKey} INTEGER NOT NULL, "
       "${Event.lastScouterKey} TEXT, "
-      "${Event.defaultAlliancePositionKey} TEXT)"
+      "${Event.defaultAlliancePositionKey} TEXT, "
+      "${Event.pitMapDataJSONKey} TEXT)"
     );
   }
 
-  Future<int> insertEvent(Event event) async {
+  Future<int> upsertEvent(Event event) async {
     Database db = await dbHelper.db;
-    int result = await db.insert(Event.tableName, event.toMap());
+    int result = await db.insert(
+      Event.tableName,
+      event.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return result;
   }
 
@@ -76,6 +83,16 @@ class DbEvents {
 
     String result = db.update(Event.tableName, {
       Event.defaultAlliancePositionKey: alliancePosition,
+    }, where: "${Event.idKey} = 0").toString();
+    
+    return result;
+  }
+
+  Future<String> updatePitMapData(Map<String, dynamic> pitMapDataJSON) async {
+    Database db = await dbHelper.db;
+
+    String result = db.update(Event.tableName, {
+      Event.pitMapDataJSONKey: jsonEncode(pitMapDataJSON),
     }, where: "${Event.idKey} = 0").toString();
     
     return result;

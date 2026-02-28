@@ -16,7 +16,7 @@ import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 
-Future<APIResponse> syncData() async {
+Future<APIResponse> syncData({bool hard = false}) async {
   DbEvents dbEvents = DbEvents();
   Event event = await dbEvents.getEvent();
 
@@ -46,7 +46,7 @@ Future<APIResponse> syncData() async {
     event.serverURL!,
     event.teamNumber,
     event.authToken!,
-    event.lastSync == null
+    (event.lastSync == null || hard)
         ? DateTime.fromMillisecondsSinceEpoch(0).toIso8601String()
         : event.lastSync!.toIso8601String(),
     dataToPush,
@@ -85,6 +85,12 @@ Future<APIResponse> syncData() async {
   DbTeams dbTeams = DbTeams();
   DbTeamMembers dbTeamMembers = DbTeamMembers();
   DbMatches dbMatches = DbMatches();
+
+  print(pulledData.data);
+
+  if (pulledData.data["pit_map_data"] != null) {
+    await dbEvents.updatePitMapData(pulledData.data["pit_map_data"]);
+  }
 
   for (dynamic item in items) {
     try {
@@ -155,7 +161,6 @@ Future<APIResponse> syncData() async {
           teamFlagApplication,
         );
       }
-
     } catch (e) {
       return APIResponse(
         success: false,
@@ -172,8 +177,8 @@ Future<APIResponse> syncData() async {
   );
 }
 
-Future syncDataFlow(BuildContext context) async {
-  APIResponse response = await syncData();
+Future syncDataFlow(BuildContext context, {bool hard = false}) async {
+  APIResponse response = await syncData(hard: hard);
   if (!response.success) {
     if (!context.mounted) return;
     await showDialog(

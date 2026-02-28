@@ -2,14 +2,15 @@
 #
 # Table name: scouted_events
 #
-#  id         :bigint           not null, primary key
-#  code       :string
-#  name       :string
-#  tba_sync   :boolean          default(FALSE), not null
-#  test       :boolean
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  team_id    :bigint           not null
+#  id                    :bigint           not null, primary key
+#  code                  :string
+#  name                  :string
+#  pit_map_cache_updated :datetime
+#  tba_sync              :boolean          default(FALSE), not null
+#  test                  :boolean
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  team_id               :bigint           not null
 #
 # Indexes
 #
@@ -35,6 +36,15 @@ class ScoutedEvent < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :team_id }
   validates :code, presence: true, uniqueness: { scope: :team_id }
   validates :test, presence: true
+
+  def pit_map
+    Rails.cache.fetch("#{code}/pit_map", expires_in: 1.hour) do
+      self.update!(pit_map_cache_updated: Time.current)
+      NexusService.pit_map(2026, code)
+    rescue Faraday::ResourceNotFound
+      nil
+    end
+  end
 
   private
 

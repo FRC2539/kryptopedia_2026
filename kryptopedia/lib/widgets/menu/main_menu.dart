@@ -3,6 +3,7 @@ import 'package:kryptopedia/dialogs/match_scouting_select.dart';
 import 'package:kryptopedia/dialogs/pit_scouting_select.dart';
 import 'package:kryptopedia/screens/manage_team_flags.dart';
 import 'package:kryptopedia/screens/pdf_viewer.dart';
+import 'package:kryptopedia/screens/pit_map.dart';
 import 'package:kryptopedia/screens/team_info.dart';
 import 'package:kryptopedia/screens/team_metrics.dart';
 import 'package:kryptopedia/widgets/menu/section.dart';
@@ -30,7 +31,7 @@ class MainMenu extends StatelessWidget {
             icon: Icons.person_4,
             onTap: (context) => showDialog(
               context: context,
-              builder: (context) => ScoutedMatchSelectionDialog(),
+              builder: (context) => ScoutMatchSelectionDialog(),
             ),
           ),
           MenuItemDefinition(
@@ -38,7 +39,7 @@ class MainMenu extends StatelessWidget {
             icon: Icons.flag,
             landscapeWidget: ManageTeamFlags(),
             portraitWidget: ManageTeamFlags(),
-          )
+          ),
         ]),
 
         // Info
@@ -61,6 +62,12 @@ class MainMenu extends StatelessWidget {
 
         // Resources
         MenuSection([
+          MenuItemDefinition(
+            title: "Pit Map",
+            icon: Icons.map_outlined,
+            portraitWidget: PitMapViewer(),
+            landscapeWidget: PitMapViewer(),
+          ),
           MenuItemDefinition(
             title: "Game Manual",
             icon: Icons.menu_book,

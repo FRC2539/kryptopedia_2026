@@ -62,8 +62,6 @@ class ScoutedPit {
   int maxFuelCapacity = 0;
   int shooterNumber = 0;
 
-  String autoComments = "";
-
   String generalComments = "";
 
   Uuid uuid = Uuid();
@@ -89,7 +87,6 @@ class ScoutedPit {
     maxFuelCapacity = 35;
     shooterNumber = 1;
 
-    autoComments = "";
     generalComments = "";
   }
 
@@ -110,7 +107,6 @@ class ScoutedPit {
   static const shooterNumberKey = "shooter_number";
   static const maxFuelCapacityKey = "max_fuel_capacity";
   static const wheelTypeKey = "wheel_type";
-  static const autoCommentsKey = "auto_comments";
   static const generalCommentsKey = "general_comments";
 
   ScoutedPit();
@@ -133,7 +129,6 @@ class ScoutedPit {
       hasTurretKey: _hasTurret,
       maxFuelCapacityKey: maxFuelCapacity,
       shooterNumberKey: shooterNumber,
-      autoCommentsKey: autoComments,
       generalCommentsKey: generalComments,
     };
   }
@@ -151,10 +146,10 @@ class ScoutedPit {
       _isKitBot = map[isKitBotKey],
       _drivetrain = map[drivetrainKey],
       _wheelType = map[wheelTypeKey],
+      _fuelPickupMethods = map[fuelPickupMethodsKey],
       _hasTurret = map[hasTurretKey],
       maxFuelCapacity = map[maxFuelCapacityKey],
       shooterNumber = map[shooterNumberKey],
-      autoComments = map[autoCommentsKey],
       generalComments = map[generalCommentsKey];
 
   SyncDataItem toSyncDataItem() {
@@ -170,7 +165,7 @@ class ScoutedPit {
       "${appDir.path}/Robot_Pics",
     ).create();
 
-    return join(robotPicsDir.path, "pitscout_${uid}.jpg");
+    return join(robotPicsDir.path, "pitscout_$uid.jpg");
   }
 }
 

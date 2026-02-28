@@ -11,6 +11,15 @@ class EventMatch {
 
   String get id => "$compLevel/$number";
 
+  String get compLevelName {
+    switch (compLevel) {
+      case "q":
+        return "Qualification";
+      default:
+        return compLevel;
+    }
+  }
+
   static const String tableName = "matches";
   static const String numberKey = "number";
   static const String compLevelKey = "comp_level";

@@ -9,18 +9,18 @@ class DbScoutedMatches {
     if (await dbHelper.tableExists(db, ScoutedMatch.tableName)) return;
     await db.execute(
       "CREATE TABLE ${ScoutedMatch.tableName}("
+      "${ScoutedMatch.scouterIdKey} TEXT NOT NULL, "
+      "${ScoutedMatch.uidKey} TEXT PRIMARY KEY, "
+      "${ScoutedMatch.matchCompLevelKey} TEXT NOT NULL, "
+      "${ScoutedMatch.matchNumberKey} INTEGER NOT NULL, "
       "${ScoutedMatch.teamNumberKey} INTEGER NOT NULL, "
       "${ScoutedMatch.localKey} INTEGER NOT NULL, "
-      "${ScoutedMatch.uidKey} TEXT PRIMARY KEY, "
-      "${ScoutedMatch.scouterIdKey} TEXT NOT NULL, "
       "${ScoutedMatch.autoFuelScoredKey} INTEGER NOT NULL, "
-      "${ScoutedMatch.autoFuelFinalKey} INTEGER NOT NULL, "
+      //"${ScoutedMatch.autoFuelFinalKey} INTEGER NOT NULL, "
       "${ScoutedMatch.autoClimbedKey} INTEGER NOT NULL, "
       "${ScoutedMatch.teleopFuelScoredKey} INTEGER NOT NULL,"
       "${ScoutedMatch.teleopFuelFedKey} INTEGER NOT NULL,"
       "${ScoutedMatch.climbLevelKey} INTEGER NOT NULL,"
-      "${ScoutedMatch.autoCommentsKey} TEXT NOT NULL, "
-      "${ScoutedMatch.defenseCommentsKey} TEXT NOT NULL, "
       "${ScoutedMatch.generalCommentsKey} TEXT NOT NULL)",
     );
   }

@@ -18,6 +18,7 @@ class MatchScouting extends StatefulWidget {
   final EventMatch match;
   final String alliancePosition;
   final TeamMember scouter;
+  final bool preserve;
 
   const MatchScouting({
     super.key,
@@ -25,6 +26,7 @@ class MatchScouting extends StatefulWidget {
     required this.alliancePosition,
     required this.match,
     required this.scouter,
+    this.preserve = false,
   });
 
   @override
@@ -37,11 +39,13 @@ class _MatchScoutingState extends State<MatchScouting> {
   @override
   void initState() {
     super.initState();
-    scoutedMatchSingleton.setToDefaults(
-      widget.match,
-      widget.team.number,
-      widget.scouter,
-    );
+    if (!widget.preserve) {
+      scoutedMatchSingleton.setToDefaults(
+        widget.match,
+        widget.team.number,
+        widget.scouter,
+      );
+    }
   }
 
   @override

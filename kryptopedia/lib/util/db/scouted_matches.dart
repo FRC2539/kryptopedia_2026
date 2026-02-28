@@ -21,6 +21,9 @@ class DbScoutedMatches {
       "${ScoutedMatch.teleopFuelScoredKey} INTEGER NOT NULL,"
       "${ScoutedMatch.teleopFuelFedKey} INTEGER NOT NULL,"
       "${ScoutedMatch.climbLevelKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.robotRolesKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.issuesKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.penaltiesKey} INTEGER NOT NULL,"
       "${ScoutedMatch.generalCommentsKey} TEXT NOT NULL)",
     );
   }

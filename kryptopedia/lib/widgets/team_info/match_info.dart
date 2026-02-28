@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
-import 'package:kryptopedia/models/scouted_pit.dart';
-import 'package:kryptopedia/models/team.dart';
 
-class TeamInfoMatchInfo extends StatefulWidget {
+class TeamInfoMatches extends StatefulWidget {
   final List<ScoutedMatch> scoutedMatches;
-  final ScoutedPit? scoutedPit;
-  final List<Team> teamList;
 
-  const TeamInfoMatchInfo({
-    super.key,
-    required this.scoutedMatches,
-    required this.scoutedPit,
-    required this.teamList,
-  });
+  const TeamInfoMatches({super.key, required this.scoutedMatches});
 
   @override
-  State<TeamInfoMatchInfo> createState() => _TeamInfoMatchInfoState();
+  State<TeamInfoMatches> createState() => _TeamInfoMatchesState();
 }
 
-class _TeamInfoMatchInfoState extends State<TeamInfoMatchInfo> {
+class _TeamInfoMatchesState extends State<TeamInfoMatches> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();

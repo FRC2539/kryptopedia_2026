@@ -5,6 +5,7 @@ import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/teams.dart';
+import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
@@ -117,7 +118,37 @@ class _TeamInfoState extends State<TeamInfo> {
       _teamChangedNotifier.value,
     );
 
-    scoutedMatches.sort((a, b) => a.matchNumber.compareTo(b.matchNumber));
+    // Sort the Matches
+    DbMatches dbMatches = DbMatches();
+    List<int> matchNumbers = [];
+    for (int i = 0; i < scoutedMatches.length; i++) {
+      matchNumbers.add(scoutedMatches[i].matchNumber);
+    }
+
+    matchNumbers.sort();
+
+    List<ScoutedMatch> sortedScoutedMatches = [];
+    for (int matchNumber in matchNumbers) {
+      sortedScoutedMatches.add(
+        scoutedMatches.firstWhere((match) => match.matchNumber == matchNumber),
+      );
+    }
+    scoutedMatches = sortedScoutedMatches;
+
+    for (int j = 0; j < matchNumbers.length - 1; j++) {
+      int matchid1 = matchNumbers[j];
+      int matchid2 = matchNumbers[j + 1];
+
+      if (matchid1 > matchid2) {
+        int tempNumber = matchNumbers[j];
+        matchNumbers[j] = matchNumbers[j + 1];
+        matchNumbers[j + 1] = tempNumber;
+
+        ScoutedMatch tempScoutedMatch = scoutedMatches[j];
+        scoutedMatches[j] = scoutedMatches[j + 1];
+        scoutedMatches[j + 1] = tempScoutedMatch;
+      }
+    }
 
     // Grab the Scouted Pit information
     DbScoutedPits dbScoutedPits = DbScoutedPits();

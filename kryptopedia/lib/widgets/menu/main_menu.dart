@@ -38,7 +38,7 @@ class MainMenu extends StatelessWidget {
             icon: Icons.flag,
             landscapeWidget: ManageTeamFlags(),
             portraitWidget: ManageTeamFlags(),
-          )
+          ),
         ]),
 
         // Info
@@ -46,8 +46,8 @@ class MainMenu extends StatelessWidget {
           MenuItemDefinition(
             title: "Team Info",
             icon: Icons.info,
-            landscapeWidget: TeamInfo(),
-            portraitWidget: TeamInfo(),
+            landscapeWidget: TeamInfo(passedTeamID: -1),
+            portraitWidget: TeamInfo(passedTeamID: -1),
           ),
         ]),
 

@@ -16,9 +16,7 @@ class TeamInfo extends StatefulWidget {
 }
 
 class _TeamInfoState extends State<TeamInfo> {
-  dynamic _futureTeams;
   List<Team> _teams = [];
-  bool _isLoading = true;
 
   @override
   void initState() {
@@ -31,13 +29,9 @@ class _TeamInfoState extends State<TeamInfo> {
       final teams = await DbTeams().getTeams();
       setState(() {
         _teams = teams;
-        _isLoading = false;
       });
     } catch (e) {
-      // Handle error, e.g., show a snackbar or log the error
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
     }
   }
 

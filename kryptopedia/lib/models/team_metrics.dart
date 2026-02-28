@@ -16,7 +16,7 @@ class TeamMetrics {
   double teleopFuelFedAverage = 0.0;
 
   int autoClimbedTotal = 0;
-  double autoClimbedAverage = 0.0;
+  double autoClimbedPercent = 0.0;
   List<int> teleopClimbedTotals = [0, 0, 0, 0];
   List<double> teleopClimbedPercents = [0.0, 0.0, 0.0, 0.0];
 

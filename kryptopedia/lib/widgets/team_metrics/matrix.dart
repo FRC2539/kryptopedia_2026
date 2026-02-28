@@ -93,8 +93,6 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
                                           return DataGrid(
                                             currentTeamStats: currentTeamStats,
                                             maxTeamStats: maxTeamStats,
-                                            // teamScorePredictions:
-                                            //     teamPredictions,
                                             maxPredictedScore:
                                                 maxPredictedScore,
                                           );

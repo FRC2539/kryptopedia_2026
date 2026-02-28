@@ -160,8 +160,8 @@ class CalculateAllTeamMetrics {
           teamMetrics.teleopFuelFedTotal / scoutedMatches.length;
 
       // Calculate climbing averages
-      teamMetrics.autoClimbedAverage =
-          teamMetrics.autoClimbedTotal / scoutedMatches.length;
+      teamMetrics.autoClimbedPercent =
+          (teamMetrics.autoClimbedTotal / scoutedMatches.length) * 100.0;
 
       for (int i = 0; i < teamMetrics.teleopClimbedTotals.length; i++) {
         teamMetrics.teleopClimbedPercents[i] =

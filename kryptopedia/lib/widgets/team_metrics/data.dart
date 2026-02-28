@@ -96,7 +96,7 @@ class DataGrid extends StatelessWidget {
               true,
             ),
             smallCellContainer(
-              currentTeamStats[i].autoFuelScoreAverage.toString(),
+              currentTeamStats[i].autoFuelScoreAverage.toStringAsFixed(2),
               75.0,
               getDoubleShading(
                 currentTeamStats[i].autoFuelScoreAverage,
@@ -116,7 +116,7 @@ class DataGrid extends StatelessWidget {
               true,
             ),
             smallCellContainer(
-              currentTeamStats[i].teleopFuelScoreAverage.toString(),
+              currentTeamStats[i].teleopFuelScoreAverage.toStringAsFixed(2),
               75.0,
               getDoubleShading(
                 currentTeamStats[i].teleopFuelScoreAverage,
@@ -136,7 +136,7 @@ class DataGrid extends StatelessWidget {
               true,
             ),
             smallCellContainer(
-              currentTeamStats[i].teleopFuelFedAverage.toString(),
+              currentTeamStats[i].teleopFuelFedAverage.toStringAsFixed(2),
               75.0,
               getDoubleShading(
                 currentTeamStats[i].teleopFuelFedAverage,
@@ -145,158 +145,80 @@ class DataGrid extends StatelessWidget {
               true,
               true,
             ),
+
             leadLabel(
               context,
               currentTeamStats[i].teamId.toString(),
               75.0,
               Colors.grey.shade200,
             ),
+            smallCellContainer(
+              currentTeamStats[i].autoClimbedTotal.toString(),
+              75.0,
+              getIntShading(
+                currentTeamStats[i].autoClimbedTotal,
+                maxTeamStats.autoClimbedTotal,
+              ),
+              true,
+              true,
+            ),
+            // smallCellContainer(
+            //   "${currentTeamStats[i].autoClimbedPercent.toStringAsFixed(2)}%",
+            //   75.0,
+            //   getDoubleShading(
+            //     currentTeamStats[i].autoClimbedPercent,
+            //     maxTeamStats.autoClimbedPercent,
+            //   ),
+            //   true,
+            //   true,
+            // ),
+            smallCellContainer(
+              currentTeamStats[i].teleopClimbedTotals[1].toString(),
+              75.0,
+              getIntShading(
+                currentTeamStats[i].teleopClimbedTotals[1],
+                maxTeamStats.teleopClimbedTotals[1],
+              ),
+              true,
+              true,
+            ),
+            // smallCellContainer(
+            //   "${currentTeamStats[i].teleopClimbedPercents[1].toStringAsFixed(2)}%",
+            //   75.0,
+            //   getDoubleShading(
+            //     currentTeamStats[i].teleopClimbedPercents[1],
+            //     maxTeamStats.teleopClimbedPercents[1],
+            //   ),
+            //   true,
+            //   true,
+            // ),
+            smallCellContainer(
+              currentTeamStats[i].teleopClimbedTotals[2].toString(),
+              75.0,
+              getIntShading(
+                currentTeamStats[i].teleopClimbedTotals[2],
+                maxTeamStats.teleopClimbedTotals[2],
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              currentTeamStats[i].teleopClimbedTotals[3].toString(),
+              75.0,
+              getIntShading(
+                currentTeamStats[i].teleopClimbedTotals[3],
+                maxTeamStats.teleopClimbedTotals[3],
+              ),
+              true,
+              true,
+            ),
 
-            // smallCellContainer(
-            //   currentTeamStats[i].autoCoralScoreAverage.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].autoCoralScoreAverage,
-            //     maxTeamStats.autoCoralScoreAverage,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].autoAlgaeScoreAverage.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].autoAlgaeScoreAverage,
-            //     maxTeamStats.autoAlgaeScoreAverage,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopCoralScoreAverage.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopCoralScoreAverage,
-            //     maxTeamStats.teleopCoralScoreAverage,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopAlgaeScoreAverage.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopAlgaeScoreAverage,
-            //     maxTeamStats.teleopAlgaeScoreAverage,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   teamScorePredictions[i].totalPoints.toStringAsFixed(2),
-            //   75.0,
-            //   getIntShading(
-            //     teamScorePredictions[i].totalPoints,
-            //     maxPredictedScore,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-
-            // leadLabel(
-            //   context,
-            //   currentTeamStats[i].teamId.toString(),
-            //   75.0,
-            //   Colors.grey.shade200,
-            // ),
-
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopCoralLevel1Average.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopCoralLevel1Average,
-            //     maxTeamStats.teleopCoralLevel1Average,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopCoralLevel2Average.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopCoralLevel2Average,
-            //     maxTeamStats.teleopCoralLevel2Average,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopCoralLevel3Average.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopCoralLevel3Average,
-            //     maxTeamStats.teleopCoralLevel3Average,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopCoralLevel4Average.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopCoralLevel4Average,
-            //     maxTeamStats.teleopCoralLevel4Average,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   "${currentTeamStats[i].teleopCoralPiecesTotal}",
-            //   75.0,
-            //   getIntShading(
-            //     currentTeamStats[i].teleopCoralPiecesTotal,
-            //     maxTeamStats.teleopCoralPiecesTotal,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopCoralPiecesAverage.toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopCoralPiecesAverage,
-            //     maxTeamStats.teleopCoralPiecesAverage,
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopEndGamePercents[2].toStringAsFixed(2),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopEndGamePercents[2],
-            //     maxTeamStats.teleopEndGamePercents[2],
-            //   ),
-            //   true,
-            //   true,
-            // ),
-            // smallCellContainer(
-            //   currentTeamStats[i].teleopEndGamePercents[3].toStringAsFixed(3),
-            //   75.0,
-            //   getDoubleShading(
-            //     currentTeamStats[i].teleopEndGamePercents[3],
-            //     maxTeamStats.teleopEndGamePercents[3],
-            //   ),
-            //   true,
-            //   true,
-            // ),
-
-            // leadLabel(
-            //   context,
-            //   currentTeamStats[i].teamId.toString(),
-            //   75.0,
-            //   Colors.grey.shade200,
-            // ),
+            leadLabel(
+              context,
+              currentTeamStats[i].teamId.toString(),
+              75.0,
+              Colors.grey.shade200,
+            ),
           ],
         ),
       );

@@ -12,7 +12,7 @@ enum ColType {
   autoFuelScored,
   autoFuelAverage,
   autoClimbedTotal,
-  autoClimbedAverage,
+  autoClimbedPercent,
   teleopFuelScored,
   teleopFuelAverage,
   teleopFuelFed,
@@ -65,7 +65,7 @@ class BottomHeaderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (75.0 * 21.0) + 85.0,
+      width: (75.0 * 24.0) + 85.0,
       child: Row(
         children: [
           headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
@@ -138,6 +138,13 @@ class BottomHeaderRow extends StatelessWidget {
             sortNotifier,
             ColType.autoClimbedTotal,
           ),
+          // headerCell(
+          //   "Auto\nL1 %",
+          //   75.0,
+          //   50.0,
+          //   sortNotifier,
+          //   ColType.autoClimbedPercent,
+          // ),
           headerCell(
             "Teleop\nL1",
             75.0,
@@ -145,6 +152,13 @@ class BottomHeaderRow extends StatelessWidget {
             sortNotifier,
             ColType.teleopClimbedL1,
           ),
+          // headerCell(
+          //   "Teleop\nL1 %",
+          //   75.0,
+          //   50.0,
+          //   sortNotifier,
+          //   ColType.teleopClimbedL1,
+          // ),
           headerCell(
             "Teleop\nL2",
             75.0,
@@ -152,6 +166,13 @@ class BottomHeaderRow extends StatelessWidget {
             sortNotifier,
             ColType.teleopClimbedL2,
           ),
+          // headerCell(
+          //   "Teleop\nL2 %",
+          //   75.0,
+          //   50.0,
+          //   sortNotifier,
+          //   ColType.teleopClimbedL2,
+          // ),
           headerCell(
             "Teleop\nL3",
             75.0,
@@ -159,6 +180,13 @@ class BottomHeaderRow extends StatelessWidget {
             sortNotifier,
             ColType.teleopClimbedL3,
           ),
+          // headerCell(
+          //   "Teleop\nL3 %",
+          //   75.0,
+          //   50.0,
+          //   sortNotifier,
+          //   ColType.teleopClimbedL3,
+          // ),
           headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
           // headerCell(
           //   "EPA-ish",

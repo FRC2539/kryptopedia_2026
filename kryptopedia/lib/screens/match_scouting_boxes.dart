@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:kryptopedia/dialogs/generic_confirmation.dart';
@@ -8,8 +9,10 @@ import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/screens/match_scouting.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
+import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/util/vibrate.dart';
+import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/text_field.dart';
 
 class MatchScoutingBoxesEdition extends StatefulWidget {
@@ -65,8 +68,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didpop, result) async {
-        if (didpop) {
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) {
           return;
         }
         switch (state) {
@@ -104,23 +107,38 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
         appBar: AppBar(
           title: const Text("Kryptopedia - Match Scouting"),
           actions: [
-            IconButton(
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MatchScouting(
-                      team: widget.team,
-                      match: widget.match,
-                      scouter: widget.scouter,
-                      alliancePosition: widget.alliancePosition,
-                      preserve: true,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(), //it works :)
+                  AutoSizeText(
+                    "Scouter: ${widget.scouter.name}",
+                    style: TextStyle(
+                      fontSize: Device.fontHeader(context) * 0.7,
                     ),
+                    maxLines: 1,
                   ),
-                );
-                setState(() {});
-              },
-              icon: const Icon(Icons.edit),
+                  IconButton(
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MatchScouting(
+                            team: widget.team,
+                            match: widget.match,
+                            scouter: widget.scouter,
+                            alliancePosition: widget.alliancePosition,
+                            preserve: true,
+                          ),
+                        ),
+                      );
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.edit),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -134,7 +152,13 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "${widget.team.number} ${widget.team.nickname} | ${widget.match.compLevelName} ${widget.match.number}",
+                    "${widget.team.number} ${widget.team.nickname} | ${widget.match.name} | ${state == MatchState.auto
+                        ? "Auto"
+                        : state == MatchState.teleop
+                        ? "Teleop"
+                        : state == MatchState.end
+                        ? "Endgame"
+                        : "Summary"}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.white,
@@ -384,24 +408,39 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
   Future<void> comments() async {
     bool? done = await showDialog(
       context: context,
-      builder: (context) => Dialog(
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => Dialog(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextInputField(
               label: "comments!",
+                hint:
+                    "general comments: describe anything eventful, mostly.\nparticularly, please be sure to describe any penalties, issues, or defense.",
               isMultiline: true,
               initialValue: scoutedMatchSingleton.generalComments,
               callback: (comments) =>
                   scoutedMatchSingleton.generalComments = comments,
             ),
-
-            Text("issues?"),
-            Checkbox(
+              DropdownList(
+                label: 'Penalties?',
+                initialValue: Penalties.none,
+                options: [
+                  MultiSelectOption(value: Penalties.none, label: 'None'),
+                  MultiSelectOption(value: Penalties.one, label: 'One'),
+                  MultiSelectOption(value: Penalties.few, label: 'Few'),
+                  MultiSelectOption(value: Penalties.many, label: 'Many'),
+                ],
+                callback: (newValue) {
+                  scoutedMatchSingleton.penalties = newValue;
+                },
+              ),
+              CheckboxListTile(
+                title: const Text("Issues?"),
               value: scoutedMatchSingleton.issues,
               onChanged: (value) {
-                setState(() {
-                  scoutedMatchSingleton.issues = value ?? false;
+                  setDialogState(() {
+                    scoutedMatchSingleton.issues = value!;
                 });
               },
             ),
@@ -418,6 +457,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
             ),
           ],
         ),
+      ),
       ),
     );
     if (done == null) {

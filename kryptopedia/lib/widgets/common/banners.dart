@@ -44,9 +44,7 @@ class MatchBanner extends StatelessWidget {
     Color backgroundColor = alliancePosition.startsWith("Red")
         ? Colors.red
         : Colors.blue;
-    // Color textBackgroundColor =
-    //     alliance == "red" ? Colors.red.shade600 : Colors.blue.shade600;
-
+        
     return PageBanner(
       color: backgroundColor,
       children: [
@@ -60,7 +58,7 @@ class MatchBanner extends StatelessWidget {
           maxLines: 1,
         ),
         AutoSizeText(
-          match.number.toString(),
+          "$alliancePosition in ${match.name}",
           style: TextStyle(
             fontSize: Device.fontHeader2(context),
             color: Colors.white,

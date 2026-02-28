@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/util/singletons.dart';
-import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/layouts.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/super_number_field.dart';
@@ -29,19 +27,6 @@ class _TeleopMatchScoutingState extends State<TeleopMatchScouting> {
           portraitMode: LayoutMode.singleColumn,
           landscapeMode: LayoutMode.twoColumn,
           group1: [
-            DropdownList(
-              label: 'Climb level',
-              initialValue: ClimbLevel.none,
-              options: [
-                MultiSelectOption(value: ClimbLevel.none, label: 'No climb'),
-                MultiSelectOption(value: ClimbLevel.L1, label: 'L1'),
-                MultiSelectOption(value: ClimbLevel.L2, label: 'L2'),
-                MultiSelectOption(value: ClimbLevel.L3, label: 'L3'),
-              ],
-              callback: (newValue) {
-                scoutedMatchSingleton.climbLevel = newValue;
-              },
-            ),
             SuperNumberField(
               label: "Fuel scored",
               minValue: 0,

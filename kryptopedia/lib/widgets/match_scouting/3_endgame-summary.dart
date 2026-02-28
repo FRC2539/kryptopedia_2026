@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/util/singletons.dart';
-import 'package:kryptopedia/widgets/common/layouts.dart';
+import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/text_field.dart';
 
@@ -18,6 +19,41 @@ class _EndgameMatchScoutingState extends State<EndgameMatchScouting> {
     return ScoutingSection(
       title: 'Endgame/Summary',
       children: [
+        DropdownList(
+          label: 'Climb level',
+          initialValue: ClimbLevel.none,
+          options: [
+            MultiSelectOption(value: ClimbLevel.none, label: 'No climb'),
+            MultiSelectOption(value: ClimbLevel.L1, label: 'L1'),
+            MultiSelectOption(value: ClimbLevel.L2, label: 'L2'),
+            MultiSelectOption(value: ClimbLevel.L3, label: 'L3'),
+          ],
+          callback: (newValue) {
+            scoutedMatchSingleton.climbLevel = newValue;
+          },
+        ),
+        DropdownList(
+          label: 'Penalties',
+          initialValue: Penalties.none,
+          options: [
+            MultiSelectOption(value: Penalties.none, label: 'None'),
+            MultiSelectOption(value: Penalties.one, label: 'One'),
+            MultiSelectOption(value: Penalties.few, label: 'Few'),
+            MultiSelectOption(value: Penalties.many, label: 'Many'),
+          ],
+          callback: (newValue) {
+            scoutedMatchSingleton.penalties = newValue;
+          },
+        ),
+        CheckboxListTile(
+          title: const Text("Issues?"),
+          value: scoutedMatchSingleton.issues,
+          onChanged: (value) {
+            setState(() {
+              scoutedMatchSingleton.issues = value!;
+            });
+          },
+        ),
             TextInputField(
           label: "Comments",
           hint:

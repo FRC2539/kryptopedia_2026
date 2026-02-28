@@ -84,22 +84,6 @@ class DbScoutedMatches {
     return scoutedMatches;
   }
 
-  Future<List<ScoutedMatch>> getScoutedMatchesForTeam(int teamNumber) async {
-    Database db = await dbHelper.db;
-
-    final List<Map<String, dynamic>> result = await db.query(
-      ScoutedMatch.tableName,
-      where: "${ScoutedMatch.teamNumberKey} = ?",
-      whereArgs: [teamNumber],
-    );
-
-    List<ScoutedMatch> scoutedMatches = result
-        .map((map) => ScoutedMatch.fromMap(map))
-        .toList();
-
-    return scoutedMatches;
-  }
-
   Future<int> deleteScoutedMatch(String uid) async {
     Database db = await dbHelper.db;
     int result = await db.delete(

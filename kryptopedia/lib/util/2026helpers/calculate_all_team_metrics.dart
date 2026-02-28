@@ -69,21 +69,6 @@ class CalculateAllTeamMetrics {
       teamMetrics.robotWeight = scoutedPit.weight;
     }
 
-    double average(List<int> items) {
-      if (items.isEmpty) return 0;
-      items.sort();
-      if (removeLowest && items.length > 2) {
-        items.removeAt(0);
-        items.removeAt(0);
-      }
-
-      int total = 0;
-      for (int i = 0; i < items.length; i++) {
-        total += items[i];
-      }
-      return (total / items.length);
-    }
-
     // Calculate Scouted Match information
     DbScoutedMatches dbScoutedMatches = DbScoutedMatches();
     List<ScoutedMatch> scoutedMatches = await dbScoutedMatches
@@ -96,7 +81,7 @@ class CalculateAllTeamMetrics {
       // Calculate the total fuel scores
       teamMetrics.autoFuelScoreTotal += scoutedMatches[i].autoFuelScored;
       teamMetrics.teleopFuelScoreTotal += scoutedMatches[i].teleopFuelScored;
-      teamMetrics.teleopFuelFeedTotal += scoutedMatches[i].teleopFuelFed;
+      teamMetrics.teleopFuelFedTotal += scoutedMatches[i].teleopFuelFed;
 
       // Calculate the totals for climbing
       if (scoutedMatches[i].autoClimbed) {
@@ -167,12 +152,12 @@ class CalculateAllTeamMetrics {
     // Calculate the averages if the team has been scouted at least once.
     if (scoutedMatches.isNotEmpty) {
       // Calculate fuel averages
-      teamMetrics.autoClimbedAverage =
-          teamMetrics.autoClimbedTotal / scoutedMatches.length;
+      teamMetrics.autoFuelScoreAverage =
+          teamMetrics.autoFuelScoreTotal / scoutedMatches.length;
       teamMetrics.teleopFuelScoreAverage =
           teamMetrics.teleopFuelScoreTotal / scoutedMatches.length;
-      teamMetrics.teleopFuelFeedAverage =
-          teamMetrics.teleopFuelFeedTotal / scoutedMatches.length;
+      teamMetrics.teleopFuelFedAverage =
+          teamMetrics.teleopFuelFedTotal / scoutedMatches.length;
 
       // Calculate climbing averages
       teamMetrics.autoClimbedAverage =

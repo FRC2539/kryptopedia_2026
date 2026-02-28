@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 // import 'package:kryptopedia/screens/team_info.dart';
 import 'package:kryptopedia/models/team_metrics.dart';
-//import 'package:kryptopedia_2025/util/predictions.dart';
 
 class DataGrid extends StatelessWidget {
   final List<TeamMetrics> currentTeamStats;
@@ -70,6 +69,8 @@ class DataGrid extends StatelessWidget {
               true,
             ),
             smallCellContainer(
+              "TBD", 75.0, getIntShading(10, 10), true, true),
+            smallCellContainer(
               (currentTeamStats[i].robotWeight >= 0)
                   ? currentTeamStats[i].robotWeight.toString()
                   : "--",
@@ -78,7 +79,72 @@ class DataGrid extends StatelessWidget {
               true,
               true,
             ),
-
+            leadLabel(
+              context,
+              currentTeamStats[i].teamId.toString(),
+              75.0,
+              Colors.grey.shade200,
+            ),
+            smallCellContainer(
+              currentTeamStats[i].autoFuelScoreTotal.toString(),
+              75.0,
+              getIntShading(
+                currentTeamStats[i].autoFuelScoreTotal,
+                maxTeamStats.autoFuelScoreTotal,
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              currentTeamStats[i].autoFuelScoreAverage.toString(),
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].autoFuelScoreAverage,
+                maxTeamStats.autoFuelScoreAverage,
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              currentTeamStats[i].teleopFuelScoreTotal.toString(),
+              75.0,
+              getIntShading(
+                currentTeamStats[i].teleopFuelScoreTotal,
+                maxTeamStats.teleopFuelScoreTotal,
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              currentTeamStats[i].teleopFuelScoreAverage.toString(),
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].teleopFuelScoreAverage,
+                maxTeamStats.teleopFuelScoreAverage,
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              currentTeamStats[i].teleopFuelFedTotal.toString(),
+              75.0,
+              getIntShading(
+                currentTeamStats[i].teleopFuelFedTotal,
+                maxTeamStats.teleopFuelFedTotal,
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              currentTeamStats[i].teleopFuelFedAverage.toString(),
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].teleopFuelFedAverage,
+                maxTeamStats.teleopFuelFedAverage,
+              ),
+              true,
+              true,
+            ),
             leadLabel(
               context,
               currentTeamStats[i].teamId.toString(),

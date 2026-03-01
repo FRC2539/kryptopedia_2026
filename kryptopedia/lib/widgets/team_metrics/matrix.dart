@@ -236,41 +236,37 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
         });
         break;
 
-      // case ColType.autoCoralScoring:
-      //   currentTeamStats.sort((a, b) {
-      //     return (columnSelectorNotifier.value.ascending)
-      //         ? (a.autoCoralScoreAverage.compareTo(b.autoCoralScoreAverage))
-      //         : (b.autoCoralScoreAverage.compareTo(a.autoCoralScoreAverage));
-      //   });
-      //   break;
+      case ColType.autoClimbedTotal:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.autoClimbedTotal.compareTo(b.autoClimbedTotal))
+              : (b.autoClimbedTotal.compareTo(a.autoClimbedTotal));
+        });
+        break;
 
-      // case ColType.autoAlgaeScoring:
-      //   currentTeamStats.sort((a, b) {
-      //     return (columnSelectorNotifier.value.ascending)
-      //         ? (a.autoAlgaeScoreAverage.compareTo(b.autoAlgaeScoreAverage))
-      //         : (b.autoAlgaeScoreAverage.compareTo(a.autoAlgaeScoreAverage));
-      //   });
-      //   break;
+      case ColType.teleopClimbedL1:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.teleopClimbedTotals[1].compareTo(b.teleopClimbedTotals[1]))
+              : (b.teleopClimbedTotals[1].compareTo(a.teleopClimbedTotals[1]));
+        });
+        break;
 
-      // case ColumnHeaders.teleopCoralScoring:
-      //   currentTeamStats.sort((a, b) {
-      //     return (columnSelectorNotifier.value.ascending)
-      //         ? (a.teleopCoralScoreAverage.compareTo(b.teleopCoralScoreAverage))
-      //         : (b.teleopCoralScoreAverage.compareTo(
-      //             a.teleopCoralScoreAverage,
-      //           ));
-      //   });
-      //   break;
+      case ColType.teleopClimbedL2:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.teleopClimbedTotals[2].compareTo(b.teleopClimbedTotals[2]))
+              : (b.teleopClimbedTotals[2].compareTo(a.teleopClimbedTotals[2]));
+        });
+        break;
 
-      // case ColumnHeaders.teleopAlgaeScoring:
-      //   currentTeamStats.sort((a, b) {
-      //     return (columnSelectorNotifier.value.ascending)
-      //         ? (a.teleopAlgaeScoreAverage.compareTo(b.teleopAlgaeScoreAverage))
-      //         : (b.teleopAlgaeScoreAverage.compareTo(
-      //             a.teleopAlgaeScoreAverage,
-      //           ));
-      //   });
-      //   break;
+      case ColType.teleopClimbedL3:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.teleopClimbedTotals[3].compareTo(b.teleopClimbedTotals[3]))
+              : (b.teleopClimbedTotals[3].compareTo(a.teleopClimbedTotals[3]));
+        });
+        break;
 
       // case ColumnHeaders.totalPredictedScore:
       //   teamPredictions.sort((a, b) {

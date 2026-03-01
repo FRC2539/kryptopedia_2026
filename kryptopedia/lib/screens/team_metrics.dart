@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-// import 'package:kryptopedia/models/team.dart';
-// import 'package:kryptopedia/models/event.dart';
-// import 'package:kryptopedia/util/db/events.dart';
-// import 'package:kryptopedia/util/db/teams.dart';
+import 'package:kryptopedia/models/team.dart';
+import 'package:kryptopedia/models/team_flag_application.dart';
+import 'package:kryptopedia/util/db/teams.dart';
+import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/widgets/team_metrics/matrix.dart';
 
@@ -24,92 +24,92 @@ class _TeamMetricsState extends State<TeamMetrics> {
   );
 
   Future<List<Widget>> getFlags() async {
-    // DbEvents dbEvents = DbEvents();
-    // DbTeams dbTeams = DbTeams();
-    //DbTeamFlag dbTeamFlag = DbTeamFlag();
+    DbTeams dbTeams = DbTeams();
+    DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
 
-    //   Event activeEvent = await dbEvents.getEvent();
-    //   List<Team> eventTeams = await dbTeams.getTeams();
-    //   //List<TeamFlag> teamFlags = await dbTeamFlag.getTeamFlags();
+    List<Team> eventTeams = await dbTeams.getTeams();
+    List<TeamFlagApplication> teamFlagApplication = await dbTeamFlagApplications
+        .getActiveTeamFlagApplications();
 
-    //   // If the teams to show is empty, add the list of teams at the event.
-    //   if (teamsToShowNotifier.value.teams.isEmpty) {
-    //     List<int> teams = [];
-    //     for (Team team in eventTeams) {
-    //       teams.add(team.number);
-    //     }
-    //     teamsToShowNotifier.value = TeamsToShow.init(teams, false);
-    //   }
+    // If the teams to show is empty, add the list of teams at the event.
+    if (teamsToShowNotifier.value.teams.isEmpty) {
+      List<int> teams = [];
+      for (Team team in eventTeams) {
+        teams.add(team.number);
+      }
+      teamsToShowNotifier.value = TeamsToShow.init(teams, false);
+    }
 
     List<Widget> chips = [];
-    // chips.add(
-    //   Padding(
-    //     padding: const EdgeInsets.all(5.0),
-    //     child: Align(
-    //       alignment: Alignment.center,
-    //       child: AutoSizeText(
-    //         'Flags:',
-    //         textAlign: TextAlign.center,
-    //         style: TextStyle(
-    //           color: Colors.orange.shade300,
-    //           fontWeight: FontWeight.bold,
-    //           fontSize: 15.0,
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
+    chips.add(
+      Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Align(
+          alignment: Alignment.center,
+          child: AutoSizeText(
+            'Flags:',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.orange.shade300,
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+            ),
+          ),
+        ),
+      ),
+    );
 
-    //   for (TeamFlag teamFlag in teamFlags) {
-    //     if (teamFlag.teamNumbers.isNotEmpty) {
-    //       if (context.mounted) {
-    //         chips.add(
-    //           Padding(
-    //             padding: const EdgeInsets.all(5.0),
-    //             child: ElevatedButton(
-    //               style: ElevatedButton.styleFrom(
-    //                 backgroundColor: (activeFlags.contains(teamFlag.name))
-    //                     ? Colors.orange.shade300
-    //                     : Colors.black,
-    //                 side: BorderSide(width: 2.0, color: Colors.orange.shade300),
-    //               ),
-    //               child: AutoSizeText(
-    //                 teamFlag.name,
-    //                 textAlign: TextAlign.center,
-    //                 style: TextStyle(
-    //                   color: (activeFlags.contains(teamFlag.name))
-    //                       ? Colors.black
-    //                       : Colors.white,
-    //                   fontSize: 14.0,
-    //                 ),
-    //               ),
-    //               onPressed: () async {
-    //                 setState(() {
-    //                   (!activeFlags.contains(teamFlag.name))
-    //                       ? activeFlags.add(teamFlag.name)
-    //                       : activeFlags.remove(teamFlag.name);
-
-    //                   teams = [];
-    //                   for (Team team in eventTeams) {
-    //                     bool teamFound = true;
-    //                     for (TeamFlag teamFlag in teamFlags) {
-    //                       if (activeFlags.contains(teamFlag.name) &&
-    //                           !teamFlag.teamNumbers.contains(team.teamnumber)) {
-    //                         teamFound = false;
-    //                       }
-    //                     }
-    //                     if (teamFound) teams.add(team.teamnumber);
-    //                   }
-
-    //                   teamsToShowNotifier.value = TeamsToShow.init(teams, true);
-    //                 });
-    //               },
+    // for (TeamFlagApplication teamFlag in teamFlagApplication) {
+    //   if (teamFlag.teamNumbers.isNotEmpty) {
+    //     if (context.mounted) {
+    //       chips.add(
+    //         Padding(
+    //           padding: const EdgeInsets.all(5.0),
+    //           child: ElevatedButton(
+    //             style: ElevatedButton.styleFrom(
+    //               backgroundColor: (activeFlags.contains(teamFlag.name))
+    //                   ? Colors.orange.shade300
+    //                   : Colors.black,
+    //               side: BorderSide(width: 2.0, color: Colors.orange.shade300),
     //             ),
+    //             child: AutoSizeText(
+    //               teamFlag.name,
+    //               textAlign: TextAlign.center,
+    //               style: TextStyle(
+    //                 color: (activeFlags.contains(teamFlag.name))
+    //                     ? Colors.black
+    //                     : Colors.white,
+    //                 fontSize: 14.0,
+    //               ),
+    //             ),
+    //             onPressed: () async {
+    //               setState(() {
+    //                 (!activeFlags.contains(teamFlag.name))
+    //                     ? activeFlags.add(teamFlag.name)
+    //                     : activeFlags.remove(teamFlag.name);
+
+    //                 teams = [];
+    //                 for (Team team in eventTeams) {
+    //                   bool teamFound = true;
+    //                   for (TeamFlagApplication teamFlag in teamFlagApplication) {
+    //                     if (activeFlags.contains(teamFlag.name) &&
+    //                         !teamFlag.teamNumbers.contains(team.teamnumber)) {
+    //                       teamFound = false;
+    //                     }
+    //                   }
+    //                   if (teamFound) teams.add(team.teamnumber);
+    //                 }
+
+    //                 teamsToShowNotifier.value = TeamsToShow.init(teams, true);
+    //               });
+    //             },
     //           ),
-    //         );
-    //       }
+    //         ),
+    //       );
     //     }
     //   }
+    // }
+
     return chips;
   }
 

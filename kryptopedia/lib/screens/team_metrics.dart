@@ -16,6 +16,9 @@ class TeamMetrics extends StatefulWidget {
 
 class _TeamMetricsState extends State<TeamMetrics> {
   bool showFlags = false;
+  bool importRankings = false;
+  bool importOPRs = false;
+
   List<String> activeFlags = [];
   int updateCount = 0;
   List<int> teams = [];
@@ -23,7 +26,7 @@ class _TeamMetricsState extends State<TeamMetrics> {
     TeamsToShow.init([], false),
   );
 
-  Future<List<Widget>> getFlags() async {
+  Future<List<Widget>> processActions() async {
     DbTeams dbTeams = DbTeams();
     DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
 
@@ -123,21 +126,41 @@ class _TeamMetricsState extends State<TeamMetrics> {
           maxLines: 1,
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              showFlags ? Icons.flag : Icons.flag_outlined,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                showFlags = !showFlags;
-              });
-            },
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.leaderboard, color: Colors.white),
+                onPressed: () {
+                  setState(() {
+                    if (!importRankings) importRankings = true;
+                  });
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.sports_score, color: Colors.white),
+                onPressed: () {
+                  setState(() {
+                    if (!importOPRs) importOPRs = true;
+                  });
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  showFlags ? Icons.flag : Icons.flag_outlined,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    showFlags = !showFlags;
+                  });
+                },
+              ),
+            ],
           ),
         ],
       ),
       body: FutureBuilder(
-        future: getFlags(),
+        future: processActions(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(

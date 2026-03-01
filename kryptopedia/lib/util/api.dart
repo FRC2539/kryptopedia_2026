@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:kryptopedia/models/tba_event_ranking.dart';
-// import 'package:kryptopedia/models/tba_event_insights.dart';
+import 'package:kryptopedia/models/tba_event_insights.dart';
 // import 'package:kryptopedia/models/tba_event_alliance.dart';
 
 class Api {
@@ -143,6 +143,24 @@ class Api {
     }
   }
 
+  static Future<TBAEventInsights?> getTBATeamInsights(String eventCode) async {
+    APIResponse apiResponse = await _makeTbaRequest(
+      "https://www.thebluealliance.com/api/v3/event/$eventCode/oprs",
+      tbaAuthKey:
+          "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
+    );
+
+    if (apiResponse.success) {
+      if (!apiResponse.data.contains('null') &&
+          !apiResponse.data.contains('{}')) {
+        return TBAEventInsights.fromJson(apiResponse.data);
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
 }
 
 class APIResponse<T> {

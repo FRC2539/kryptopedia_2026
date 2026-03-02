@@ -59,7 +59,9 @@ class DataGrid extends StatelessWidget {
             ),
 
             smallCellContainer(
-              currentTeamStats[i].driveTrain,
+              (currentTeamStats[i].driveTrain != "")
+                  ? currentTeamStats[i].driveTrain
+                  : "--",
               85.0,
               getIntShading(
                 getDrivetrainValue(currentTeamStats[i].driveTrain),
@@ -69,7 +71,14 @@ class DataGrid extends StatelessWidget {
               true,
             ),
             smallCellContainer(
-              "TBD", 75.0, getIntShading(10, 10), true, true),
+              (currentTeamStats[i].wheelType != "")
+                  ? currentTeamStats[i].wheelType
+                  : "--",
+              75.0,
+              CellColoring(Colors.white, Colors.black),
+              true,
+              true,
+            ),
             smallCellContainer(
               (currentTeamStats[i].robotWeight >= 0)
                   ? currentTeamStats[i].robotWeight.toString()

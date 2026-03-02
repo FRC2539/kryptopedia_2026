@@ -66,6 +66,21 @@ class CalculateAllTeamMetrics {
           break;
       }
 
+      switch (scoutedPit.wheelType) {
+        case WheelType.billet:
+          teamMetrics.wheelType = "Billet";
+          break;
+        case WheelType.colson:
+          teamMetrics.wheelType = "Billet";
+          break;
+        case WheelType.spike:
+          teamMetrics.wheelType = "Spike";
+          break;
+        case WheelType.other:
+          teamMetrics.wheelType = "Other";
+          break;
+      }
+
       teamMetrics.robotWeight = scoutedPit.weight;
     }
 

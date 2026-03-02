@@ -12,7 +12,7 @@ enum ColType {
   autoFuelScored,
   autoFuelAverage,
   autoClimbedTotal,
-  autoClimbedPercent,
+  // autoClimbedPercent,
   teleopFuelScored,
   teleopFuelAverage,
   teleopFuelFed,

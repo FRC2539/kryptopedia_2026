@@ -199,6 +199,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.purple,
                         label: "Subtract fuel scored",
                         onPressed: () {
+                          if (scoutedMatchSingleton.autoFuelScored <= 1) return;
                           scoutedMatchSingleton.autoFuelScored--;
                           vibrate(HapticsType.heavy);
                         },
@@ -246,6 +247,9 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.purple,
                         label: "Subtract fuel scored",
                         onPressed: () {
+                          if (scoutedMatchSingleton.teleopFuelScored <= 1) {
+                            return;
+                          }
                           scoutedMatchSingleton.teleopFuelScored--;
                           vibrate(HapticsType.heavy);
                         },
@@ -254,6 +258,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.purple,
                         label: "Subtract fuel fed",
                         onPressed: () {
+                          if (scoutedMatchSingleton.teleopFuelFed <= 1) return;
                           scoutedMatchSingleton.teleopFuelFed--;
                           vibrate(HapticsType.heavy);
                         },
@@ -410,18 +415,18 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => Dialog(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextInputField(
-              label: "comments!",
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextInputField(
+                label: "comments!",
                 hint:
                     "general comments: describe anything eventful, mostly.\nparticularly, please be sure to describe any penalties, issues, or defense.",
-              isMultiline: true,
-              initialValue: scoutedMatchSingleton.generalComments,
-              callback: (comments) =>
-                  scoutedMatchSingleton.generalComments = comments,
-            ),
+                isMultiline: true,
+                initialValue: scoutedMatchSingleton.generalComments,
+                callback: (comments) =>
+                    scoutedMatchSingleton.generalComments = comments,
+              ),
               DropdownList(
                 label: 'Penalties?',
                 initialValue: Penalties.none,
@@ -437,27 +442,27 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
               ),
               CheckboxListTile(
                 title: const Text("Issues?"),
-              value: scoutedMatchSingleton.issues,
-              onChanged: (value) {
+                value: scoutedMatchSingleton.issues,
+                onChanged: (value) {
                   setDialogState(() {
                     scoutedMatchSingleton.issues = value!;
-                });
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onLongPress: () => {
-                  Navigator.pop(context, true),
-                  vibrate(HapticsType.success),
+                  });
                 },
-                onPressed: () {},
-                child: Text('save (hold) (no more changes!)'),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onLongPress: () => {
+                    Navigator.pop(context, true),
+                    vibrate(HapticsType.success),
+                  },
+                  onPressed: () {},
+                  child: Text('save (hold) (no more changes!)'),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
       ),
     );
     if (done == null) {

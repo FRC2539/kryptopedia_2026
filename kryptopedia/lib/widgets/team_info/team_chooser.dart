@@ -28,7 +28,6 @@ class _TeamInfoChooserState extends State<TeamInfoChooser> {
     } else if (widget.teamList.isEmpty) {
       return PitBanner("No Teams Found");
     } else {
-      
       final List<Team> uniqueTeams = {
         for (var team in widget.teamList) team.number: team,
       }.values.toList();

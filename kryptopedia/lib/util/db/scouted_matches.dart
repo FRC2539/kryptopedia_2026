@@ -38,6 +38,22 @@ class DbScoutedMatches {
     return result;
   }
 
+  Future<List<ScoutedMatch>> getScoutedMatchesForTeam(int teamNumber) async {
+    Database db = await dbHelper.db;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      ScoutedMatch.tableName,
+      where: "${ScoutedMatch.teamNumberKey} = ?",
+      whereArgs: [teamNumber],
+    );
+
+    List<ScoutedMatch> scoutedMatches = result
+        .map((map) => ScoutedMatch.fromMap(map))
+        .toList();
+
+    return scoutedMatches;
+  }
+
   Future<List<ScoutedMatch>> getScoutedMatches() async {
     Database db = await dbHelper.db;
 
@@ -59,22 +75,6 @@ class DbScoutedMatches {
       ScoutedMatch.tableName,
       where: "${ScoutedMatch.localKey} = ?",
       whereArgs: [1],
-    );
-
-    List<ScoutedMatch> scoutedMatches = result
-        .map((map) => ScoutedMatch.fromMap(map))
-        .toList();
-
-    return scoutedMatches;
-  }
-
-  Future<List<ScoutedMatch>> getScoutedMatchesForTeam(int teamNumber) async {
-    Database db = await dbHelper.db;
-
-    final List<Map<String, dynamic>> result = await db.query(
-      ScoutedMatch.tableName,
-      where: "${ScoutedMatch.teamNumberKey} = ?",
-      whereArgs: [teamNumber],
     );
 
     List<ScoutedMatch> scoutedMatches = result

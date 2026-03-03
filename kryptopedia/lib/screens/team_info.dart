@@ -1,78 +1,159 @@
-import 'package:flutter/material.dart';
-import 'package:kryptopedia/models/team.dart';
-import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
-import 'package:kryptopedia/widgets/team_info/comments.dart';
-import 'package:kryptopedia/widgets/team_info/team_chooser.dart';
+import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/teams.dart';
+import 'package:kryptopedia/util/db/matches.dart';
+import 'package:kryptopedia/util/db/scouted_matches.dart';
+import 'package:kryptopedia/util/db/scouted_pits.dart';
+import 'package:kryptopedia/util/deviceinfo.dart';
+import 'package:kryptopedia/widgets/team_info/team_chooser.dart';
+import 'package:kryptopedia/widgets/team_info/match_info.dart';
+import 'package:kryptopedia/widgets/team_info/pit_info.dart';
+import 'package:kryptopedia/widgets/team_info/comments.dart';
 
 class TeamInfo extends StatefulWidget {
-  const TeamInfo({super.key});
+  final int passedTeamID;
+  const TeamInfo({super.key, required this.passedTeamID});
 
   @override
   State<TeamInfo> createState() => _TeamInfoState();
 }
 
 class _TeamInfoState extends State<TeamInfo> {
-  dynamic _futureTeams;
-  List<Team> _teams = [];
-  bool _isLoading = true;
+  final ValueNotifier<int> _teamChangedNotifier = ValueNotifier<int>(0);
 
-  @override
-  void initState() {
-    super.initState();
-    _loadTeams();
-  }
-
-  Future<void> _loadTeams() async {
-    try {
-      final teams = await DbTeams().getTeams();
-      setState(() {
-        _teams = teams;
-        _isLoading = false;
-      });
-    } catch (e) {
-      // Handle error, e.g., show a snackbar or log the error
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
+  List<Event> _eventList = [];
+  List<Team> _teamList = [];
 
   List<ScoutedMatch> scoutedMatches = [];
   ScoutedPit? scoutedPit = ScoutedPit();
 
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<int> teamChangeNotifier = ValueNotifier(0);
     return Scaffold(
       appBar: AppBar(
         title: AutoSizeText(
-          "Kryptopedia - Team Info",
+          "Kryptopedia - Team Information",
           style: TextStyle(fontSize: Device.fontHeader(context)),
           maxLines: 1,
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                TeamInfoChooser(
-                  teamList: _teams,
-                  teamChangedNotifier: teamChangeNotifier,
-                ),
-                TeamInfoComments(
-                  scoutedMatches: scoutedMatches,
-                  scoutedPit: scoutedPit,
-                ),
-              ],
-            ),
-          ),
-        ],
+      body: ValueListenableBuilder<int>(
+        builder: (BuildContext context, int value, Widget? child) {
+          return FutureBuilder<bool>(
+            future: retrieveInformation(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    TeamInfoChooser(
+                      teamList: _teamList,
+                      teamChangedNotifier: _teamChangedNotifier,
+                    ),
+                    Expanded(
+                      child: ListView(
+                        addAutomaticKeepAlives: true,
+                        children: [
+                          TeamInfoMatches(scoutedMatches: scoutedMatches),
+                          TeamInfoPitInfo(
+                            scoutedPit: scoutedPit,
+                            team: _teamList.firstWhere(
+                              (team) =>
+                                  team.number == _teamChangedNotifier.value,
+                            ),
+                          ),
+                          TeamInfoComments(
+                            scoutedMatches: scoutedMatches,
+                            scoutedPit: scoutedPit,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Container();
+              }
+            },
+          );
+        },
+        valueListenable: _teamChangedNotifier,
       ),
     );
+  }
+
+  Future<bool> retrieveInformation() async {
+    // Retrieve list of sorted list of teams at the event.  If a specific team was passed,
+    // generate a list with only that team as it's content.
+    if (_teamList.isEmpty) {
+      DbTeams dbTeams = DbTeams();
+      _teamList = await dbTeams.getTeams();
+
+      if (widget.passedTeamID != -1) {
+        List<Team> tempTeamList = [];
+
+        for (Team team in _teamList) {
+          if (team.number == widget.passedTeamID) {
+            tempTeamList.add(team);
+            break;
+          }
+        }
+
+        _teamList = tempTeamList.map((v) => v).toList();
+      } else {
+        _teamList.sort((a, b) => a.number.compareTo(b.number));
+      }
+    }
+
+    if (_teamChangedNotifier.value == 0) {
+      _teamChangedNotifier.value = _teamList[0].number;
+    }
+
+    // Grab all of the scouted matches for requested team.
+    DbScoutedMatches dbScoutedMatches = DbScoutedMatches();
+    scoutedMatches = await dbScoutedMatches.getScoutedMatchesForTeam(
+      _teamChangedNotifier.value,
+    );
+
+    // Sort the Matches
+    DbMatches dbMatches = DbMatches();
+    List<int> matchNumbers = [];
+    for (int i = 0; i < scoutedMatches.length; i++) {
+      matchNumbers.add(scoutedMatches[i].matchNumber);
+    }
+
+    matchNumbers.sort();
+
+    List<ScoutedMatch> sortedScoutedMatches = [];
+    for (int matchNumber in matchNumbers) {
+      sortedScoutedMatches.add(
+        scoutedMatches.firstWhere((match) => match.matchNumber == matchNumber),
+      );
+    }
+    scoutedMatches = sortedScoutedMatches;
+
+    for (int j = 0; j < matchNumbers.length - 1; j++) {
+      int matchid1 = matchNumbers[j];
+      int matchid2 = matchNumbers[j + 1];
+
+      if (matchid1 > matchid2) {
+        int tempNumber = matchNumbers[j];
+        matchNumbers[j] = matchNumbers[j + 1];
+        matchNumbers[j + 1] = tempNumber;
+
+        ScoutedMatch tempScoutedMatch = scoutedMatches[j];
+        scoutedMatches[j] = scoutedMatches[j + 1];
+        scoutedMatches[j + 1] = tempScoutedMatch;
+      }
+    }
+
+    // Grab the Scouted Pit information
+    DbScoutedPits dbScoutedPits = DbScoutedPits();
+    scoutedPit = await dbScoutedPits.getScoutedPit(_teamChangedNotifier.value);
+
+    return true;
   }
 }

@@ -47,8 +47,8 @@ Future<APIResponse> syncData({bool hard = false}) async {
     event.teamNumber,
     event.authToken!,
     (event.lastSync == null || hard)
-        ? DateTime.fromMillisecondsSinceEpoch(0).toIso8601String()
-        : event.lastSync!.toIso8601String(),
+        ? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toIso8601String()
+        : event.lastSync!.toUtc().toIso8601String(),
     dataToPush,
   );
   if (!pulledData.success) {

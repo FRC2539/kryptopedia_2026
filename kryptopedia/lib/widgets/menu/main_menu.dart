@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/match_scouting_select.dart';
 import 'package:kryptopedia/dialogs/pit_scouting_select.dart';
+import 'package:kryptopedia/screens/alliance_selection.dart';
 import 'package:kryptopedia/screens/manage_team_flags.dart';
 import 'package:kryptopedia/screens/pdf_viewer.dart';
 import 'package:kryptopedia/screens/pit_map.dart';
@@ -42,15 +43,23 @@ class MainMenu extends StatelessWidget {
           ),
         ]),
 
+        //Gameplay
+        MenuSection(([
+          MenuItemDefinition(
+            title: "Alliance Selection",
+            icon: Icons.dashboard_customize,
+            landscapeWidget: AllianceSelection(),
+          ),
+        ])),
+
         // Info
         MenuSection([
           MenuItemDefinition(
             title: "Team Info",
             icon: Icons.info,
-            landscapeWidget: TeamInfo(),
-            portraitWidget: TeamInfo(),
+            landscapeWidget: TeamInfo(passedTeamID: -1),
+            portraitWidget: TeamInfo(passedTeamID: -1),
           ),
-
           MenuItemDefinition(
             title: "All Team Metrics",
             icon: Icons.table_view,
@@ -58,7 +67,6 @@ class MainMenu extends StatelessWidget {
             portraitWidget: TeamMetrics(),
           ),
         ]),
-        // Info
 
         // Resources
         MenuSection([

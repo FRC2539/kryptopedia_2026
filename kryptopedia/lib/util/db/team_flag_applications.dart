@@ -63,6 +63,27 @@ class DbTeamFlagApplications {
     return result.map((map) => TeamFlagApplication.fromMap(map)).toList();
   }
 
+  Future<Map<String, List<int>>> getActiveTeamFlagApplicationsAsMap() async {
+    Database db = await dbHelper.db;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      TeamFlagApplication.tableName,
+      where: "${TeamFlagApplication.deletedKey} = ?",
+      whereArgs: [0],
+    );
+
+    Map<String, List<int>> applicationsMap = {};
+    for (Map<String, dynamic> map in result) {
+      TeamFlagApplication application = TeamFlagApplication.fromMap(map);
+      if (!applicationsMap.containsKey(application.name)) {
+        applicationsMap[application.name] = [];
+      }
+      applicationsMap[application.name]!.add(application.teamNumber);
+    }
+
+    return applicationsMap;
+  }
+
   Future<List<TeamFlagApplication>> getActiveTeamFlagApplicationsForTeam(
     int teamNumber,
   ) async {
@@ -73,21 +94,6 @@ class DbTeamFlagApplications {
       where:
           "${TeamFlagApplication.teamNumberKey} = ? AND ${TeamFlagApplication.deletedKey} = ?",
       whereArgs: [teamNumber, 0],
-    );
-
-    return result.map((map) => TeamFlagApplication.fromMap(map)).toList();
-  }
-
-  Future<List<TeamFlagApplication>> getActiveTeamFlagApplicationsForFlag(
-    String flagName,
-  ) async {
-    Database db = await dbHelper.db;
-
-    final List<Map<String, dynamic>> result = await db.query(
-      TeamFlagApplication.tableName,
-      where:
-          "${TeamFlagApplication.nameKey} = ? AND ${TeamFlagApplication.deletedKey} = ?",
-      whereArgs: [flagName, 0],
     );
 
     return result.map((map) => TeamFlagApplication.fromMap(map)).toList();

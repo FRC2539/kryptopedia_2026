@@ -7,6 +7,7 @@ import 'package:kryptopedia/screens/pdf_viewer.dart';
 import 'package:kryptopedia/screens/pit_map.dart';
 import 'package:kryptopedia/screens/team_info.dart';
 import 'package:kryptopedia/screens/team_metrics.dart';
+import 'package:kryptopedia/screens/test_haptics.dart';
 import 'package:kryptopedia/widgets/menu/section.dart';
 import 'package:kryptopedia/widgets/menu/version_number.dart';
 
@@ -87,6 +88,12 @@ class MainMenu extends StatelessWidget {
               pdfPath: "assets/pdfs/2026GameManual.pdf",
               title: "Game Manual",
             ),
+          ),
+          MenuItemDefinition(
+            title: "Test Haptics",
+            icon: Icons.vibration,
+            portraitWidget: TestHaptics(),
+            debugOnly: true,
           ),
         ]),
 

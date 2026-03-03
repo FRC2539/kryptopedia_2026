@@ -201,7 +201,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         onPressed: () {
                           if (scoutedMatchSingleton.autoFuelScored <= 1) return;
                           scoutedMatchSingleton.autoFuelScored--;
-                          vibrate(HapticsType.heavy);
+                          vibrate(HapticsType.warning);
                         },
                       ),
                       _buildGridButton(
@@ -219,7 +219,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         onPressed: () {
                           scoutedMatchSingleton.autoClimbed = false;
                           state = MatchState.teleop;
-                          vibrate(HapticsType.success);
+                          vibrate(HapticsType.error);
                         },
                       ),
                     ],
@@ -251,7 +251,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                             return;
                           }
                           scoutedMatchSingleton.teleopFuelScored--;
-                          vibrate(HapticsType.heavy);
+                          vibrate(HapticsType.warning);
                         },
                       ),
                       _buildGridButton(
@@ -260,7 +260,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         onPressed: () {
                           if (scoutedMatchSingleton.teleopFuelFed <= 1) return;
                           scoutedMatchSingleton.teleopFuelFed--;
-                          vibrate(HapticsType.heavy);
+                          vibrate(HapticsType.warning);
                         },
                       ),
                       _buildGridButton(
@@ -279,7 +279,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L3;
                           state = MatchState.summary;
-                          vibrate(HapticsType.light);
+                          vibrate(HapticsType.heavy);
                         },
                       ),
                       _buildGridButton(
@@ -288,7 +288,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L2;
                           state = MatchState.summary;
-                          vibrate(HapticsType.heavy);
+                          vibrate(HapticsType.medium);
                         },
                       ),
                       _buildGridButton(
@@ -297,7 +297,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L1;
                           state = MatchState.summary;
-                          vibrate(HapticsType.medium);
+                          vibrate(HapticsType.light);
                         },
                       ),
                       _buildGridButton(

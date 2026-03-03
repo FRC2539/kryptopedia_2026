@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/team_flag_application.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
@@ -32,6 +34,10 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     DropdownMenuItem(
       value: TeamFlagApplication.tableName,
       child: Text("Flag Applications"),
+    ),
+    DropdownMenuItem(
+      value: ScoutedMatch.tableName,
+      child: Text("Scouted Matches"),
     ),
   ];
 
@@ -62,6 +68,11 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     List<TeamFlagApplication> flagApplications = await dbFlagApplications
         .getTeamFlagApplications();
     result[TeamFlagApplication.tableName] = flagApplications;
+
+    DbScoutedMatches dbScoutedMatches = DbScoutedMatches();
+    List<ScoutedMatch> scoutedMatches = await dbScoutedMatches
+        .getScoutedMatches();
+    result[ScoutedMatch.tableName] = scoutedMatches;
 
     return result;
   }
@@ -158,6 +169,14 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
                               subtitle: Text(
                                 flagApplication.toMap().toString(),
                               ),
+                            );
+                          case ScoutedMatch.tableName:
+                            ScoutedMatch scoutedMatch = tableData[index];
+                            return ListTile(
+                              title: Text(
+                                "Scouted Match - Team: ${scoutedMatch.teamNumber}, Match: ${scoutedMatch.matchCompLevel} ${scoutedMatch.matchNumber}",
+                              ),
+                              subtitle: Text(scoutedMatch.toMap().toString()),
                             );
                           default:
                             return ListTile(title: Text("Unknown Table"));

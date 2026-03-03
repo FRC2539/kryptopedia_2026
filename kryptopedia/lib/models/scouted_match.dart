@@ -87,22 +87,22 @@ class ScoutedMatch {
     generalComments = "";
   }
 
-  static final scouterIdKey = "scouter_id";
-  static final uidKey = "uid";
-  static final tableName = "scouted_matches";
-  static final matchCompLevelKey = "match_comp_level";
-  static final matchNumberKey = "match_number";
-  static final teamNumberKey = "team_number";
-  static final localKey = "local";
-  static final autoFuelScoredKey = "auto_fuel_scored";
-  static final autoClimbedKey = "auto_climbed";
-  static final teleopFuelScoredKey = "teleop_fuel_scored";
-  static final teleopFuelFedKey = "teleop_fuel_fed";
-  static final climbLevelKey = "climb_level";
-  static final robotRolesKey = "robot_roles";
-  static final issuesKey = "issues";
-  static final penaltiesKey = "penalties";
-  static final generalCommentsKey = "general_comments";
+  static const scouterIdKey = "scouter_id";
+  static const uidKey = "uid";
+  static const tableName = "scouted_matches";
+  static const matchCompLevelKey = "match_comp_level";
+  static const matchNumberKey = "match_number";
+  static const teamNumberKey = "team_number";
+  static const localKey = "local";
+  static const autoFuelScoredKey = "auto_fuel_scored";
+  static const autoClimbedKey = "auto_climbed";
+  static const teleopFuelScoredKey = "teleop_fuel_scored";
+  static const teleopFuelFedKey = "teleop_fuel_fed";
+  static const climbLevelKey = "climb_level";
+  static const robotRolesKey = "robot_roles";
+  static const issuesKey = "issues";
+  static const penaltiesKey = "penalties";
+  static const generalCommentsKey = "general_comments";
 
   ScoutedMatch();
 

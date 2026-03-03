@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/models/eventranking.dart';
+import 'package:kryptopedia/models/tba_event_ranking.dart';
+import 'package:kryptopedia/models/tba_rankings.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_flag_application.dart';
+import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/tba_ranking.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
+import 'package:kryptopedia/util/api.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/widgets/team_metrics/matrix.dart';
 
@@ -16,8 +23,7 @@ class TeamMetrics extends StatefulWidget {
 
 class _TeamMetricsState extends State<TeamMetrics> {
   bool showFlags = false;
-  bool importRankings = false;
-  bool importOPRs = false;
+  bool importTBAInfo = false;
 
   List<String> activeFlags = [];
   int updateCount = 0;
@@ -26,13 +32,11 @@ class _TeamMetricsState extends State<TeamMetrics> {
     TeamsToShow.init([], false),
   );
 
-  Future<List<Widget>> processActions() async {
+  Future<List<Widget>> processActions(BuildContext context) async {
     DbTeams dbTeams = DbTeams();
     DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
 
     List<Team> eventTeams = await dbTeams.getTeams();
-    List<TeamFlagApplication> teamFlagApplication = await dbTeamFlagApplications
-        .getActiveTeamFlagApplications();
 
     // If the teams to show is empty, add the list of teams at the event.
     if (teamsToShowNotifier.value.teams.isEmpty) {
@@ -42,6 +46,71 @@ class _TeamMetricsState extends State<TeamMetrics> {
       }
       teamsToShowNotifier.value = TeamsToShow.init(teams, false);
     }
+
+    // Check if we should be pulling TBA information
+    if (importTBAInfo) {
+      DbEvents dbEvents = DbEvents();
+      Event activeEvent = (await dbEvents.getEvent());
+
+      // Pull current rankings from the Blue Alliance
+      APIResponse eventRankingResponse = await Api.getTBATeamRankings(
+        activeEvent.code,
+      );
+
+      if (eventRankingResponse.success && eventRankingResponse.data != null) {
+        // Create the table
+        DbEventRanking dbEventRanking = DbEventRanking();
+        await dbEventRanking.createEventRankingTable();
+
+        // Decode the the response
+        TBAEventRanking tbaEventRanking = TBAEventRanking.fromJson(
+          eventRankingResponse.data,
+        );
+
+        for (TBARankings tbaRankings in tbaEventRanking.rankings) {
+          await dbEventRanking.insertEventRanking(
+            EventRanking(
+              int.parse(tbaRankings.teamKey.substring(3)),
+              tbaRankings.rank,
+            ),
+          );
+        }
+      }
+
+      SnackBar? snackBar;
+      if (eventRankingResponse.success) {
+        snackBar = SnackBar(
+          content: Text(
+            'TBA information successfully pulled.',
+            style: TextStyle(fontSize: 16),
+          ),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.greenAccent,
+          showCloseIcon: true,
+        );
+      } else {
+        snackBar = SnackBar(
+          content: Text(
+            'TBA information failed to be pulled.',
+            style: TextStyle(fontSize: 16),
+          ),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.redAccent,
+          showCloseIcon: true,
+        );
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+
+      importTBAInfo = false;
+    }
+
+    // Create Flag Section
+    List<TeamFlagApplication> teamFlagApplication = await dbTeamFlagApplications
+        .getActiveTeamFlagApplications();
 
     List<Widget> chips = [];
     chips.add(
@@ -132,15 +201,7 @@ class _TeamMetricsState extends State<TeamMetrics> {
                 icon: Icon(Icons.leaderboard, color: Colors.white),
                 onPressed: () {
                   setState(() {
-                    if (!importRankings) importRankings = true;
-                  });
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.sports_score, color: Colors.white),
-                onPressed: () {
-                  setState(() {
-                    if (!importOPRs) importOPRs = true;
+                    if (!importTBAInfo) importTBAInfo = true;
                   });
                 },
               ),
@@ -160,7 +221,7 @@ class _TeamMetricsState extends State<TeamMetrics> {
         ],
       ),
       body: FutureBuilder(
-        future: processActions(),
+        future: processActions(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(

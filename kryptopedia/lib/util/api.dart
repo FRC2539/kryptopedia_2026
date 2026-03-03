@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:kryptopedia/models/tba_event_ranking.dart';
 import 'package:kryptopedia/models/tba_event_insights.dart';
 // import 'package:kryptopedia/models/tba_event_alliance.dart';
 
@@ -48,20 +47,16 @@ class Api {
   }
 
   static Future<APIResponse> _makeTbaRequest(
-    String url, {
-    String? body,
-    String? tbaAuthKey,
-  }) async {
+    String url,
+    String tbaAuthKey,
+  ) async {
     try {
       Response response;
-      response = await post(
+      response = await get(
         Uri.parse(url),
         headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          if (tbaAuthKey != null) "X-TBA-Auth-Key": tbaAuthKey,
+          "X-TBA-Auth-Key": tbaAuthKey,
         },
-        body: body,
       );
 
       return APIResponse(success: true, data: json.decode(response.body));
@@ -124,30 +119,17 @@ class Api {
     );
   }
 
-  static Future<TBAEventRanking?> getTBATeamRankings(String eventCode) async {
-    APIResponse apiResponse = await _makeTbaRequest(
-      "https://www.thebluealliance.com/api/v3/event/$eventCode/rankings",
-      tbaAuthKey:
-          "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
+  static Future<APIResponse> getTBATeamRankings(String eventCode) async {
+    return await _makeTbaRequest(
+      "https://www.thebluealliance.com/api/v3/event/2025${eventCode.toLowerCase()}/rankings",
+      "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
     );
-
-    if (apiResponse.success) {
-      if (!apiResponse.data.contains('null') &&
-          !apiResponse.data.contains('{}')) {
-        return TBAEventRanking.fromJson(apiResponse.data);
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
   }
 
   static Future<TBAEventInsights?> getTBATeamInsights(String eventCode) async {
     APIResponse apiResponse = await _makeTbaRequest(
-      "https://www.thebluealliance.com/api/v3/event/$eventCode/oprs",
-      tbaAuthKey:
-          "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
+      "https://www.thebluealliance.com/api/v3/event/2026${eventCode.toLowerCase()}/oprs",
+      "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
     );
 
     if (apiResponse.success) {

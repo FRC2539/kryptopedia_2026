@@ -12,23 +12,23 @@ module TBAService
     end
 
     def teams
-      Rails.cache.fetch("tba_teams", expires_in: 7.days) do
-        teams = []
+      @teams ||= Rails.cache.fetch("tba_teams", expires_in: 7.days) do
+        result = []
         page = 0
         loop do
-          response = _conn.get("teams/#{page}",)
+          response = _conn.get("teams/#{page}")
           break if response.body.empty?
 
-          teams.concat(response.body)
+          result.concat(response.body)
           page += 1
         end
 
-        teams
+        result.index_by { |t| t["key"] }
       end
     end
 
     def team(team_number)
-      teams.find { |team| team["key"] == "frc#{team_number}" }
+      teams["frc#{team_number}"]
     end
 
     def team_events_for_year(team_number, year)

@@ -72,6 +72,11 @@
         display: flex;
         gap: 0.5rem;
     }
+
+    .oneline {
+        display: flex;
+        gap: 0.5rem;
+    }
 }
 
 .event-header {

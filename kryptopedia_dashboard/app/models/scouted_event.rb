@@ -36,7 +36,7 @@ class ScoutedEvent < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :team_id }
   validates :code, presence: true, uniqueness: { scope: :team_id }
-  validates :test, presence: true
+  validates :test, inclusion: [true, false]
 
   def pit_map
     Rails.cache.fetch("#{code}/pit_map", expires_in: 1.hour) do

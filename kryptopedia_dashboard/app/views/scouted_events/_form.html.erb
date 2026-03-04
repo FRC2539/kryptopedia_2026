@@ -14,6 +14,7 @@
     <%= f.check_box :tba_sync %>
     <%= error_messages_for scouted_event, :tba_sync %>
   </div>
+  <p><%= scouted_event.test ? "test event" : "real deal event" %></p>
   <div>
     <%= f.submit %>
   </div>

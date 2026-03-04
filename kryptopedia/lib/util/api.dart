@@ -126,22 +126,11 @@ class Api {
     );
   }
 
-  static Future<TBAEventInsights?> getTBATeamInsights(String eventCode) async {
-    APIResponse apiResponse = await _makeTbaRequest(
-      "https://www.thebluealliance.com/api/v3/event/2026${eventCode.toLowerCase()}/oprs",
+  static Future<APIResponse> getTBATeamInsights(String eventCode) async {
+    return await _makeTbaRequest(
+      "https://www.thebluealliance.com/api/v3/event/2025${eventCode.toLowerCase()}/oprs",
       "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
     );
-
-    if (apiResponse.success) {
-      if (!apiResponse.data.contains('null') &&
-          !apiResponse.data.contains('{}')) {
-        return TBAEventInsights.fromJson(apiResponse.data);
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
   }
 }
 

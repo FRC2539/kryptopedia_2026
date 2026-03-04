@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-// import 'package:kryptopedia/screens/team_info.dart';
+import 'package:kryptopedia/screens/team_info.dart';
 import 'package:kryptopedia/models/team_metrics.dart';
 
 class DataGrid extends StatelessWidget {
@@ -259,13 +259,13 @@ class DataGrid extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) =>
-          //         TeamInfo(passedTeamID: int.parse(bannerLabel)),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  TeamInfo(passedTeamID: int.parse(bannerLabel)),
+            ),
+          );
         },
         child: AutoSizeText(
           bannerLabel,

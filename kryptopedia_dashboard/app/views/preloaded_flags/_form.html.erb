@@ -1,0 +1,10 @@
+<%= form_with model: [preloaded_flag.scouted_event.owner, preloaded_flag.scouted_event, preloaded_flag] do |f| %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <%= error_messages_for preloaded_flag, :name %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

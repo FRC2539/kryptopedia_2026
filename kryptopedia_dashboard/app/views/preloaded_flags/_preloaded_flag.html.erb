@@ -1,0 +1,4 @@
+<div class="card">
+  <p><%= preloaded_flag.name %></p>
+  <div class="buttons">  <%= button_to "delete", team_scouted_event_preloaded_flag_path(@team, @scouted_event, preloaded_flag), method: :delete, data: { turbo_confirm: 'Delete this?' } %></div>
+</div>

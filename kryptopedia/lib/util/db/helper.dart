@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/preloaded_flags.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/util/db/matches.dart';
@@ -65,6 +66,7 @@ class DbHelper {
     DbMatches dbMatches = DbMatches();
     DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
     DbScoutedMatches dbScoutedMatches = DbScoutedMatches();
+    DbPreloadedFlags dbPreloadedFlags = DbPreloadedFlags();
 
     await Future.wait([
       dbTeams.ensureTableExists(db),
@@ -74,6 +76,7 @@ class DbHelper {
       dbMatches.ensureTableExists(db),
       dbTeamFlagApplications.ensureTableExists(db),
       dbScoutedMatches.ensureTableExists(db),
+      dbPreloadedFlags.ensureTableExists(db),
     ]);
   }
 

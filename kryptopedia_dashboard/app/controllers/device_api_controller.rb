@@ -65,12 +65,19 @@ class DeviceApiController < ApplicationController
 
     since = params[:since] ? Time.parse(params[:since]).. : (10.years.ago..)
 
+    from_clean = ActiveModel::Type::Boolean.new.cast(params[:from_clean]) # can ignore sending deleted items back to the client, since their DB is empty anyway
+
     @synced_to = Time.current
+
     @teams = ScoutedEventTeam.where(updated_at: since, scouted_event: @event)
+    @teams = @teams.where(deleted_at: nil) if from_clean
     @team_members = TeamMember.where(updated_at: since, team: current_user.team)
     @scouting_data_items = @event.scouting_data_items.where(updated_at: since)
+    @scouting_data_items = @scouting_data_items.where(deleted_at: nil) if from_clean
     @matches = @event.matches.where(updated_at: since)
     @should_update_pit_map = since.include?(@event.pit_map_cache_updated)
+    @preloaded_flags = @event.preloaded_flags.where(updated_at: since)
+    @preloaded_flags = @preloaded_flags.where(deleted_at: nil) if from_clean
 
     current_user.update! last_sync: @synced_to
   end

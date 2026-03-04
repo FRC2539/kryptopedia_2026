@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/match.dart';
+import 'package:kryptopedia/models/preloaded_flag.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
@@ -10,13 +11,17 @@ import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/api.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/matches.dart';
+import 'package:kryptopedia/util/db/preloaded_flags.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 
-Future<APIResponse> syncData({bool hard = false}) async {
+Future<APIResponse> syncData({
+  bool hard = false,
+  bool fromClean = false,
+}) async {
   DbEvents dbEvents = DbEvents();
   Event event = await dbEvents.getEvent();
 
@@ -50,6 +55,7 @@ Future<APIResponse> syncData({bool hard = false}) async {
         ? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toIso8601String()
         : event.lastSync!.toUtc().toIso8601String(),
     dataToPush,
+    fromClean: fromClean
   );
   if (!pulledData.success) {
     return APIResponse(
@@ -85,6 +91,7 @@ Future<APIResponse> syncData({bool hard = false}) async {
   DbTeams dbTeams = DbTeams();
   DbTeamMembers dbTeamMembers = DbTeamMembers();
   DbMatches dbMatches = DbMatches();
+  DbPreloadedFlags dbPreloadedFlags = DbPreloadedFlags();
 
   print(pulledData.data);
 
@@ -121,6 +128,15 @@ Future<APIResponse> syncData({bool hard = false}) async {
         }
         EventMatch match = EventMatch.fromMap(item);
         await dbMatches.upsertMatch(match);
+      }
+
+      if (type == "preloaded_flag") {
+        if (deleted) {
+          dbPreloadedFlags.deletePreloadedFlag(item["name"]);
+          continue;
+        }
+        PreloadedFlag preloadedFlag = PreloadedFlag(item["name"]);
+        await dbPreloadedFlags.upsertPreloadedFlag(preloadedFlag);
       }
 
       //ScoutingDataItems vv
@@ -177,8 +193,12 @@ Future<APIResponse> syncData({bool hard = false}) async {
   );
 }
 
-Future syncDataFlow(BuildContext context, {bool hard = false}) async {
-  APIResponse response = await syncData(hard: hard);
+Future syncDataFlow(
+  BuildContext context, {
+  bool hard = false,
+  bool fromClean = false,
+}) async {
+  APIResponse response = await syncData(hard: hard, fromClean: fromClean);
   if (!response.success) {
     if (!context.mounted) return;
     await showDialog(

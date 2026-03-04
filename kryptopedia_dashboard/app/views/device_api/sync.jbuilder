@@ -41,4 +41,10 @@ json.items do
     # end
     json.data JSON.parse(item.data)
   end
+
+  json.array! @preloaded_flags do |flag|
+    json.type "preloaded_flag"
+    json.deleted !!flag.deleted_at
+    json.name flag.name
+  end
 end

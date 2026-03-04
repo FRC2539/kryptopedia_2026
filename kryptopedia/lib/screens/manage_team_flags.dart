@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/generic_confirmation.dart';
 import 'package:kryptopedia/main.dart';
+import 'package:kryptopedia/models/preloaded_flag.dart';
 import 'package:kryptopedia/models/team_flag_application.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/preloaded_flags.dart';
 import 'package:kryptopedia/util/db/sync.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/widgets/common/banners.dart';
@@ -19,14 +21,14 @@ class ManageTeamFlags extends StatefulWidget {
 }
 
 class _ManageTeamFlagsState extends State<ManageTeamFlags> {
-  late Future<List<TeamFlagApplication>> data;
+  late Future<FutureResponse> data;
   String lastSync = "Never";
   bool syncEnabled = false;
 
   @override
   void initState() {
     super.initState();
-    data = getTeamFlagApplications();
+    data = getData();
     getLastSync();
   }
 
@@ -46,9 +48,16 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
     });
   }
 
-  Future<List<TeamFlagApplication>> getTeamFlagApplications() {
+  Future<FutureResponse> getData() async {
     DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
-    return dbTeamFlagApplications.getActiveTeamFlagApplications();
+    List<TeamFlagApplication> teamFlagApplications =
+        await dbTeamFlagApplications.getActiveTeamFlagApplications();
+
+    DbPreloadedFlags dbPreloadedFlags = DbPreloadedFlags();
+    List<PreloadedFlag> preloadedFlags = await dbPreloadedFlags
+        .getPreloadedFlags();
+
+    return FutureResponse(teamFlagApplications, preloadedFlags);
   }
 
   @override
@@ -89,7 +98,6 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
                   ),
                 ],
               ),
-            
             ],
           ),
           FutureBuilder(
@@ -99,14 +107,20 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
               }
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              if (!snapshot.hasData ||
+                  snapshot.data!.teamFlagApplications.isEmpty &&
+                      snapshot.data!.preloadedFlags.isEmpty) {
                 return Text("No team flags yet!");
               }
-              List<TeamFlagApplication> applications = snapshot.data!;
-              List<String> uniqueFlagNames = applications
-                  .map((app) => app.name)
-                  .toSet()
-                  .toList();
+              List<TeamFlagApplication> applications =
+                  snapshot.data!.teamFlagApplications;
+              List<PreloadedFlag> preloadedFlags =
+                  snapshot.data!.preloadedFlags;
+              Set<String> flagNamesSet = {
+                ...applications.map((app) => app.name),
+                ...preloadedFlags.map((flag) => flag.name),
+              };
+              List<String> uniqueFlagNames = flagNamesSet.toList();
               return ListView.builder(
                 itemCount: uniqueFlagNames.length,
                 shrinkWrap: true,
@@ -124,10 +138,13 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
                             selectedTeamNumbers: appsForFlag
                                 .map((app) => app.teamNumber)
                                 .toList(),
+                            isPreloaded: preloadedFlags.any(
+                              (flag) => flag.name == uniqueFlagNames[index],
+                            ),
                           ),
                         );
                         setState(() {
-                          data = getTeamFlagApplications();
+                          data = getData();
                         });
                       },
                       child: ListTile(
@@ -152,7 +169,7 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
             builder: (context) => ModifyFlagDialog(),
           );
           setState(() {
-            data = getTeamFlagApplications();
+            data = getData();
           });
         },
         child: Icon(Icons.add),
@@ -164,8 +181,14 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
 class ModifyFlagDialog extends StatefulWidget {
   final String? flagName;
   final List<int>? selectedTeamNumbers;
+  final bool isPreloaded;
 
-  const ModifyFlagDialog({super.key, this.flagName, this.selectedTeamNumbers});
+  const ModifyFlagDialog({
+    super.key,
+    this.flagName,
+    this.selectedTeamNumbers,
+    this.isPreloaded = false,
+  });
 
   @override
   State<ModifyFlagDialog> createState() => _ModifyFlagDialogState();
@@ -203,20 +226,20 @@ class _ModifyFlagDialogState extends State<ModifyFlagDialog> {
         return;
       }
 
-      if (selectedTeamNumbers.isEmpty) {
+      if (selectedTeamNumbers.isEmpty && !widget.isPreloaded) {
         bool? confirmation = await showDialog(
           context: context,
           builder: (context) => ConfirmationDialog(
             title: "Delete flag?",
             body:
-                "Flags must have at least one team. Continuing will delete this flag",
+                "Flags must have at least one team. Continuing will delete this flag.\nTo create an empty flag, ask Dominic :)",
           ),
         );
         if (confirmation != true) return;
       }
 
       DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
-      
+
       List<TeamFlagApplication> existingFlags = await dbTeamFlagApplications
           .getTeamFlagApplicationsForFlag(flagName!);
 
@@ -259,7 +282,6 @@ class _ModifyFlagDialogState extends State<ModifyFlagDialog> {
             TeamFlagApplication(flagName!, teamNumber, true, false),
           );
         }
-
       }
 
       // Remove teams- only sync deletion if team was on server
@@ -277,7 +299,7 @@ class _ModifyFlagDialogState extends State<ModifyFlagDialog> {
           );
         }
       }
-      
+
       if (!context.mounted) return;
       Navigator.pop(context);
     }
@@ -347,4 +369,11 @@ class _ModifyFlagDialogState extends State<ModifyFlagDialog> {
       ),
     );
   }
+}
+
+class FutureResponse {
+  final List<TeamFlagApplication> teamFlagApplications;
+  final List<PreloadedFlag> preloadedFlags;
+
+  FutureResponse(this.teamFlagApplications, this.preloadedFlags);
 }

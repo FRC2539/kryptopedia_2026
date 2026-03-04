@@ -5,11 +5,11 @@ import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/widgets/common/label.dart';
 import 'package:kryptopedia/widgets/team_info/team_tables.dart';
 
-class TeamInfoMatches extends StatelessWidget {
+class TeamInfoMatchesTable extends StatelessWidget {
   final List<ScoutedMatch> scoutedMatches;
   //final TeamInfoSummary teamInfoSummary;
 
-  const TeamInfoMatches({
+  const TeamInfoMatchesTable({
     super.key,
     required this.scoutedMatches,
     /*required this.teamInfoSummary*/

@@ -13,7 +13,7 @@ class MenuSection extends StatelessWidget {
       return (landscape(context)
                   ? item.landscapeWidget != null
                   : item.portraitWidget != null) &&
-              (kDebugMode || !item.dev) ||
+              (kDebugMode || !item.debugOnly) ||
           item.onTap != null;
     }).toList();
 
@@ -46,7 +46,7 @@ class MenuSection extends StatelessWidget {
                   item.description,
                   item.icon,
                   item == visibleItems.last,
-                  dev: item.dev,
+                  dev: item.debugOnly,
                 ),
               ),
             )
@@ -80,7 +80,7 @@ class MenuItemDefinition {
   final Widget? portraitWidget;
   final Widget? landscapeWidget;
   final Function(BuildContext context)? onTap;
-  final bool dev;
+  final bool debugOnly;
 
   const MenuItemDefinition({
     required this.title,
@@ -89,6 +89,6 @@ class MenuItemDefinition {
     this.portraitWidget,
     this.landscapeWidget,
     this.onTap,
-    this.dev = false,
+    this.debugOnly = false,
   });
 }

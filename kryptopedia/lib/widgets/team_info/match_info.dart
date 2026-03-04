@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/info_not_available.dart';
+import 'package:kryptopedia/widgets/team_info/match_info_table.dart';
 
 class TeamInfoMatches extends StatelessWidget {
   final List<ScoutedMatch> scoutedMatches;
@@ -15,7 +16,7 @@ class TeamInfoMatches extends StatelessWidget {
       children: [
         if (scoutedMatches.isNotEmpty)
           Column(
-            // children: [TeamInfoMatchesAuto(scoutedMatches: scoutedMatches)],
+            children: [TeamInfoMatchesTable(scoutedMatches: scoutedMatches)],
           )
         else
           InformationNotAvailable(

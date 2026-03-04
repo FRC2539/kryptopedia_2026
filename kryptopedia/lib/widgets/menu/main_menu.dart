@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/match_scouting_select.dart';
 import 'package:kryptopedia/dialogs/pit_scouting_select.dart';
 import 'package:kryptopedia/screens/alliance_selection.dart';
+import 'package:kryptopedia/screens/match_preview.dart';
 import 'package:kryptopedia/screens/manage_team_flags.dart';
 import 'package:kryptopedia/screens/pdf_viewer.dart';
 import 'package:kryptopedia/screens/pit_map.dart';
 import 'package:kryptopedia/screens/team_info.dart';
 import 'package:kryptopedia/screens/team_metrics.dart';
+import 'package:kryptopedia/screens/test_haptics.dart';
 import 'package:kryptopedia/widgets/menu/section.dart';
 import 'package:kryptopedia/widgets/menu/version_number.dart';
 
@@ -45,6 +47,11 @@ class MainMenu extends StatelessWidget {
 
         //Gameplay
         MenuSection(([
+          MenuItemDefinition(
+            title: 'Match Preview',
+            icon: Icons.batch_prediction,
+            landscapeWidget: MatchPreview(),
+          ),
           MenuItemDefinition(
             title: "Alliance Selection",
             icon: Icons.dashboard_customize,
@@ -87,6 +94,12 @@ class MainMenu extends StatelessWidget {
               pdfPath: "assets/pdfs/2026GameManual.pdf",
               title: "Game Manual",
             ),
+          ),
+          MenuItemDefinition(
+            title: "Test Haptics",
+            icon: Icons.vibration,
+            portraitWidget: TestHaptics(),
+            debugOnly: true,
           ),
         ]),
 

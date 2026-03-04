@@ -32,6 +32,7 @@ class ScoutedEvent < ApplicationRecord
            before_remove: :soft_remove_team_from_event
   has_many :scouting_data_items
   has_many :matches
+  has_many :preloaded_flags
 
   validates :name, presence: true, uniqueness: { scope: :team_id }
   validates :code, presence: true, uniqueness: { scope: :team_id }

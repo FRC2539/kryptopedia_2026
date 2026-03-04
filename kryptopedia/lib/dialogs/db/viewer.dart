@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/models/preloaded_flag.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/team_flag_application.dart';
 import 'package:kryptopedia/models/match.dart';
@@ -7,6 +8,7 @@ import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/preloaded_flags.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/util/db/matches.dart';
@@ -38,6 +40,10 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     DropdownMenuItem(
       value: ScoutedMatch.tableName,
       child: Text("Scouted Matches"),
+    ),
+    DropdownMenuItem(
+      value: PreloadedFlag.tableName,
+      child: Text("Preloaded Flags"),
     ),
   ];
 
@@ -73,6 +79,11 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
     List<ScoutedMatch> scoutedMatches = await dbScoutedMatches
         .getScoutedMatches();
     result[ScoutedMatch.tableName] = scoutedMatches;
+
+    DbPreloadedFlags dbPreloadedFlags = DbPreloadedFlags();
+    List<PreloadedFlag> preloadedFlags = await dbPreloadedFlags
+        .getPreloadedFlags();
+    result[PreloadedFlag.tableName] = preloadedFlags;
 
     return result;
   }
@@ -177,6 +188,14 @@ class _DbViewerDialogState extends State<DbViewerDialog> {
                                 "Scouted Match - Team: ${scoutedMatch.teamNumber}, Match: ${scoutedMatch.matchCompLevel} ${scoutedMatch.matchNumber}",
                               ),
                               subtitle: Text(scoutedMatch.toMap().toString()),
+                            );
+                          case PreloadedFlag.tableName:
+                            PreloadedFlag preloadedFlag = tableData[index];
+                            return ListTile(
+                              title: Text(
+                                "Preloaded Flag: ${preloadedFlag.name}",
+                              ),
+                              subtitle: Text(preloadedFlag.toMap().toString()),
                             );
                           default:
                             return ListTile(title: Text("Unknown Table"));

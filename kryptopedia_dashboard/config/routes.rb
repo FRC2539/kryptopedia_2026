@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       get "teams" => "scouted_events#index_teams", as: :teams
       post "teams/download-from-tba" => "scouted_events#download_teams", as: :download_teams_from_tba
       resources :scouting_data_items
+      resources :preloaded_flags
     end
 
     resources :team_members

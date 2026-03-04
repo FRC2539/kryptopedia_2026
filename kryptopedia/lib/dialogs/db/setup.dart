@@ -73,7 +73,7 @@ class _EventSetupDialogState extends State<EventSetupDialog>
             child: TabBarView(
               controller: _tabController,
               children: [
-                TeamDeviceForm(),
+                TeamDeviceForm(fromClean: !widget.authOnly),
                 if (!widget.authOnly) TestDataForm(),
               ],
             ),
@@ -85,7 +85,8 @@ class _EventSetupDialogState extends State<EventSetupDialog>
 }
 
 class TeamDeviceForm extends StatefulWidget {
-  const TeamDeviceForm({super.key});
+  final bool fromClean;
+  const TeamDeviceForm({super.key, this.fromClean = false});
 
   @override
   State<TeamDeviceForm> createState() => _TeamDeviceFormState();
@@ -209,7 +210,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     );
 
     if (!mounted) return;
-    await syncDataFlow(context);
+    await syncDataFlow(context, fromClean: widget.fromClean);
 
     if (!mounted) return;
     Navigator.pop(context);

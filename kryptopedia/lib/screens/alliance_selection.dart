@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:kryptopedia/models/alliance_selection_teams.dart';
+import 'package:kryptopedia/models/alliance_selection_team.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/tba_ranking.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';

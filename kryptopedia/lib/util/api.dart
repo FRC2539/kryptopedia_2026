@@ -111,9 +111,12 @@ class Api {
     String authToken,
     String lastSync,
     List<SyncDataItem> data,
+    {
+    bool fromClean = false,
+  }
   ) async {
     return await _makeRequest(
-      "$serverURL/$teamNumber/api/sync?since=$lastSync",
+      "$serverURL/$teamNumber/api/sync?since=$lastSync&from_clean=$fromClean",
       token: authToken,
       body: json.encode(data.map((d) => d.toMap()).toList()),
     );

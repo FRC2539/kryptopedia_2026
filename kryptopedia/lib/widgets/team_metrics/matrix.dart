@@ -17,8 +17,13 @@ class TeamsToShow {
 
 class TeamMetricsMatrix extends StatefulWidget {
   final ValueNotifier<TeamsToShow> teamstoShowNotifer;
+  final ValueNotifier<int> tbaUpdateNotifier;
 
-  const TeamMetricsMatrix({super.key, required this.teamstoShowNotifer});
+  const TeamMetricsMatrix({
+    super.key,
+    required this.teamstoShowNotifer,
+    required this.tbaUpdateNotifier,
+  });
 
   @override
   State<TeamMetricsMatrix> createState() => _TeamMetricsMatrixState();
@@ -72,34 +77,52 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
                 BottomHeaderRow(sortNotifier: columnSelectorNotifier),
                 ValueListenableBuilder<TeamsToShow>(
                   builder:
-                      (BuildContext context, TeamsToShow value, Widget? child) {
+                      (
+                        BuildContext context,
+                        TeamsToShow teamsToShow,
+                        Widget? child,
+                      ) {
                         return ValueListenableBuilder<ColumnSelector>(
                           builder:
                               (
                                 BuildContext context,
-                                ColumnSelector value,
+                                ColumnSelector columnSelector,
                                 Widget? child,
                               ) {
-                                return FutureBuilder(
-                                  future: getMetricsDataTable(
-                                    widget.teamstoShowNotifer,
-                                  ),
+                                return ValueListenableBuilder<int>(
                                   builder:
                                       (
                                         BuildContext context,
-                                        AsyncSnapshot snapshot,
+                                        int tbaUpdate,
+                                        Widget? child,
                                       ) {
-                                        if (snapshot.hasData) {
-                                          return DataGrid(
-                                            currentTeamStats: currentTeamStats,
-                                            maxTeamStats: maxTeamStats,
-                                            maxPredictedScore:
-                                                maxPredictedScore,
-                                          );
-                                        } else {
-                                          return const Text("Calculating ...");
-                                        }
+                                        return FutureBuilder(
+                                          future: getMetricsDataTable(
+                                            widget.teamstoShowNotifer,
+                                            widget.tbaUpdateNotifier,
+                                          ),
+                                          builder:
+                                              (
+                                                BuildContext context,
+                                                AsyncSnapshot snapshot,
+                                              ) {
+                                                if (snapshot.hasData) {
+                                                  return DataGrid(
+                                                    currentTeamStats:
+                                                        currentTeamStats,
+                                                    maxTeamStats: maxTeamStats,
+                                                    maxPredictedScore:
+                                                        maxPredictedScore,
+                                                  );
+                                                } else {
+                                                  return const Text(
+                                                    "Calculating ...",
+                                                  );
+                                                }
+                                              },
+                                        );
                                       },
+                                  valueListenable: widget.tbaUpdateNotifier,
                                 );
                               },
                           valueListenable: columnSelectorNotifier,
@@ -116,10 +139,12 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
   }
 
   Future<bool> getMetricsDataTable(
-    ValueNotifier<TeamsToShow> teamstoShowNotifer,
+    ValueNotifier<TeamsToShow> teamstoShowNotifer, 
+    ValueNotifier<int> tbaUpdateNotifier,
   ) async {
     // Retrieve a list of teams at the event if needed
-    if (teams.isEmpty && !teamstoShowNotifer.value.flagsSelected) {
+    if ((teams.isEmpty && !teamstoShowNotifer.value.flagsSelected) ||
+        (tbaUpdateNotifier.value == 1)) {
       DbTeams dbTeams = DbTeams();
       teams = await dbTeams.getTeams();
 
@@ -142,6 +167,9 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
         //   maxPredictedScore = tempPrediction.totalPoints;
         // }
       }
+
+      // Reset the tba notifier
+      tbaUpdateNotifier.value = 0;
     }
 
     // Reset the list of Current teams

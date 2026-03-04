@@ -50,6 +50,7 @@ class _AllianceSelectionState extends State<AllianceSelection> {
   ValueNotifier<TeamsToShow> teamsToShowNotifier = ValueNotifier<TeamsToShow>(
     TeamsToShow.init([], false),
   );
+  ValueNotifier<int> tbaUpdateNotifier = ValueNotifier<int>(1);
 
   @override
   Widget build(BuildContext context) {
@@ -436,7 +437,10 @@ class _AllianceSelectionState extends State<AllianceSelection> {
                       ),
                     ],
                   ),
-                  TeamMetricsMatrix(teamstoShowNotifer: teamsToShowNotifier),
+                  TeamMetricsMatrix(
+                    teamstoShowNotifer: teamsToShowNotifier,
+                    tbaUpdateNotifier: tbaUpdateNotifier,
+                  ),
                 ],
               );
             } else {

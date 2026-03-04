@@ -34,6 +34,7 @@ class _TeamMetricsState extends State<TeamMetrics> {
   ValueNotifier<TeamsToShow> teamsToShowNotifier = ValueNotifier<TeamsToShow>(
     TeamsToShow.init([], false),
   );
+  ValueNotifier<int> tbaUpdateNotifier = ValueNotifier<int>(0);
 
   Future<List<Widget>> processActions(BuildContext context) async {
     DbTeams dbTeams = DbTeams();
@@ -123,6 +124,9 @@ class _TeamMetricsState extends State<TeamMetrics> {
           backgroundColor: Colors.greenAccent,
           showCloseIcon: true,
         );
+
+        // Let the matrix know that potential changes to tba information have been made.
+        tbaUpdateNotifier.value = 1;
       } else {
         snackBar = SnackBar(
           content: Text(
@@ -292,7 +296,10 @@ class _TeamMetricsState extends State<TeamMetrics> {
                     ),
                   ),
                 ),
-                TeamMetricsMatrix(teamstoShowNotifer: teamsToShowNotifier),
+                TeamMetricsMatrix(
+                  teamstoShowNotifer: teamsToShowNotifier,
+                  tbaUpdateNotifier: tbaUpdateNotifier,
+                ),
               ],
             );
           } else {

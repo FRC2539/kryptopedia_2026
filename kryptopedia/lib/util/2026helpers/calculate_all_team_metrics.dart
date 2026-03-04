@@ -6,7 +6,7 @@ import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_metrics.dart';
 
-// import 'package:kryptopedia_2025/util/dbhelpers/dbeventinsights.dart';
+import 'package:kryptopedia/util/db/tba_insights.dart';
 import 'package:kryptopedia/util/db/tba_ranking.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
@@ -39,10 +39,10 @@ class CalculateAllTeamMetrics {
     int? ranking = await dbEventRanking.getTeamRanking(teamId);
     teamMetrics.teamRanking = (ranking != null) ? ranking : 0;
 
-    // // Retrieve Event OPRS
-    // DbEventInsights dbEventInsights = DbEventInsights();
-    // double? oprs = await dbEventInsights.getTeamOprs(eventId, teamId);
-    // teamMetrics.teamOprs = (oprs != null) ? oprs : 0.0;
+    // Retrieve Event OPRS
+    DbEventInsights dbEventInsights = DbEventInsights();
+    double? oprs = await dbEventInsights.getTeamOprs(teamId);
+    teamMetrics.teamOprs = (oprs != null) ? oprs : 0.0;
 
     // Retrieve Team Epa
     // DbStatboticsTeamStats dbStatboticsTeamStats = DbStatboticsTeamStats();

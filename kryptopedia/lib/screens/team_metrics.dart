@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:kryptopedia/models/event.dart';
+import 'package:kryptopedia/models/eventinsights.dart';
 import 'package:kryptopedia/models/eventranking.dart';
+import 'package:kryptopedia/models/tba_event_insights.dart';
 import 'package:kryptopedia/models/tba_event_ranking.dart';
 import 'package:kryptopedia/models/tba_rankings.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_flag_application.dart';
 import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/tba_insights.dart';
 import 'package:kryptopedia/util/db/tba_ranking.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
@@ -72,6 +75,38 @@ class _TeamMetricsState extends State<TeamMetrics> {
             EventRanking(
               int.parse(tbaRankings.teamKey.substring(3)),
               tbaRankings.rank,
+            ),
+          );
+        }
+      }
+
+      // Pull current rankings from the Blue Alliance
+      APIResponse eventInsightsResponse = await Api.getTBATeamInsights(
+        activeEvent.code,
+      );
+
+      if (eventInsightsResponse.success && eventInsightsResponse.data != null) {
+        // Create the table
+        DbEventInsights dbEventInsights = DbEventInsights();
+        await dbEventInsights.createEventInsightsTable();
+
+        // Decode the the response
+        TBAEventInsights tbaEventInsights = TBAEventInsights.fromJson(
+          eventInsightsResponse.data,
+        );
+
+        for (MapEntry<String, dynamic> oprsItem
+            in tbaEventInsights.oprs.entries) {
+          double oprsValue = oprsItem.value as double;
+          double dprsValue = tbaEventInsights.dprs[oprsItem.key] as double;
+          double ccwmsValue = tbaEventInsights.ccwms[oprsItem.key] as double;
+
+          await dbEventInsights.insertEventInsights(
+            EventInsights(
+              int.parse(oprsItem.key.substring(3)),
+              oprsValue,
+              dprsValue,
+              ccwmsValue,
             ),
           );
         }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/match_scouting_select.dart';
 import 'package:kryptopedia/dialogs/pit_scouting_select.dart';
 import 'package:kryptopedia/screens/alliance_selection.dart';
+import 'package:kryptopedia/screens/match_preview.dart';
 import 'package:kryptopedia/screens/manage_team_flags.dart';
 import 'package:kryptopedia/screens/pdf_viewer.dart';
 import 'package:kryptopedia/screens/pit_map.dart';
@@ -46,6 +47,11 @@ class MainMenu extends StatelessWidget {
 
         //Gameplay
         MenuSection(([
+          MenuItemDefinition(
+            title: 'Match Preview',
+            icon: Icons.batch_prediction,
+            landscapeWidget: MatchPreview(),
+          ),
           MenuItemDefinition(
             title: "Alliance Selection",
             icon: Icons.dashboard_customize,

@@ -142,11 +142,12 @@ class _MatchSelectState extends State<MatchSelect> {
                       ),
                       child: Switch(
                         value: _team2539MatchesOnly == true,
-                        onChanged: (newValue) {
+                        onChanged: (newValue) async {
                           setState(() {
-                            _team2539MatchesOnly = newValue ? true : false;
+                            _team2539MatchesOnly = newValue;
                             _selectedMatch = -1;
                           });
+                          await getMatchList();
                         },
                         activeTrackColor: Colors.lightGreenAccent,
                         activeColor: Colors.green,

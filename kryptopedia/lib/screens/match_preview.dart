@@ -7,6 +7,7 @@ import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/widgets/predictions/adhoc_select.dart';
 //import 'package:kryptopedia/widgets/match_preview/alliances_select.dart';
 import 'package:kryptopedia/widgets/predictions/match_select.dart';
+import 'package:kryptopedia/widgets/predictions/predictions.dart';
 
 class MatchPreview extends StatefulWidget {
   const MatchPreview({super.key});
@@ -145,7 +146,7 @@ class _MatchPreviewState extends State<MatchPreview> {
               },
             ),
           ),*/
-          /*MatchPredictionViewer(
+          MatchPredictionViewer(
             red1: red1,
             red2: red2,
             red3: red3,
@@ -153,7 +154,7 @@ class _MatchPreviewState extends State<MatchPreview> {
             blue2: blue2,
             blue3: blue3,
             adhoc: (teamSelectType == TeamSelectType.adhoc),
-          ),*/
+          ),
         ],
       ),
     );

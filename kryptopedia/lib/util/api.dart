@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:kryptopedia/models/tba_event_insights.dart';
 // import 'package:kryptopedia/models/tba_event_alliance.dart';
 
 class Api {
@@ -54,9 +53,7 @@ class Api {
       Response response;
       response = await get(
         Uri.parse(url),
-        headers: {
-          "X-TBA-Auth-Key": tbaAuthKey,
-        },
+        headers: {"X-TBA-Auth-Key": tbaAuthKey},
       );
 
       return APIResponse(success: true, data: json.decode(response.body));
@@ -110,11 +107,9 @@ class Api {
     int teamNumber,
     String authToken,
     String lastSync,
-    List<SyncDataItem> data,
-    {
+    List<SyncDataItem> data, {
     bool fromClean = false,
-  }
-  ) async {
+  }) async {
     return await _makeRequest(
       "$serverURL/$teamNumber/api/sync?since=$lastSync&from_clean=$fromClean",
       token: authToken,
@@ -148,11 +143,25 @@ class APIResponse<T> {
 class SyncDataItem {
   final String type;
   final dynamic data;
+  final String uid;
+  final String? scouterId;
   final bool deleted;
 
-  SyncDataItem({required this.type, required this.data, this.deleted = false});
+  SyncDataItem({
+    required this.type,
+    required this.data,
+    required this.uid,
+    this.scouterId,
+    this.deleted = false,
+  });
 
   Map<String, dynamic> toMap() {
-    return {"type": type, "data": data, "deleted": deleted};
+    return {
+      "type": type,
+      "data": data,
+      "uid": uid,
+      "scouter_id": scouterId,
+      "deleted": deleted,
+    };
   }
 }

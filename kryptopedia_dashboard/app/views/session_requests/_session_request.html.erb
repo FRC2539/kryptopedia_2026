@@ -13,7 +13,7 @@
   <% end %>
 
   <div class="buttons">
-    <%= button_to "approve", team_approve_session_request_path(@team, session_request), data: { turbo_confirm: 'Approve this session?' } %>
-    <%= button_to "no!", team_destroy_session_request_path(@team, session_request), method: :delete, data: { turbo_confirm: 'Delete this session request?' } %>
+    <%= button_to "approve", team_approve_session_request_path(session_request.device.team, session_request), data: { turbo_confirm: 'Approve this session?' } %>
+    <%= button_to "no!", team_destroy_session_request_path(session_request.device.team, session_request), method: :delete, data: { turbo_confirm: 'Delete this session request?' } %>
   </div>
 </div>

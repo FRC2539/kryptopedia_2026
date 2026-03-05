@@ -17,7 +17,7 @@ class PreloadedFlagsController < ApplicationController
   def create
     @flag = @scouted_event.preloaded_flags.new(flag_params)
     if @flag.save
-      redirect_to team_scouted_event_preloaded_flags_path(@scouted_event.owner, @scouted_event), notice: "Flag added!"
+      redirect_to team_scouted_event_preloaded_flags_path(@scouted_event), notice: "Flag added!"
     else
       render :new
     end
@@ -26,7 +26,7 @@ class PreloadedFlagsController < ApplicationController
   def destroy
     @flag = @scouted_event.preloaded_flags.find(params[:id])
     @flag.destroy
-    redirect_to team_scouted_event_preloaded_flags_path(@scouted_event.owner, @scouted_event), notice: "Flag removed!"
+    redirect_to team_scouted_event_preloaded_flags_path(@scouted_event), notice: "Flag removed!"
   end
 
   private

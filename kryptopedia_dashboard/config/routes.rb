@@ -29,7 +29,9 @@ Rails.application.routes.draw do
       post "matches/download-from-tba" => "matches#download_matches_from_tba", as: :download_matches_from_tba
       get "teams" => "scouted_events#index_teams", as: :teams
       post "teams/download-from-tba" => "scouted_events#download_teams", as: :download_teams_from_tba
-      resources :scouting_data_items
+      resources :scouting_data_items, param: :uid do
+        post "restore" => "scouting_data_items#restore", as: :restore
+      end
       resources :preloaded_flags
     end
 

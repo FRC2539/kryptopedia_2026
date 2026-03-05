@@ -145,8 +145,15 @@ class ScoutedMatch {
   SyncDataItem toSyncDataItem() {
     Map<String, dynamic> map = toMap();
     map.remove(localKey);
+    map.remove(uidKey);
+    map.remove(scouterIdKey);
 
-    return SyncDataItem(type: "scouted_match", data: map);
+    return SyncDataItem(
+      type: "scouted_match",
+      uid: uid,
+      scouterId: scouterId,
+      data: map,
+    );
   }
 }
 

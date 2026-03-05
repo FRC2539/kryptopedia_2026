@@ -1,0 +1,15 @@
+<%= form_with model: [scouting_data_item.scouted_event.owner, scouting_data_item.scouted_event, scouting_data_item] do |f| %>
+  <div>
+    <%= f.label :data_type %>
+    <%= f.text_field :data_type, disabled: true %>
+    <%= error_messages_for scouting_data_item, :data_type %>
+  </div>
+  <div>
+    <%= f.label :data %>
+    <%= f.textarea :data, value: JSON.pretty_generate(scouting_data_item.data) %>
+    <%= error_messages_for scouting_data_item, :data_value %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

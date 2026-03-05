@@ -199,7 +199,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.purple,
                         label: "Subtract fuel scored",
                         onPressed: () {
-                          if (scoutedMatchSingleton.autoFuelScored <= 1) return;
+                          if (scoutedMatchSingleton.autoFuelScored <= 0) return;
                           scoutedMatchSingleton.autoFuelScored--;
                           vibrate(HapticsType.warning);
                         },
@@ -247,7 +247,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.purple,
                         label: "Subtract fuel scored",
                         onPressed: () {
-                          if (scoutedMatchSingleton.teleopFuelScored <= 1) {
+                          if (scoutedMatchSingleton.teleopFuelScored <= 0) {
                             return;
                           }
                           scoutedMatchSingleton.teleopFuelScored--;
@@ -258,7 +258,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.purple,
                         label: "Subtract fuel fed",
                         onPressed: () {
-                          if (scoutedMatchSingleton.teleopFuelFed <= 1) return;
+                          if (scoutedMatchSingleton.teleopFuelFed <= 0) return;
                           scoutedMatchSingleton.teleopFuelFed--;
                           vibrate(HapticsType.warning);
                         },

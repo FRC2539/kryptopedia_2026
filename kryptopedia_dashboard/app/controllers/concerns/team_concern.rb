@@ -41,4 +41,8 @@ module TeamConcern
     end
   end
 
+  def default_url_options
+    { team_number: @team.number }
+  end
+
 end

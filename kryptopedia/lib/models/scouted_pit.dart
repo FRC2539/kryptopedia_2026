@@ -155,8 +155,15 @@ class ScoutedPit {
   SyncDataItem toSyncDataItem() {
     Map<String, dynamic> map = toMap();
     map.remove(localKey);
+    map.remove(uidKey);
+    map.remove(scouterIdKey);
 
-    return SyncDataItem(type: "scouted_pit", data: map);
+    return SyncDataItem(
+      type: "scouted_pit",
+      uid: uid,
+      scouterId: scouterId,
+      data: map,
+    );
   }
 
   Future<String> get photoPath async {

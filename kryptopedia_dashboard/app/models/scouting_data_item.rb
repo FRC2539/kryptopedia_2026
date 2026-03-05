@@ -48,5 +48,11 @@ class ScoutingDataItem < ApplicationRecord
     update!(deleted_at: Time.current)
   end
 
+  def to_param
+    uid
+  end
+
+  default_scope -> { order(created_at: :desc) }
+
   scope :alive, -> { where(deleted_at: nil) }
 end

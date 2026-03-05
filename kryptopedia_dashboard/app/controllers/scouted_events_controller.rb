@@ -17,7 +17,7 @@ class ScoutedEventsController < ApplicationController
   def update
     @scouted_event = @team.scouted_events.find_by_hashid!(params[:id])
     if @scouted_event.update(scouted_event_params)
-      redirect_to team_scouted_events_path(@team), notice: "Scouted event updated successfully."
+      redirect_to edit_team_scouted_event_path(@team), notice: "Scouted event updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -30,14 +30,14 @@ class ScoutedEventsController < ApplicationController
 
   def download_teams
     @scouted_event = @team.scouted_events.find_by_hashid!(params[:scouted_event_id])
-    redirect_to edit_team_scouted_event_path(@scouted_event.owner, @scouted_event), alert: "TBA Sync is disabled" and return unless @scouted_event.tba_sync?
+    redirect_to edit_team_scouted_event_path(@scouted_event), alert: "TBA Sync is disabled" and return unless @scouted_event.tba_sync?
 
     teams_numbers = TBAService.event_teams(2026, @scouted_event.code).map { |team_data| team_data["team_number"] }
     teams = teams_numbers.map { |num| Team.find_or_create_by!(number: num) }
 
     @scouted_event.teams = teams
 
-    redirect_to team_scouted_event_teams_path(@scouted_event.owner, @scouted_event), notice: "Teams downloaded!"
+    redirect_to team_scouted_event_teams_path(@scouted_event), notice: "Teams downloaded!"
   end
 
   private

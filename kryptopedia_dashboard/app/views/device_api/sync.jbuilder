@@ -1,4 +1,4 @@
-json.synced_to @synced_to.iso8601
+json.synced_to @synced_to.iso8601(6)
 json.pit_map_data @event.pit_map if @should_update_pit_map
 
 json.items do
@@ -32,14 +32,8 @@ json.items do
   json.array! @scouting_data_items do |item|
     json.type item.data_type
     json.deleted !!item.deleted_at
-    # if item.deleted?
-    #   json.data do
-    #     json.uid item.uid
-    #   end
-    # else
-    #   json.data JSON.parse(item.data)
-    # end
-    json.data JSON.parse(item.data)
+    # TODO: do not send full items for deletions!
+    json.data item.data.merge({ "uid" => item.uid, "scouter_id" => item.team_member&.hashid })
   end
 
   json.array! @preloaded_flags do |flag|

@@ -1,6 +1,6 @@
 <div class="card">
   <p> 📅 <%= link_to scouted_event.name, edit_team_scouted_event_path(scouted_event.owner, scouted_event) %></p>
-  <p> 🤖 <em><%= scouted_event.teams.count %></em> teams</p>
-  <p> 🏆 <em><%= scouted_event.matches.count %></em> matches </p>
-  <p> 📊 <em><%= scouted_event.scouting_data_items.count %></em> scouting data items</p>
+  <p> 🤖 <%= pluralize(scouted_event.teams.count, 'team') %></p>
+  <p> 🏆 <%= pluralize(scouted_event.matches.count, 'match') %></p>
+  <p> 📊 <%= pluralize(scouted_event.scouting_data_items.alive.count, 'scouting data items') %></p>
 </div>

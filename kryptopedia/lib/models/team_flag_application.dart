@@ -44,12 +44,12 @@ class TeamFlagApplication {
     Map<String, dynamic> map = toMap();
     map.remove(localKey);
     map.remove(deletedKey);
-    map["uid"] = "$name-$teamNumber";
 
     return SyncDataItem(
       type: "team_flag_application",
       data: map,
       deleted: deleted,
+      uid: "$name-$teamNumber",
     );
   }
 }

@@ -4,9 +4,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 //import 'package:kryptopedia/util/db/eventalliances.dart';
 
 import 'package:kryptopedia/util/deviceinfo.dart';
-import 'package:kryptopedia/widgets/match_preview/adhoc_select.dart';
+import 'package:kryptopedia/widgets/predictions/adhoc_select.dart';
 //import 'package:kryptopedia/widgets/match_preview/alliances_select.dart';
-import 'package:kryptopedia/widgets/match_preview/match_select.dart';
+import 'package:kryptopedia/widgets/predictions/match_select.dart';
 
 class MatchPreview extends StatefulWidget {
   const MatchPreview({super.key});

@@ -28,9 +28,12 @@ class _TeamMetricsState extends State<TeamMetrics> {
   bool showFlags = false;
   bool importTBAInfo = false;
 
-  List<String> activeFlags = [];
   int updateCount = 0;
   List<int> teams = [];
+
+  List<String> activeFlags = [];
+  Map<String, List<int>> teamFlags = {};
+
   ValueNotifier<TeamsToShow> teamsToShowNotifier = ValueNotifier<TeamsToShow>(
     TeamsToShow.init([], false),
   );
@@ -139,7 +142,7 @@ class _TeamMetricsState extends State<TeamMetrics> {
         );
       }
 
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -170,56 +173,75 @@ class _TeamMetricsState extends State<TeamMetrics> {
       ),
     );
 
-    // for (TeamFlagApplication teamFlag in teamFlagApplication) {
-    //   if (teamFlag.teamNumbers.isNotEmpty) {
-    //     if (context.mounted) {
-    //       chips.add(
-    //         Padding(
-    //           padding: const EdgeInsets.all(5.0),
-    //           child: ElevatedButton(
-    //             style: ElevatedButton.styleFrom(
-    //               backgroundColor: (activeFlags.contains(teamFlag.name))
-    //                   ? Colors.orange.shade300
-    //                   : Colors.black,
-    //               side: BorderSide(width: 2.0, color: Colors.orange.shade300),
-    //             ),
-    //             child: AutoSizeText(
-    //               teamFlag.name,
-    //               textAlign: TextAlign.center,
-    //               style: TextStyle(
-    //                 color: (activeFlags.contains(teamFlag.name))
-    //                     ? Colors.black
-    //                     : Colors.white,
-    //                 fontSize: 14.0,
-    //               ),
-    //             ),
-    //             onPressed: () async {
-    //               setState(() {
-    //                 (!activeFlags.contains(teamFlag.name))
-    //                     ? activeFlags.add(teamFlag.name)
-    //                     : activeFlags.remove(teamFlag.name);
+    // Get a list of active flags (flags with teams assigned)
+    if (teamFlags.isEmpty) {
+      teamFlags = await dbTeamFlagApplications
+          .getActiveTeamFlagApplicationsAsMap();
+    }
 
-    //                 teams = [];
-    //                 for (Team team in eventTeams) {
-    //                   bool teamFound = true;
-    //                   for (TeamFlagApplication teamFlag in teamFlagApplication) {
-    //                     if (activeFlags.contains(teamFlag.name) &&
-    //                         !teamFlag.teamNumbers.contains(team.teamnumber)) {
-    //                       teamFound = false;
-    //                     }
-    //                   }
-    //                   if (teamFound) teams.add(team.teamnumber);
-    //                 }
+    List<String> flagsWithTeams = [];
+    for (TeamFlagApplication teamFlagApplication in teamFlagApplication) {
+      if (!flagsWithTeams.contains(teamFlagApplication.name)) {
+        flagsWithTeams.add(teamFlagApplication.name);
+      }
+    }
 
-    //                 teamsToShowNotifier.value = TeamsToShow.init(teams, true);
-    //               });
-    //             },
-    //           ),
-    //         ),
-    //       );
-    //     }
-    //   }
-    // }
+    // Determine the list of teams to display
+    List<int> listOfTeamsToDisplay = [];
+
+    for (Team team in eventTeams) {
+      bool teamFound = true;
+      teamFlags.forEach((key, value) {
+        if (activeFlags.contains(key) && !value.contains(team.number)) {
+          teamFound = false;
+        }
+      });
+      if (teamFound) listOfTeamsToDisplay.add(team.number);
+    }
+
+    // Trigger an update of the Team Metrics table
+    teamsToShowNotifier.value = TeamsToShow.init(
+      listOfTeamsToDisplay,
+      activeFlags.isNotEmpty,
+    );
+
+    // Create the Flag chips
+    for (String key in teamFlags.keys) {
+      if (context.mounted) {
+        chips.add(
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: (activeFlags.contains(key))
+                    ? Colors.orange.shade300
+                    : Colors.black,
+                side: BorderSide(width: 2.0, color: Colors.orange.shade300),
+              ),
+              child: AutoSizeText(
+                key,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: (activeFlags.contains(key))
+                      ? Colors.black
+                      : Colors.white,
+                  fontSize: 14.0,
+                ),
+              ),
+              onPressed: () async {
+                setState(() {
+                  (!activeFlags.contains(key))
+                      ? activeFlags.add(key)
+                      : activeFlags.remove(key);
+
+                  teamsToShowNotifier.value = TeamsToShow.init(teams, true);
+                });
+              },
+            ),
+          ),
+        );
+      }
+    }
 
     return chips;
   }
@@ -252,6 +274,7 @@ class _TeamMetricsState extends State<TeamMetrics> {
                 onPressed: () {
                   setState(() {
                     showFlags = !showFlags;
+                    activeFlags = [];
                   });
                 },
               ),

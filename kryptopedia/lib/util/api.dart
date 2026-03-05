@@ -117,6 +117,69 @@ class Api {
     );
   }
 
+  static Future<APIResponse> uploadPhoto(
+    String serverURL,
+    int teamNumber,
+    String authToken,
+    String associatedRecordUid,
+    String photoPath,
+  ) async {
+    try {
+      String appVersion = await PackageInfo.fromPlatform().then(
+        (packageInfo) => packageInfo.version,
+      );
+      var request = MultipartRequest(
+        'POST',
+        Uri.parse("$serverURL/$teamNumber/api/photos/$associatedRecordUid"),
+      );
+      request.headers.addAll({
+        "X-App-Version": appVersion,
+        "Authorization": "Bearer $authToken",
+      });
+      request.files.add(await MultipartFile.fromPath('photo', photoPath));
+      StreamedResponse response = await request.send();
+      if (response.statusCode.toString().startsWith("2")) {
+        return APIResponse(
+          success: true,
+          data: json.decode(
+            await response.stream.bytesToString(),
+          )["upload_time"],
+        );
+      } else {
+        return APIResponse(success: false, data: response.statusCode);
+      }
+    } catch (e) {
+      return APIResponse(success: false, data: e);
+    }
+  }
+
+  static Future<APIResponse> downloadPitPhoto(
+    String serverURL,
+    int teamNumber,
+    String authToken,
+    String associatedRecordUid,
+  ) async {
+    try {
+      String appVersion = await PackageInfo.fromPlatform().then(
+        (packageInfo) => packageInfo.version,
+      );
+      Response response = await get(
+        Uri.parse("$serverURL/$teamNumber/api/photos/$associatedRecordUid"),
+        headers: {
+          "X-App-Version": appVersion,
+          "Authorization": "Bearer $authToken",
+        },
+      );
+      if (response.statusCode.toString().startsWith("2")) {
+        return APIResponse(success: true, data: response.bodyBytes);
+      } else {
+        return APIResponse(success: false, data: response.statusCode);
+      }
+    } catch (e) {
+      return APIResponse(success: false, data: e);
+    }
+  }
+
   static Future<APIResponse> getTBATeamRankings(String eventCode) async {
     return await _makeTbaRequest(
       "https://www.thebluealliance.com/api/v3/event/2025${eventCode.toLowerCase()}/rankings",
@@ -139,7 +202,6 @@ class APIResponse<T> {
   APIResponse({required this.success, required this.data});
 }
 
-/// param data MUST INCLUDE "uid"
 class SyncDataItem {
   final String type;
   final dynamic data;

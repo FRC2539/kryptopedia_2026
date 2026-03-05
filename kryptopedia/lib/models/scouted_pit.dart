@@ -15,6 +15,14 @@ class ScoutedPit {
     _local = value ? 1 : 0;
   }
 
+  int? _serverPhotoUpdated;
+  DateTime? get serverPhotoUpdated => _serverPhotoUpdated == null
+      ? null
+      : DateTime.fromMillisecondsSinceEpoch(_serverPhotoUpdated!);
+  set serverPhotoUpdated(DateTime? value) {
+    _serverPhotoUpdated = value?.millisecondsSinceEpoch;
+  }
+
   int teamNumber = 0;
 
   int weight = 0;
@@ -72,6 +80,7 @@ class ScoutedPit {
 
     teamNumber = team;
     local = true;
+  
 
     isKitBot = false;
     weight = 110;
@@ -94,6 +103,7 @@ class ScoutedPit {
   static const uidKey = "uid";
   static const scouterIdKey = "scouter_id";
   static const localKey = "local";
+  static const serverPhotoUpdatedKey = "server_photo_updated";
   static const teamNumberKey = "team_number";
   static const weightKey = "weight";
   static const widthKey = "width";
@@ -116,6 +126,7 @@ class ScoutedPit {
       uidKey: uid,
       scouterIdKey: scouterId,
       localKey: _local,
+      serverPhotoUpdatedKey: _serverPhotoUpdated,
       teamNumberKey: teamNumber,
       weightKey: weight,
       widthKey: width,
@@ -137,6 +148,7 @@ class ScoutedPit {
     : uid = map[uidKey],
       scouterId = map[scouterIdKey],
       _local = map[localKey] == 1 ? 1 : 0,
+      _serverPhotoUpdated = map[serverPhotoUpdatedKey], 
       teamNumber = map[teamNumberKey],
       weight = map[weightKey],
       width = map[widthKey],
@@ -157,6 +169,7 @@ class ScoutedPit {
     map.remove(localKey);
     map.remove(uidKey);
     map.remove(scouterIdKey);
+    map.remove(serverPhotoUpdatedKey);
 
     return SyncDataItem(
       type: "scouted_pit",

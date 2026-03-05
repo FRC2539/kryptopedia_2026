@@ -82,4 +82,26 @@ class DeviceApiController < ApplicationController
     current_user.update! last_sync: @synced_to
   end
 
+  def upload_scouting_data_item_photo
+    event = current_user.active_event
+
+    item = event.scouting_data_items.find_by!(uid: params[:uid])
+    item.image.attach(params[:photo])
+    item.save!
+    item.reload
+    render json: { upload_time: item.image.blob.created_at.to_i * 1000 }
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
+  end
+
+  def download_scouting_data_item_photo
+    event = current_user.active_event
+
+    item = event.scouting_data_items.find_by!(uid: params[:uid])
+    return head :not_found unless item.image.attached?
+    redirect_to url_for(item.image), allow_other_host: true
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
+  end
+
 end

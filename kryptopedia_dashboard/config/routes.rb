@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     get "api/poke-session" => "device_api#check_session_request"
     get "api/me" => "device_api#me"
     post "api/sync" => "device_api#sync"
-
+    post "api/photos/:uid" => "device_api#upload_scouting_data_item_photo"
+    get "api/photos/:uid" => "device_api#download_scouting_data_item_photo"
   end
 end

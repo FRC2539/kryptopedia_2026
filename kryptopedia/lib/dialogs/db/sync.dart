@@ -78,7 +78,7 @@ class _SyncPopupState extends State<SyncPopup> {
                         setState(() {
                           syncEnabled = false;
                         });
-                        await syncDataFlow(context);
+                        await syncFlow(context);
                         this.event = getEvent();
                         setState(() {
                           syncEnabled = true;
@@ -95,7 +95,7 @@ class _SyncPopupState extends State<SyncPopup> {
                         setState(() {
                           syncEnabled = false;
                         });
-                        await syncDataFlow(context, hard: true);
+                        await syncFlow(context, hard: true);
                         this.event = getEvent();
                         setState(() {
                           syncEnabled = true;

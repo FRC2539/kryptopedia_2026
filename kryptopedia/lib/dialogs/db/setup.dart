@@ -198,22 +198,9 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     await dbEvents.upsertEvent(eventData);
 
     if (!mounted) return;
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      useRootNavigator: false,
-      builder: (context) => NotificationDialog(
-        title: "Syncing data",
-        body: "Syncing data with server...",
-        showOkButton: false,
-      ),
-    );
+    await syncFlow(context, fromClean: widget.fromClean);
 
     if (!mounted) return;
-    await syncDataFlow(context, fromClean: widget.fromClean);
-
-    if (!mounted) return;
-    Navigator.pop(context);
     Navigator.pop(context);
   }
 

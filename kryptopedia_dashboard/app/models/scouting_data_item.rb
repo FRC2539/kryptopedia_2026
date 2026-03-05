@@ -31,28 +31,14 @@ class ScoutingDataItem < ApplicationRecord
   validates :data_type, presence: true
   validates :data, presence: true
 
-  def deleted?
-    deleted_at.present?
-  end
+  include SoftDeleteConcern
 
-  def destroy
-    soft_delete
-  end
-
-  def delete
-    soft_delete
-  end
-
-  def soft_delete
-    return if deleted_at.present?
-    update!(deleted_at: Time.current)
-  end
+  has_one_attached :image
+  validates :image, size: { less_than: 10.megabytes }
 
   def to_param
     uid
   end
 
   default_scope -> { order(created_at: :desc) }
-
-  scope :alive, -> { where(deleted_at: nil) }
 end

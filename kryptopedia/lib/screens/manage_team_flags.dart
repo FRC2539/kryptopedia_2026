@@ -89,7 +89,7 @@ class _ManageTeamFlagsState extends State<ManageTeamFlags> {
                             setState(() {
                               syncEnabled = false;
                             });
-                            await syncDataFlow(context);
+                            await syncFlow(context);
                             getLastSync();
                           }
                         : null,

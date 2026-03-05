@@ -12,6 +12,7 @@ class DbScoutedPits {
       "${ScoutedPit.uidKey} TEXT PRIMARY KEY, "
       "${ScoutedPit.scouterIdKey} TEXT NOT NULL, "
       "${ScoutedPit.localKey} INTEGER NOT NULL, "
+      "${ScoutedPit.serverPhotoUpdatedKey} INTEGER, "
       "${ScoutedPit.teamNumberKey} INTEGER NOT NULL, "
       "${ScoutedPit.weightKey} INTEGER NOT NULL, "
       "${ScoutedPit.widthKey} INTEGER NOT NULL, "
@@ -29,8 +30,7 @@ class DbScoutedPits {
     );
   }
 
-
-Future<int> upsertScoutedPit(ScoutedPit scoutedPit) async {
+  Future<int> upsertScoutedPit(ScoutedPit scoutedPit) async {
     Database db = await dbHelper.db;
     int result = await db.insert(
       ScoutedPit.tableName,
@@ -107,6 +107,19 @@ Future<int> upsertScoutedPit(ScoutedPit scoutedPit) async {
       whereArgs: [uid],
     );
 
+    return result;
+  }
+
+  Future<int> updateScoutedPitPhotoTimestamp(String uid, int timestamp) async {
+    Database db = await dbHelper.db;
+
+    int result = await db.update(
+      ScoutedPit.tableName,
+      {ScoutedPit.serverPhotoUpdatedKey: timestamp},
+      where: "${ScoutedPit.uidKey} = ?",
+      whereArgs: [uid],
+    );
+    
     return result;
   }
 }

@@ -33,7 +33,7 @@ json.items do
     json.type item.data_type
     json.deleted !!item.deleted_at
     # TODO: do not send full items for deletions!
-    json.data item.data.merge({ "uid" => item.uid, "scouter_id" => item.team_member&.hashid })
+    json.data item.data.merge({ "uid" => item.uid, "scouter_id" => item.team_member&.hashid, "server_photo_updated" => item.image.attached? ? item.image.blob.created_at.to_i * 1000 : nil })
   end
 
   json.array! @preloaded_flags do |flag|

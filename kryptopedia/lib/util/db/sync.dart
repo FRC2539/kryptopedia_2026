@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/models/event.dart';
@@ -55,7 +57,7 @@ Future<APIResponse> syncData({
         ? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toIso8601String()
         : event.lastSync!.toUtc().toIso8601String(),
     dataToPush,
-    fromClean: fromClean
+    fromClean: fromClean,
   );
   if (!pulledData.success) {
     return APIResponse(
@@ -193,27 +195,151 @@ Future<APIResponse> syncData({
   );
 }
 
-Future syncDataFlow(
+Future<APIResponse> uploadPitPhotos(Event event) async {
+  DbScoutedPits dbScoutedPits = DbScoutedPits();
+
+  List<ScoutedPit> scoutedPits = await dbScoutedPits.getScoutedPits();
+  int successCount = 0;
+  for (ScoutedPit pit in scoutedPits) {
+    try {
+      if (pit.serverPhotoUpdated != null || pit.local) continue;
+      String path = await pit.photoPath;
+      if (!await File(path).exists()) continue;
+      APIResponse response = await Api.uploadPhoto(
+        event.serverURL!,
+        event.teamNumber,
+        event.authToken!,
+        pit.uid,
+        path,
+      );
+      if (!response.success) throw response.data;
+      await dbScoutedPits.updateScoutedPitPhotoTimestamp(
+        pit.uid,
+        response.data,
+      );
+      successCount++;
+    } catch (e) {
+      return APIResponse(
+        success: false,
+        data: "Error uploading photo for ${pit.teamNumber}: $e",
+      );
+    }
+  }
+  return APIResponse(success: true, data: "Uploaded $successCount photos");
+}
+
+Future<APIResponse> downloadPitPhotos(Event event) async {
+  DbScoutedPits dbScoutedPits = DbScoutedPits();
+
+  List<ScoutedPit> scoutedPits = await dbScoutedPits.getScoutedPits();
+  int successCount = 0;
+  for (ScoutedPit pit in scoutedPits) {
+    try {
+      if (pit.serverPhotoUpdated == null || pit.local) continue;
+      File existingFile = File(await pit.photoPath);
+      if (await existingFile.exists() &&
+          existingFile.lastModifiedSync().isAfter(pit.serverPhotoUpdated!)) {
+        continue;
+      }
+      APIResponse response = await Api.downloadPitPhoto(
+        event.serverURL!,
+        event.teamNumber,
+        event.authToken!,
+        pit.uid,
+      );
+      if (!response.success) {
+        return APIResponse(
+          success: false,
+          data:
+              "Error downloading photo for ${pit.teamNumber}: ${response.data}",
+        );
+      }
+      String path = await pit.photoPath;
+      File file = File(path);
+      await file.create(recursive: true);
+      await file.writeAsBytes(response.data);
+      successCount++;
+    } catch (e) {
+      return APIResponse(
+        success: false,
+        data: "Error downloading photo for ${pit.teamNumber}: $e",
+      );
+    }
+  }
+  return APIResponse(success: true, data: "Downloaded $successCount photos");
+}
+
+Future syncFlow(
   BuildContext context, {
   bool hard = false,
   bool fromClean = false,
 }) async {
-  APIResponse response = await syncData(hard: hard, fromClean: fromClean);
-  if (!response.success) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    useRootNavigator: false,
+    builder: (context) => NotificationDialog(
+      title: "Syncing data",
+      body: "Syncing data with server...",
+      showOkButton: false,
+    ),
+  );
+
+  APIResponse dataSyncResponse = await syncData(
+    hard: hard,
+    fromClean: fromClean,
+  );
+  if (!dataSyncResponse.success) {
     if (!context.mounted) return;
-    await showDialog(
+    Navigator.pop(context);
+    showDialog(
       context: context,
       builder: (context) =>
-          NotificationDialog(title: "Sync Error", body: response.data),
+          NotificationDialog(title: "Sync Error", body: dataSyncResponse.data),
     );
-  } else {
+    return;
+  }
+
+  APIResponse uploadResponse = await uploadPitPhotos(
+    await DbEvents().getEvent(),
+  );
+  if (!uploadResponse.success) {
     if (!context.mounted) return;
-    await showDialog(
+    Navigator.pop(context);
+    showDialog(
       context: context,
       builder: (context) => NotificationDialog(
-        title: "Sync Complete",
-        body: "Data synced successfully! woohoo\n\n${response.data}",
+        title: "Photo Upload Error",
+        body: uploadResponse.data,
       ),
     );
+    return;
   }
+
+  APIResponse downloadResponse = await downloadPitPhotos(
+    await DbEvents().getEvent(),
+  );
+  if (!downloadResponse.success) {
+    if (!context.mounted) return;
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) => NotificationDialog(
+        title: "Photo Download Error",
+        body: downloadResponse.data,
+      ),
+    );
+    return;
+  }
+
+  if (!context.mounted) return;
+  Navigator.pop(context);
+  await showDialog(
+    context: context,
+    builder: (context) => NotificationDialog(
+      title: "Sync Complete",
+      body:
+          "Data synced successfully! woohoo\n\n${dataSyncResponse.data}\n${uploadResponse.data}\n${downloadResponse.data}",
+    ),
+  );
 }

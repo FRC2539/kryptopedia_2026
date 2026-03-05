@@ -1,11 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/util/db/teams.dart';
-import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
@@ -25,7 +23,6 @@ class TeamInfo extends StatefulWidget {
 class _TeamInfoState extends State<TeamInfo> {
   final ValueNotifier<int> _teamChangedNotifier = ValueNotifier<int>(0);
 
-  List<Event> _eventList = [];
   List<Team> _teamList = [];
 
   List<ScoutedMatch> scoutedMatches = [];
@@ -119,7 +116,6 @@ class _TeamInfoState extends State<TeamInfo> {
     );
 
     // Sort the Matches
-    DbMatches dbMatches = DbMatches();
     List<int> matchNumbers = [];
     for (int i = 0; i < scoutedMatches.length; i++) {
       matchNumbers.add(scoutedMatches[i].matchNumber);

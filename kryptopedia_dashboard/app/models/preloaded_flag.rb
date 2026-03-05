@@ -21,18 +21,7 @@ class PreloadedFlag < ApplicationRecord
   include Hashid::Rails
   belongs_to :scouted_event
 
-  def destroy
-    soft_delete
-  end
-
-  def delete
-    soft_delete
-  end
-
-  def soft_delete
-    return if deleted_at.present?
-    update!(deleted_at: Time.current)
-  end
+  include SoftDeleteConcern
 
   scope :alive, -> { where(deleted_at: nil) }
 end

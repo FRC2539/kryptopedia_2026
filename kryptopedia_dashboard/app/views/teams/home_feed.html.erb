@@ -1,7 +1,13 @@
-<% @alert_cards.each do |card| %>
-  <%= render card %>
+<% render @session_requests %>
+
+<% @duplicate_scouting_data_items.each do |items| %>
+  <div class="card">
+    <h3>double scouted? :(</h3>
+    <p>multiple items at <strong><%= items.first.scouted_event.name %></strong> match the same uniqueness keys...</p>
+    <%= render items %>
+  </div>
 <% end %>
 
-<% if @alert_cards.empty? %>
+<% if @session_requests.empty? and @duplicate_scouting_data_items.empty? %>
   <p>nothing to do but scout</p>
 <% end %>

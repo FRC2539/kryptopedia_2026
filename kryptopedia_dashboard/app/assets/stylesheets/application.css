@@ -37,3 +37,6 @@ p {
     color: red;
 }
 
+textarea {
+    field-sizing: content; /*doesnt work everywhere:( going to need a better solution*/
+}

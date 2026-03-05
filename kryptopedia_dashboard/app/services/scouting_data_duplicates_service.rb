@@ -2,7 +2,8 @@ class ScoutingDataDuplicatesService
 
   UNIQUENESS_FIELDS = {
     "scouted_pit" => %w[team_number],
-    "scouted_match" => %w[match_comp_level match_number team_number]
+    "scouted_match" => %w[match_comp_level match_number team_number],
+    "team_flag_application" => %w[team_number name], # uniqueness is guaranteed by the UID, should never hit dupes here
   }.freeze
 
   def initialize(scouted_event)
@@ -11,7 +12,7 @@ class ScoutingDataDuplicatesService
 
   def self.uniqueness_keys_for(item)
     fields = UNIQUENESS_FIELDS[item.data_type]
-    return nil unless fields
+    return [] unless fields
 
     item.data.slice(*fields)
   end
@@ -25,7 +26,7 @@ class ScoutingDataDuplicatesService
   private
 
   def duplicates_for_type(data_type)
-    all_items = @scouted_event.scouting_data_items.alive.where(data_type: data_type)
+    all_items = @scouted_event.scouting_data_items.alive.where(data_type: data_type).unscope(:order)
     fields = UNIQUENESS_FIELDS[data_type]
 
     group_expression = fields.map { |f| Arel.sql("data->>'#{f}'") }

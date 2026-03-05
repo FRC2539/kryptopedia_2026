@@ -41,10 +41,9 @@ class TeamsController < ApplicationController
   end
 
   def home_feed
-    @alert_cards = []
+    @session_requests = SessionRequest.alive.where(device: @team.devices, session_id: nil)
 
-    unanswered_session_requests = SessionRequest.alive.where(device: @team.devices, session_id: nil)
-    @alert_cards += unanswered_session_requests
+    @duplicate_scouting_data_items = @team.scouted_events.flat_map { |e| ScoutingDataDuplicatesService.new(e).all_duplicates }
   end
 
   private

@@ -27,6 +27,6 @@ class Session < ApplicationRecord
   private
 
   def delete_other_sessions
-    Session.where(owner: owner).delete_all
+    Session.where(owner: owner).delete_all if owner.is_a?(Device)
   end
 end

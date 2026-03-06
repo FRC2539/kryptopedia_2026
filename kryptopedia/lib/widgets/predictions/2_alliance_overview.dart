@@ -78,13 +78,11 @@ class AllianceOverview extends StatelessWidget {
       child: Row(
         children: [
           columnMajorHeaders(" ", 65.0, 30.0),
-          columnMajorHeaders("Performance", 3 * 75.0, 30.0),
+          columnMajorHeaders("Performance", 2 * 85.0, 30.0),
           columnMajorHeaders(" ", 65.0, 30.0),
-          columnMajorHeaders("Auto - Min / Max / Avg", 6 * 95.0, 30.0),
+          columnMajorHeaders("Fuel Scoring", 2 * 120.0, 30.0),
           columnMajorHeaders(" ", 65.0, 30.0),
-          columnMajorHeaders("Teleop - Min / Max / Avg", 6 * 95.0, 30.0),
-          columnMajorHeaders(" ", 65.0, 30.0),
-          columnMajorHeaders("Endgame - Counts / Percents", 4 * 75.0, 30.0),
+          columnMajorHeaders("Climb - Counts / %", 5 * 100.0, 30.0),
         ],
       ),
     );
@@ -96,31 +94,17 @@ class AllianceOverview extends StatelessWidget {
       child: Row(
         children: [
           columnMajorHeaders(" ", 65.0, 50.0),
-          columnMajorHeaders("Match\nCount", 75.0, 50.0),
-          columnMajorHeaders("Ops\nIssues", 75.0, 50.0),
-          columnMajorHeaders("Mech\nIssues", 75.0, 50.0),
-
+          columnMajorHeaders("Match\nCount", 85.0, 50.0),
+          columnMajorHeaders("Robot\nIssues / %", 85.0, 50.0),
           columnMajorHeaders(" ", 65.0, 50.0),
-          columnMajorHeaders("Coral\nL1", 95.0, 50.0),
-          columnMajorHeaders("Coral\nL2", 95.0, 50.0),
-          columnMajorHeaders("Coral\nL3", 95.0, 50.0),
-          columnMajorHeaders("Coral\nL4", 95.0, 50.0),
-          columnMajorHeaders("Algae\nProcessor", 95.0, 50.0),
-          columnMajorHeaders("Algae\nNet", 95.0, 50.0),
-
+          columnMajorHeaders("Auto", 120.0, 50.0),
+          columnMajorHeaders("Teleop", 120.0, 50.0),
           columnMajorHeaders(" ", 65.0, 50.0),
-          columnMajorHeaders("Coral\nL1", 95.0, 50.0),
-          columnMajorHeaders("Coral\nL2", 95.0, 50.0),
-          columnMajorHeaders("Coral\nL3", 95.0, 50.0),
-          columnMajorHeaders("Coral\nL4", 95.0, 50.0),
-          columnMajorHeaders("Algae\nProcessor", 95.0, 50.0),
-          columnMajorHeaders("Algae\nNet", 95.0, 50.0),
-
-          columnMajorHeaders(" ", 65.0, 50.0),
-          columnMajorHeaders("None", 75.0, 50.0),
-          columnMajorHeaders("Parked", 75.0, 50.0),
-          columnMajorHeaders("Shallow\nClimb", 75.0, 50.0),
-          columnMajorHeaders("Deep\nClimb", 75.0, 50.0),
+          columnMajorHeaders("Auto", 100.0, 50.0),
+          columnMajorHeaders("Endgame\nNone", 100.0, 50.0),
+          columnMajorHeaders("Endgame\nL1", 100.0, 50.0),
+          columnMajorHeaders("Endgame\nL2", 100.0, 50.0),
+          columnMajorHeaders("Endgame\nL3", 100.0, 50.0),
         ],
       ),
     );
@@ -162,29 +146,92 @@ class AllianceOverview extends StatelessWidget {
       child: Row(
         children: [
           leadLabel(context, teamNumber.toString(), 65.0, (allianceColor == "Red") ? Colors.red : Colors.blue),
-          smallCellContainer(teamInfoSummary.numberOfMatches.toString(), 75.0, false, true),
-        // smallCellContainer(
-        //   "${(teamInfoSummary.summaryOperationalIssuesGamePercents * 100).toStringAsFixed(2)}%", 75.0, false, true),
-        // smallCellContainer(
-        //  "${(teamInfoSummary.summaryMechanicalIssuesGamePercents * 100).toStringAsFixed(2)}%", 75.0, false, true),
+          smallCellContainer(
+            teamInfoSummary.numberOfMatches.toString(),
+            85.0,
+            false,
+            true,
+          ),
+
+          smallCellContainer(
+            teamInfoSummary.numberOfMatches.toString(),
+            85.0,
+            false,
+            true,
+          ),
+
+          // smallCellContainer(
+          //   "${(teamInfoSummary.summaryOperationalIssuesGamePercents * 100).toStringAsFixed(2)}%",
+          //   85.0,
+          //   false,
+          //   true,
+          // ),
+          // smallCellContainer(
+          //   "${(teamInfoSummary.summaryMechanicalIssuesGamePercents * 100).toStringAsFixed(2)}%",
+          //   85.0,
+          //   false,
+          //   true,
+          // ),
 
           leadLabel(context, teamNumber.toString(), 65.0, (allianceColor == "Red") ? Colors.red : Colors.blue),
           smallCellContainer(
             "${teamInfoSummary.autoFuelScoreMin} / " 
             "${teamInfoSummary.autoFuelScoreMax} / "
-            "${teamInfoSummary.autoFuelScoreAverage.toStringAsFixed(2)}", 95.0, false, true),
+            "${teamInfoSummary.autoFuelScoreAverage.toStringAsFixed(2)}",
+            120.0,
+            false,
+            true,
+          ),
           smallCellContainer(
-            "${teamInfoSummary.autoClimbedPercent} / " 
-            " / "
-            "", 95.0, false, true),
-          smallCellContainer(
-            "${teamInfoSummary.teleopFuelScoreMin} / " 
+            "${teamInfoSummary.teleopFuelScoreMin} / "
             "${teamInfoSummary.teleopFuelScoreMax} / "
-            "${teamInfoSummary.teleopFuelScoreAverage.toStringAsFixed(2)}", 95.0, false, true),
+            "${teamInfoSummary.teleopFuelScoreAverage.toStringAsFixed(2)}",
+            120.0,
+            false,
+            true,
+          ),
+
+          leadLabel(
+            context,
+            teamNumber.toString(),
+            65.0,
+            (allianceColor == "Red") ? Colors.red : Colors.blue,
+          ),
           smallCellContainer(
-            "${teamInfoSummary.teleopClimbedPercents[1]} / " 
-            "${teamInfoSummary.teleopClimbedPercents[2]} / "
-            "${teamInfoSummary.teleopClimbedPercents[3]}", 95.0, false, true),
+            "${teamInfoSummary.autoClimbedTotal} / "
+            "${teamInfoSummary.autoClimbedPercent}%",
+            100.0,
+            false,
+            true,
+          ),
+          smallCellContainer(
+            "${teamInfoSummary.teleopClimbedTotals[0]} / "
+            "${teamInfoSummary.teleopClimbedPercents[0]}%",
+            100.0,
+            false,
+            true,
+          ),
+          smallCellContainer(
+            "${teamInfoSummary.teleopClimbedTotals[1]} / "
+            "${teamInfoSummary.teleopClimbedPercents[1]}%",
+            100.0,
+            false,
+            true,
+          ),
+          smallCellContainer(
+            "${teamInfoSummary.teleopClimbedTotals[2]} / "
+            "${teamInfoSummary.teleopClimbedPercents[2]}%",
+            100.0,
+            false,
+            true,
+          ),
+          smallCellContainer(
+            "${teamInfoSummary.teleopClimbedTotals[3]} / "
+            "${teamInfoSummary.teleopClimbedPercents[3]}%",
+            100.0,
+            false,
+            true,
+          ),
         ],
       ),
     );

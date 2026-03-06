@@ -150,7 +150,7 @@ class _MatchSelectState extends State<MatchSelect> {
                           await getMatchList();
                         },
                         activeTrackColor: Colors.lightGreenAccent,
-                        activeColor: Colors.green,
+                        activeThumbColor: Colors.green,
                       ),
                     ),
                   ],
@@ -169,20 +169,20 @@ class _MatchSelectState extends State<MatchSelect> {
     if (_team2539MatchesOnly == true) {
       matches.removeWhere(
         (match) =>
-            match.red1number != 2539 &&
-            match.red2number != 2539 &&
-            match.red3number != 2539 &&
-            match.blue1number != 2539 &&
-            match.blue2number != 2539 &&
-            match.blue3number != 2539,
+            [
+              match.red1number,
+              match.red2number,
+              match.red3number,
+              match.blue1number,
+              match.blue2number,
+              match.blue3number,
+            ].contains(2539) ==
+            false
       );
     }
 
     matches.sort((a, b) {
-      int matchid1 = a.number;
-      int matchid2 = b.number;
-
-      return (matchid1).compareTo(matchid2);
+      return (a.number).compareTo(b.number);
     });
 
     if (_selectedMatch == -1) {

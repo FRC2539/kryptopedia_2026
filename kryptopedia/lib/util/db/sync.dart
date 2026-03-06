@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/notification.dart';
 import 'package:kryptopedia/models/event.dart';
@@ -95,7 +96,7 @@ Future<APIResponse> syncData({
   DbMatches dbMatches = DbMatches();
   DbPreloadedFlags dbPreloadedFlags = DbPreloadedFlags();
 
-  print(pulledData.data);
+  if (kDebugMode) print(pulledData.data);
 
   if (pulledData.data["pit_map_data"] != null) {
     await dbEvents.updatePitMapData(pulledData.data["pit_map_data"]);

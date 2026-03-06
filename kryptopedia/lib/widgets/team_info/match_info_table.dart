@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/match.dart';
+import 'package:kryptopedia/models/team_metrics.dart';
+import 'package:kryptopedia/util/2026helpers/calculate_all_team_metrics.dart';
 import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/widgets/common/label.dart';
 import 'package:kryptopedia/widgets/team_info/team_tables.dart';
@@ -60,15 +62,21 @@ class TeamInfoMatchesTable extends StatelessWidget {
   Future<List<TableRow>> createMatchInfoTable(BuildContext context) async {
     DbMatches dbMatch = DbMatches();
 
-    List<TableRow> autonomousTable = [];
+    List<TableRow> table = [];
+
+    CalculateAllTeamMetrics calculateAllTeamMetrics = CalculateAllTeamMetrics();
+
+    TeamMetrics stats = await calculateAllTeamMetrics.calculateTeamMetrics(
+      scoutedMatches.first.teamNumber,
+    );
 
     // Display table headers
-    autonomousTable.add(
+    table.add(
       TableRow(
         children: [
           TeamInfoTables.topHeader(
             context,
-            140.0,
+            100.0,
             "Match #",
             Colors.white,
             false,
@@ -109,7 +117,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
           TeamInfoTables.topHeader(
             context,
             70.0,
-            "Climb Level",
+            "Didn't climb",
             Colors.white,
             false,
             true,
@@ -117,7 +125,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
           TeamInfoTables.topHeader(
             context,
             70.0,
-            "Robot Roles",
+            "L1\nClimb",
             Colors.white,
             false,
             true,
@@ -125,7 +133,71 @@ class TeamInfoMatchesTable extends StatelessWidget {
           TeamInfoTables.topHeader(
             context,
             70.0,
-            "Penalties",
+            "L2\nClimb",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
+            70.0,
+            "L3\nClimb",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
+            70.0,
+            "Offense",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
+            70.0,
+            "Defense",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
+            80.0,
+            "No\nPenalties",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
+            80.0,
+            "One Penalty",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
+            80.0,
+            "Few Penalties",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
+            80.0,
+            "Many Penalties",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
+            70.0,
+            "Issues",
             Colors.white,
             false,
             true,
@@ -141,14 +213,14 @@ class TeamInfoMatchesTable extends StatelessWidget {
       );
 
       if (context.mounted) {
-        autonomousTable.add(
+        table.add(
           TableRow(
             children: [
               TeamInfoTables.displayCell(
                 match.number.toString(),
                 false,
                 context,
-                140.0,
+                100.0,
                 Colors.white,
                 Colors.black,
                 false,
@@ -190,7 +262,9 @@ class TeamInfoMatchesTable extends StatelessWidget {
                 true,
               ),
               TeamInfoTables.displayCell(
-                scoutedMatches[i].climbLevel.name,
+                scoutedMatches[i].climbLevel == ClimbLevel.none
+                    ? "\u2713"
+                    : "--",
                 false,
                 context,
                 70.0,
@@ -199,9 +273,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
                 true,
               ),
               TeamInfoTables.displayCell(
-                scoutedMatches[i].robotRoles
-                    .map((role) => role.name[0].toUpperCase())
-                    .join(", "),
+                scoutedMatches[i].climbLevel == ClimbLevel.L1 ? "\u2713" : "--",
                 false,
                 context,
                 70.0,
@@ -210,7 +282,83 @@ class TeamInfoMatchesTable extends StatelessWidget {
                 true,
               ),
               TeamInfoTables.displayCell(
-                scoutedMatches[i].penalties.name,
+                scoutedMatches[i].climbLevel == ClimbLevel.L2 ? "\u2713" : "--",
+                false,
+                context,
+                70.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
+                scoutedMatches[i].climbLevel == ClimbLevel.L3 ? "\u2713" : "--",
+                false,
+                context,
+                70.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
+                scoutedMatches[i].robotRoles.contains(RobotRole.offense)
+                    ? "\u2713"
+                    : "--",
+                false,
+                context,
+                70.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
+                scoutedMatches[i].robotRoles.contains(RobotRole.defense)
+                    ? "\u2713"
+                    : "--",
+                false,
+                context,
+                70.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
+                scoutedMatches[i].penalties == Penalties.none ? "\u2713" : "--",
+                false,
+                context,
+                80.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
+                scoutedMatches[i].penalties == Penalties.one ? "\u2713" : "--",
+                false,
+                context,
+                80.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
+                scoutedMatches[i].penalties == Penalties.few ? "\u2713" : "--",
+                false,
+                context,
+                80.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
+                scoutedMatches[i].penalties == Penalties.many ? "\u2713" : "--",
+                false,
+                context,
+                80.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
+                scoutedMatches[i].issues ? "\u2713" : "--",
                 false,
                 context,
                 70.0,
@@ -224,42 +372,159 @@ class TeamInfoMatchesTable extends StatelessWidget {
       }
     }
 
-    //autonomousTable.add(TeamInfoTables.createSeparatorRow(10));
+    table.add(TeamInfoTables.createSeparatorRow(16));
 
-    /*if (context.mounted) {
-      autonomousTable.add(TableRow(children: [
-        TeamInfoTables.sideHeader(context, 140.0, "Avg / %", Colors.white, false, false),
+    if (context.mounted) {
+      table.add(
+        TableRow(
+          children: [
+            TeamInfoTables.sideHeader(
+              context,
+              100.0,
+              "Avg / %",
+              Colors.white,
+              false,
+              false,
+            ),
 
-        TeamInfoTables.displayCell(
-          "${(teamInfoSummary.autoLeaveZonePercent * 100.0).toStringAsFixed(2)}%",
-          false, context, 70.0, Colors.white, Colors.black, true),
-        TeamInfoTables.displayCell(
-          "${(teamInfoSummary.autoLeaveZoneAssistPercent * 100.0).toStringAsFixed(2)}%",
-          false, context, 70.0, Colors.white, Colors.black, true),
-        TeamInfoTables.displayCell(
-          teamInfoSummary.autoCoralLevel1Average.toStringAsFixed(2),
-          false, context, 70.0, Colors.white, Colors.black, true),
-        TeamInfoTables.displayCell(
-          teamInfoSummary.autoCoralLevel2Average.toStringAsFixed(2),
-          false, context, 70.0, Colors.white, Colors.black, true),
-        TeamInfoTables.displayCell(
-          teamInfoSummary.autoCoralLevel3Average.toStringAsFixed(2),
-          false, context, 70.0, Colors.white, Colors.black, true),
-        TeamInfoTables.displayCell(
-          teamInfoSummary.autoCoralLevel4Average.toStringAsFixed(2),
-          false, context, 70.0, Colors.white, Colors.black, true),
-        TeamInfoTables.displayCell(
-          teamInfoSummary.autoAlgaeRemovedFromReefAverage.toStringAsFixed(2),
-          false, context, 80.0, Colors.white, Colors.black, true),
-        TeamInfoTables.displayCell(
-          teamInfoSummary.autoAlgaeProcessorAverage.toStringAsFixed(2),
-          false, context, 80.0, Colors.white, Colors.black, true),
-        TeamInfoTables.displayCell(
-          teamInfoSummary.autoAlgaeCargoNetAverage.toStringAsFixed(2),
-          false, context, 80.0, Colors.white, Colors.black, true),
+            TeamInfoTables.displayCell(
+              (stats.autoFuelScoreAverage).toStringAsFixed(2),
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${(stats.autoClimbedPercent).toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              stats.teleopFuelScoreAverage.toStringAsFixed(2),
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              stats.teleopFuelFedAverage.toStringAsFixed(2),
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.teleopClimbedPercents[0].toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.teleopClimbedPercents[1].toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.teleopClimbedPercents[2].toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.teleopClimbedPercents[3].toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.summaryRolesPercent[0].toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.summaryRolesPercent[1].toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.summaryPenaltiesPercents[0].toStringAsFixed(0)}%",
+              false,
+              context,
+              80.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.summaryPenaltiesPercents[1].toStringAsFixed(0)}%",
+              false,
+              context,
+              80.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.summaryPenaltiesPercents[2].toStringAsFixed(0)}%",
+              false,
+              context,
+              80.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.summaryPenaltiesPercents[3].toStringAsFixed(0)}%",
+              false,
+              context,
+              80.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.summaryIssuesPercent.toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
       ]));
-    }*/
+    }
 
-    return autonomousTable;
+    return table;
   }
 }

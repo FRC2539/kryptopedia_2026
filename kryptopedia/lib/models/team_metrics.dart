@@ -20,12 +20,14 @@ class TeamMetrics {
   List<int> teleopClimbedTotals = [0, 0, 0, 0];
   List<double> teleopClimbedPercents = [0.0, 0.0, 0.0, 0.0];
 
-  // List<int> summaryRolesTotals = [ 0, 0 ];
-  // List<double> summaryRolesPercent = [ 0.0, 0.0 ];
-  // List<int> summaryOperationalIssuesTotals = [ 0, 0, 0 ];
-  // List<double> summaryOperationalIssuesPercents = [ 0.0, 0.0, 0.0 ];
-  // List<int> summaryMechanicalIssuesTotals = [ 0, 0, 0, 0 ];
-  // List<double> summaryMechanicalIssuesPercents = [ 0.0, 0.0, 0.0, 0.0 ];
+  List<int> summaryRolesTotals = [0, 0];
+  List<double> summaryRolesPercent = [0.0, 0.0];
+
+  List<int> summaryPenaltiesTotals = [0, 0, 0, 0];
+  List<double> summaryPenaltiesPercents = [0.0, 0.0, 0.0, 0.0];
+
+  int summaryIssuesTotal = 0;
+  double summaryIssuesPercent = 0.0;
 
   // Information Gathered from Pit Scouting
   String driveTrain = "";
@@ -33,7 +35,7 @@ class TeamMetrics {
   int robotWeight = -1;
 
   static int calculateIntMax(int a, int b) {
-    return (a >= b) ?  a :  b;
+    return (a >= b) ? a : b;
   }
 
   static double calculateDoubleMax(double a, double b) {
@@ -51,7 +53,7 @@ class TeamMetrics {
       autoFuelScoreAverage,
       teamMetrics.autoFuelScoreAverage,
     );
-  
+
     teleopFuelScoreTotal = calculateIntMax(
       teleopFuelScoreTotal,
       teamMetrics.teleopFuelScoreTotal,

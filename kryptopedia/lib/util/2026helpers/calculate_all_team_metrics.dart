@@ -118,17 +118,40 @@ class CalculateAllTeamMetrics {
           break;
       }
 
-      // // Calculate Summary Items
-      // for (RobotRole robotRole in scoutedMatches[i].summaryRoles) {
-      //   switch (robotRole) {
-      //     case RobotRole.offense:
-      //       teamMetrics.summaryRolesTotals[0]++;
-      //       break;
-      //     case RobotRole.defense:
-      //       teamMetrics.summaryRolesTotals[1]++;
-      //       break;
-      //   }
-      // }
+      // Calculate Summary Items
+      for (RobotRole robotRole in scoutedMatches[i].robotRoles) {
+        switch (robotRole) {
+          case RobotRole.offense:
+            teamMetrics.summaryRolesTotals[0]++;
+            break;
+          case RobotRole.defense:
+            teamMetrics.summaryRolesTotals[1]++;
+            break;
+          case RobotRole.feeder:
+            teamMetrics.summaryRolesTotals[2]++;
+            break;
+        }
+      }
+
+      switch (scoutedMatches[i].penalties) {
+        case Penalties.none:
+          teamMetrics.summaryPenaltiesTotals[0]++;
+          break;
+        case Penalties.one:
+          teamMetrics.summaryPenaltiesTotals[1]++;
+          break;
+        case Penalties.few:
+          teamMetrics.summaryPenaltiesTotals[2]++;
+          break;
+        case Penalties.many:
+          teamMetrics.summaryPenaltiesTotals[3]++;
+          break;
+      }
+
+      if (scoutedMatches[i].issues) {
+        teamMetrics.summaryIssuesTotal++;
+      }
+      
 
       // for (OperationalIssue operationIssue
       //     in scoutedMatches[i].summaryOperationalIssues) {
@@ -184,11 +207,21 @@ class CalculateAllTeamMetrics {
             100.0;
       }
 
-      // // Calculate summary averages and percents
-      // for (int i = 0; i < teamMetrics.summaryRolesTotals.length; i++) {
-      //   teamMetrics.summaryRolesPercent[i] =
-      //       teamMetrics.summaryRolesTotals[i] / scoutedMatches.length;
-      // }
+      // Calculate summary averages and percents
+      for (int i = 0; i < teamMetrics.summaryRolesTotals.length; i++) {
+        teamMetrics.summaryRolesPercent[i] =
+            (teamMetrics.summaryRolesTotals[i] / scoutedMatches.length) * 100.0;
+      }
+
+      for (int i = 0; i < teamMetrics.summaryPenaltiesTotals.length; i++) {
+        teamMetrics.summaryPenaltiesPercents[i] =
+            (teamMetrics.summaryPenaltiesTotals[i] / scoutedMatches.length) *
+            100.0;
+      }
+
+      teamMetrics.summaryIssuesPercent =
+          (teamMetrics.summaryIssuesTotal / scoutedMatches.length) * 100.0;
+
 
       // for (
       //   int i = 0;

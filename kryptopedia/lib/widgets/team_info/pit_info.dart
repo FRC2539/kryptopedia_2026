@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
+import 'package:kryptopedia/widgets/common/info_not_available.dart';
+import 'package:kryptopedia/widgets/common/layouts.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/team_info/pit_info_photo.dart';
 import 'package:kryptopedia/widgets/team_info/pit_info_robot_capabilities.dart';
@@ -29,11 +31,24 @@ class _TeamInfoPitInfoState extends State<TeamInfoPitInfo> {
         if (widget.scoutedPit != null)
           Column(
             children: [
-              PitInfoRobotPhoto(scoutedPit: widget.scoutedPit!),
+              PitInfoRobotPhoto(
+                scoutedPit: widget.scoutedPit!,
+                team: widget.team,
+              ),
+              ResponsiveLayout(
+                portraitMode: LayoutMode.singleColumn,
+                landscapeMode: LayoutMode.twoColumn,
+                group1: [
               PitInfoRobotSpecs(scoutedPit: widget.scoutedPit!),
-              PitInfoRobotCapabilities(scoutedPit: widget.scoutedPit!),
+              ],
+                group2: [
+                  PitInfoRobotCapabilities(scoutedPit: widget.scoutedPit!),
+                ],
+              ),
             ],
-          ),
+          )
+        else
+          InformationNotAvailable(infoDescription: "Pit scouting information"),
       ],
     );
   }

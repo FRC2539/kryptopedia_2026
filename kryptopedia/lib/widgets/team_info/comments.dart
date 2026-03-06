@@ -34,17 +34,12 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
         FutureBuilder<bool>(
           future: formatScoutedComments(context),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (widget.scoutedPit != null ||
-                  widget.scoutedMatches.isNotEmpty) {
-                return Column(children: scoutedComments);
-              } else {
-                return InformationNotAvailable(
-                  infoDescription: 'Scouting comments',
-                );
-              }
+            if (snapshot.hasData && scoutedComments.isNotEmpty) {
+              return Column(children: scoutedComments);
             } else {
-              return Container();
+              return InformationNotAvailable(
+                infoDescription: 'Scouting comments',
+              );
             }
           },
         ),
@@ -59,10 +54,7 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
     if (context.mounted) {
       if (widget.scoutedPit != null) {
         scoutedComments.add(
-          TextLabel(
-            label: 'Pit Scouting - General Comments',
-            headerLabel: true,
-          ),
+          TextLabel(label: 'Pit Scouting Comments', headerLabel: true),
         );
         scoutedComments.add(
           createCommentBlock(context, widget.scoutedPit!.generalComments),
@@ -73,7 +65,8 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
           List<EventMatch> eventMatch = await dbMatch.getMatches();
           EventMatch match = eventMatch[i];
 
-          if (context.mounted) {
+          if (context.mounted &&
+              widget.scoutedMatches[i].generalComments.isNotEmpty) {
             scoutedComments.add(
               TextLabel(
                 label: 'Match Scouting - ${match.number}',

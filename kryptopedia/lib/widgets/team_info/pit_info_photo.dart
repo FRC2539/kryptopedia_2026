@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/screens/image_viewer.dart';
 import 'dart:io';
 import 'package:kryptopedia/models/scouted_pit.dart';
@@ -7,8 +8,13 @@ import 'package:kryptopedia/widgets/common/label.dart';
 
 class PitInfoRobotPhoto extends StatelessWidget {
   final ScoutedPit scoutedPit;
+  final Team team;
 
-  const PitInfoRobotPhoto({super.key, required this.scoutedPit});
+  const PitInfoRobotPhoto({
+    super.key,
+    required this.scoutedPit,
+    required this.team,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +56,8 @@ class PitInfoRobotPhoto extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => ImageViewer(
                               imagePath: robotFileNameWithPath,
-                              title: '${scoutedPit.teamNumber}',
+                              title:
+                                  '${scoutedPit.teamNumber} ${team.nickname}',
                             ),
                           ),
                         ),

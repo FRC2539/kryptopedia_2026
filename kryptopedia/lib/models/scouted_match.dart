@@ -138,6 +138,7 @@ class ScoutedMatch {
       teleopFuelScored = map[teleopFuelScoredKey],
       teleopFuelFed = map[teleopFuelFedKey],
       _climbLevel = map[climbLevelKey],
+      _robotRoles = map[robotRolesKey],
       _issues = map[issuesKey],
       _penalties = map[penaltiesKey],
       generalComments = map[generalCommentsKey];

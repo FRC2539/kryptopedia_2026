@@ -15,15 +15,16 @@ class NumberField extends StatefulWidget {
 
   final ValueChanged<int> callback;
 
-  const NumberField(
-      {super.key,
-      required this.label,
-      this.subtitle = "",
-      required this.minValue,
-      required this.maxValue,
-      required this.startValue,
-      required this.callback,
-      this.allowDirectEditing = true});
+  const NumberField({
+    super.key,
+    required this.label,
+    this.subtitle = "",
+    required this.minValue,
+    required this.maxValue,
+    required this.startValue,
+    required this.callback,
+    this.allowDirectEditing = true,
+  });
 
   @override
   State<NumberField> createState() => _NumberFieldState();
@@ -48,11 +49,11 @@ class _NumberFieldState extends State<NumberField> {
 
   @override
   Widget build(BuildContext context) {
-
     var tooHighSnackbar = SnackBar(
       content: Text(
         '${widget.label} must be <= ${widget.maxValue}',
-          style: const TextStyle(fontSize: 20)),
+        style: const TextStyle(fontSize: 20),
+      ),
       duration: const Duration(seconds: 4),
       backgroundColor: Colors.redAccent,
       showCloseIcon: true,
@@ -60,7 +61,8 @@ class _NumberFieldState extends State<NumberField> {
     SnackBar tooLowSnackbar = SnackBar(
       content: Text(
         '${widget.label} must be >= ${widget.minValue}',
-          style: const TextStyle(fontSize: 20)),
+        style: const TextStyle(fontSize: 20),
+      ),
       duration: const Duration(seconds: 4),
       backgroundColor: Colors.redAccent,
       showCloseIcon: true,
@@ -74,8 +76,7 @@ class _NumberFieldState extends State<NumberField> {
 
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child:
-        Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(

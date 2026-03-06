@@ -23,7 +23,7 @@ class ImageViewer extends StatelessWidget {
       ),
       body: Center(
         child: InteractiveViewer(
-          panEnabled: true, // Set it to false
+          panEnabled: true,
           boundaryMargin: const EdgeInsets.all(100),
           maxScale: 5,
           child: Image.file(File(imagePath), fit: BoxFit.cover),

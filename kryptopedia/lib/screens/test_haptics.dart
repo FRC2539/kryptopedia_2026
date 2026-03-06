@@ -13,6 +13,7 @@ class _TestHapticsState extends State<TestHaptics> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Test Haptics")),
       body: Column(
         children: [
           ElevatedButton(

@@ -33,7 +33,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       constraints: BoxConstraints(
-        maxHeight: Device.dialogHeight(context, 0.5),
+        maxHeight: Device.dialogHeight(context, 3 / 4, 500),
         maxWidth: 600,
       ),
       surfaceTintColor: widget.protected ? Colors.red : Colors.transparent,

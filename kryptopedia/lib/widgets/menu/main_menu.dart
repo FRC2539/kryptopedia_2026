@@ -6,6 +6,7 @@ import 'package:kryptopedia/screens/match_preview.dart';
 import 'package:kryptopedia/screens/manage_team_flags.dart';
 import 'package:kryptopedia/screens/pdf_viewer.dart';
 import 'package:kryptopedia/screens/pit_map.dart';
+import 'package:kryptopedia/screens/qualification_schedule.dart';
 import 'package:kryptopedia/screens/team_info.dart';
 import 'package:kryptopedia/screens/team_metrics.dart';
 import 'package:kryptopedia/screens/test_haptics.dart';
@@ -82,6 +83,12 @@ class MainMenu extends StatelessWidget {
             icon: Icons.map_outlined,
             portraitWidget: PitMapViewer(),
             landscapeWidget: PitMapViewer(),
+          ),
+          MenuItemDefinition(
+            title: "Qualifications Schedule",
+            icon: Icons.assignment,
+            portraitWidget: QualificationMatchSchedule(),
+            landscapeWidget: QualificationMatchSchedule(),
           ),
           MenuItemDefinition(
             title: "Game Manual",

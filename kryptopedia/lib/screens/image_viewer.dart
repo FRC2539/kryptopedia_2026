@@ -8,8 +8,14 @@ import '../../util/deviceinfo.dart';
 class ImageViewer extends StatelessWidget {
   final String imagePath;
   final String title;
+  final ImageSource imageSource;
 
-  const ImageViewer({super.key, required this.imagePath, required this.title});
+  const ImageViewer({
+    super.key,
+    required this.imagePath,
+    required this.title,
+    this.imageSource = ImageSource.file,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +32,14 @@ class ImageViewer extends StatelessWidget {
           panEnabled: true,
           boundaryMargin: const EdgeInsets.all(100),
           maxScale: 5,
-          child: Image.file(File(imagePath), fit: BoxFit.cover),
+          child: switch (imageSource) {
+            ImageSource.asset => Image.asset(imagePath, fit: BoxFit.cover),
+            ImageSource.file => Image.file(File(imagePath), fit: BoxFit.cover),
+          }
         ),
       ),
     );
   }
 }
+
+enum ImageSource { asset, file }

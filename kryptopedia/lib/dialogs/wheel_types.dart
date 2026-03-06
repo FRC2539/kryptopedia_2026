@@ -14,7 +14,11 @@ class _WheelTypesDialogState extends State<WheelTypesDialog> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ImageViewer(imagePath: path, title: type),
+          builder: (context) => ImageViewer(
+            imagePath: path,
+            title: type,
+            imageSource: ImageSource.asset,
+          ),
         ),
       ),
       child: Padding(

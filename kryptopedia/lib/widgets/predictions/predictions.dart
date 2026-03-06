@@ -3,9 +3,7 @@ import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/teaminfosummary.dart';
 import 'package:kryptopedia/widgets/predictions/1_overview.dart';
 import 'package:kryptopedia/widgets/predictions/2_alliance_overview.dart';
-import 'package:kryptopedia/util/2026helpers/calculate_all_team_metrics.dart';
 import 'package:kryptopedia/util/2026helpers/calculate_teaminfo_averages.dart';
-import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/predictions.dart';
 
@@ -36,9 +34,6 @@ class MatchPredictionViewer extends StatelessWidget {
   TeamInfoSummary blue3Summary = TeamInfoSummary();
 
   Future<MatchScorePrediction> _getPrediction() async {
-    DbEvents dbEvent = DbEvents();
-    int eventId = (await dbEvent.getEvent()).id;
-
     DbScoutedMatches dbScoutedMatch = DbScoutedMatches();
 
     List<ScoutedMatch> blue1ScoutedMatches = await dbScoutedMatch.getScoutedMatchesForTeam(blue1);

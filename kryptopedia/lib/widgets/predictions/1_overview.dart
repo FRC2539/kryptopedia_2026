@@ -38,20 +38,19 @@ class PredictionOverview extends StatelessWidget {
                   Table(
                     columnWidths: const {
                       0: FixedColumnWidth(50.0),
-                      1: FixedColumnWidth(65.0 * 4.0 + 15.0),
+                      1: FixedColumnWidth(65.0 * 2.0),
                       2: FixedColumnWidth(50.0),
-                      3: FixedColumnWidth(70.0 * 3.0 + 80.0),
+                      3: FixedColumnWidth(65.0 * 2.0),
                       4: FixedColumnWidth(50.0),
-                      5: FixedColumnWidth(85.0 * 4),
+                      5: FixedColumnWidth(110.0 * 3),
                       6: FixedColumnWidth(90.0),
                     },
                     children: [
                       TableRow(children: [
                         emptyCell(),
-                        columnMajorHeaders("Auto Points", context),
+                          columnMajorHeaders("Auto", context),
                         emptyCell(),
-                        columnMajorHeaders(
-                            "Teleop and Endgame Points", context),
+                          columnMajorHeaders("Teleop", context),
                         emptyCell(),
                         columnMajorHeaders("Bonus Ranking Points", context),
                         emptyCell(),
@@ -59,30 +58,32 @@ class PredictionOverview extends StatelessWidget {
                       TableRow(children: [
                         emptyCell(),
                         autonomousDetails(
-                            " \nFuel",
-                            " \nClimb",
+                            "Fuel",
+                            "Climb",
                             Colors.white,
                             Colors.black,
                             true,
                             context),
                         emptyCell(),
                         teleopDetails(
-                            " \nFuel",
-                            " \nClimb",
+                            "Fuel",
+                            "Climb",
                             Colors.white,
                             Colors.black,
                             true,
                             context),
                         emptyCell(),
                         rankingPointDetails(
-                            "1st Fuel\nRP",
-                            "2nd Fuel\nRP",
-                            "Climb\nRP",
+                            "Energized",
+                            "Supercharged",
+                            "Climb",
                             Colors.white,
                             Colors.black,
                             true,
                             context),
-                        finalScoreDetails("Total\nPoints", Colors.white,
+                          finalScoreDetails(
+                            "Total Points",
+                            Colors.white,
                             Colors.black, true, context),
                       ]),
                       displayAllianceInfo(prediction.blue, context),
@@ -220,9 +221,21 @@ class PredictionOverview extends StatelessWidget {
     return TableCell(
       child: Row(children: <Widget>[
         smallCellContainer(
-            70.0, value1, backgroundColor, textColor, headers, context),
+            65.0,
+            value1,
+            backgroundColor,
+            textColor,
+            headers,
+            context,
+          ),
         smallCellContainer(
-            80.0, value2, backgroundColor, textColor, headers, context),
+            65.0,
+            value2,
+            backgroundColor,
+            textColor,
+            headers,
+            context,
+          ),
       ]),
     );
   }
@@ -238,11 +251,29 @@ class PredictionOverview extends StatelessWidget {
     return TableCell(
       child: Row(children: <Widget>[
         smallCellContainer(
-            85.0, value1, backgroundColor, textColor, headers, context),
+            110.0,
+            value1,
+            backgroundColor,
+            textColor,
+            headers,
+            context,
+          ),
         smallCellContainer(
-            85.0, value2, backgroundColor, textColor, headers, context),
+            110.0,
+            value2,
+            backgroundColor,
+            textColor,
+            headers,
+            context,
+          ),
         smallCellContainer(
-            85.0, value3, backgroundColor, textColor, headers, context),
+            110.0,
+            value3,
+            backgroundColor,
+            textColor,
+            headers,
+            context,
+          ),
       ]),
     );
   }

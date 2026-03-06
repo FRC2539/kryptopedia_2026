@@ -6,6 +6,7 @@ enum ColType {
   teamNumber,
   eventRanking,
   eventOPR,
+  kitBot,
   drivetrain,
   wheels,
   weight,
@@ -41,7 +42,7 @@ class TopHeaderRow extends StatelessWidget {
           headerCell("Event Info", 3 * 75.0, 30.0, null, ColType.notUsed),
           headerCell(
             "Robot Info",
-            85.0 + (2 * 75.0),
+            85.0 + (3 * 75.0),
             30.0,
             null,
             ColType.notUsed,
@@ -78,6 +79,7 @@ class BottomHeaderRow extends StatelessWidget {
             ColType.eventRanking,
           ),
           headerCell("Event\nOPR", 75.0, 50.0, sortNotifier, ColType.eventOPR),
+          headerCell("Kit\nBot", 75.0, 50.0, sortNotifier, ColType.kitBot),
           headerCell(
             "Drivetrain",
             85.0,

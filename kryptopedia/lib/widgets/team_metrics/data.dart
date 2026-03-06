@@ -57,7 +57,14 @@ class DataGrid extends StatelessWidget {
               true,
               true,
             ),
-
+            
+            smallCellContainer(
+              (currentTeamStats[i].kitBot) ? "\u2713" : "--",
+              75.0,
+              CellColoring(Colors.white, Colors.black),
+              true,
+              true,
+            ),
             smallCellContainer(
               (currentTeamStats[i].driveTrain != "")
                   ? currentTeamStats[i].driveTrain

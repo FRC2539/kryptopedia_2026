@@ -30,6 +30,7 @@ class TeamMetrics {
   double summaryIssuesPercent = 0.0;
 
   // Information Gathered from Pit Scouting
+  bool kitBot = false;
   String driveTrain = "";
   String wheelType = "";
   int robotWeight = -1;

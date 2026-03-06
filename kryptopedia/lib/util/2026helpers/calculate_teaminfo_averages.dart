@@ -13,11 +13,16 @@ class CalculateTeamInfoAverages {
     teamInfoSummary.numberOfMatches = scoutedMatches.length;
 
     if (scoutedMatches.isEmpty) {
+      teamInfoSummary.autoFuelScoreMin = 0;
       teamInfoSummary.autoFuelScoreMax = 0;
+      teamInfoSummary.teleopFuelScoreMin = 0;
       teamInfoSummary.teleopFuelScoreMax = 0;
     }
 
     for (int i = 0; i < scoutedMatches.length; i++) {
+      // Calculate issue totals
+      if (scoutedMatches[i].issues) teamInfoSummary.summaryIssuesTotal++;
+
       // Calculate Autonomous Totals
       if (scoutedMatches[i].autoClimbed) teamInfoSummary.autoClimbedTotal++;
 
@@ -38,6 +43,7 @@ class CalculateTeamInfoAverages {
           scoutedMatches[i].teleopFuelScored;
       teamInfoSummary.teleopFuelFedTotal +=
           scoutedMatches[i].teleopFuelFed;
+
       switch (scoutedMatches[i].climbLevel) {
         case ClimbLevel.none:
           teamInfoSummary.teleopClimbedTotals[0]++;
@@ -69,27 +75,32 @@ class CalculateTeamInfoAverages {
         teamInfoSummary.teleopFuelFedMax = scoutedMatches[i].teleopFuelFed;
       }
 
-      if (scoutedMatches.isNotEmpty) {
-        // Calculate Autonomous Averages and Percents
-        teamInfoSummary.autoFuelScoreAverage =
-            teamInfoSummary.autoFuelScoreTotal / scoutedMatches.length;
+    }
 
-        teamInfoSummary.autoClimbedPercent =
-            teamInfoSummary.autoClimbedTotal / scoutedMatches.length;
+    // Calculate Autonomous Averages and Percents
+    if (scoutedMatches.isNotEmpty) {
+      teamInfoSummary.summaryIssuesPercent =
+          (teamInfoSummary.summaryIssuesTotal / scoutedMatches.length) * 100.0;
+          
+      teamInfoSummary.autoFuelScoreAverage =
+          teamInfoSummary.autoFuelScoreTotal / scoutedMatches.length;
 
-        // Calculate Teleop Averages and Percents
-        teamInfoSummary.teleopFuelScoreAverage =
-            teamInfoSummary.teleopFuelScoreTotal / scoutedMatches.length;
-        teamInfoSummary.teleopFuelFedAverage =
-            teamInfoSummary.teleopFuelFedTotal / scoutedMatches.length;
+      teamInfoSummary.autoClimbedPercent =
+          (teamInfoSummary.autoClimbedTotal / scoutedMatches.length) * 100.0;
 
-        for (int i = 0; i < teamInfoSummary.teleopClimbedTotals.length; i++) {
-          teamInfoSummary.teleopClimbedPercents[i] =
-              teamInfoSummary.teleopClimbedTotals[i] / scoutedMatches.length;
-        }
+      // Calculate Teleop Averages and Percents
+      teamInfoSummary.teleopFuelScoreAverage =
+          teamInfoSummary.teleopFuelScoreTotal / scoutedMatches.length;
+      teamInfoSummary.teleopFuelFedAverage =
+          teamInfoSummary.teleopFuelFedTotal / scoutedMatches.length;
+
+      for (int i = 0; i < teamInfoSummary.teleopClimbedTotals.length; i++) {
+        teamInfoSummary.teleopClimbedPercents[i] =
+            (teamInfoSummary.teleopClimbedTotals[i] / scoutedMatches.length) *
+            100.0;
       }
     }
-    
+
     // Return information to caller
     return teamInfoSummary;
   }

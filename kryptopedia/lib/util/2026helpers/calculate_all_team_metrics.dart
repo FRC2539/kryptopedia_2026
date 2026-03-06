@@ -151,40 +151,6 @@ class CalculateAllTeamMetrics {
       if (scoutedMatches[i].issues) {
         teamMetrics.summaryIssuesTotal++;
       }
-      
-
-      // for (OperationalIssue operationIssue
-      //     in scoutedMatches[i].summaryOperationalIssues) {
-      //   switch (operationIssue) {
-      //     case OperationalIssue.disabled:
-      //       teamMetrics.summaryOperationalIssuesTotals[0]++;
-      //       break;
-      //     case OperationalIssue.power:
-      //       teamMetrics.summaryOperationalIssuesTotals[1]++;
-      //       break;
-      //     case OperationalIssue.connection:
-      //       teamMetrics.summaryOperationalIssuesTotals[2]++;
-      //       break;
-      //   }
-      // }
-
-      // for (MechanicalIssue mechanicalIssue
-      //     in scoutedMatches[i].summaryMechanicalIssues) {
-      //   switch (mechanicalIssue) {
-      //     case MechanicalIssue.drivebase:
-      //       teamMetrics.summaryMechanicalIssuesTotals[0]++;
-      //       break;
-      //     case MechanicalIssue.coralintake:
-      //       teamMetrics.summaryMechanicalIssuesTotals[1]++;
-      //       break;
-      //     case MechanicalIssue.algaeintake:
-      //       teamMetrics.summaryMechanicalIssuesTotals[2]++;
-      //       break;
-      //     case MechanicalIssue.elevator:
-      //       teamMetrics.summaryMechanicalIssuesTotals[3]++;
-      //       break;
-      //   }
-      // }
     }
 
     // Calculate the averages if the team has been scouted at least once.
@@ -221,27 +187,6 @@ class CalculateAllTeamMetrics {
 
       teamMetrics.summaryIssuesPercent =
           (teamMetrics.summaryIssuesTotal / scoutedMatches.length) * 100.0;
-
-
-      // for (
-      //   int i = 0;
-      //   i < teamMetrics.summaryOperationalIssuesTotals.length;
-      //   i++
-      // ) {
-      //   teamMetrics.summaryOperationalIssuesPercents[i] =
-      //       teamMetrics.summaryOperationalIssuesTotals[i] /
-      //       scoutedMatches.length;
-      // }
-
-      // for (
-      //   int i = 0;
-      //   i < teamMetrics.summaryMechanicalIssuesTotals.length;
-      //   i++
-      // ) {
-      //   teamMetrics.summaryMechanicalIssuesPercents[i] =
-      //       teamMetrics.summaryMechanicalIssuesTotals[i] /
-      //       scoutedMatches.length;
-      // }
     }
 
     // Return Team stats to caller

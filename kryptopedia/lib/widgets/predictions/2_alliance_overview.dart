@@ -24,6 +24,8 @@ class AllianceOverview extends StatelessWidget {
     this.team3Summary,
     {super.key});
 
+  final double tableWidth = (65.0 * 3) + (90.0 * 2) + (120.0 * 2) + (100.0 * 5);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,11 +76,11 @@ class AllianceOverview extends StatelessWidget {
 
   Widget topHeaderRow() {
     return SizedBox(
-      width: (65.0 * 4) + (75.0 * 11.0) + (95.0 * 12),
+      width: tableWidth,
       child: Row(
         children: [
           columnMajorHeaders(" ", 65.0, 30.0),
-          columnMajorHeaders("Performance", 2 * 85.0, 30.0),
+          columnMajorHeaders("Performance", 2 * 90.0, 30.0),
           columnMajorHeaders(" ", 65.0, 30.0),
           columnMajorHeaders("Fuel Scoring", 2 * 120.0, 30.0),
           columnMajorHeaders(" ", 65.0, 30.0),
@@ -90,12 +92,12 @@ class AllianceOverview extends StatelessWidget {
 
   Widget bottomHeaderRow() {
     return SizedBox(
-      width: (65.0 * 4) + (75.0 * 11.0) + (95.0 * 12),
+      width: tableWidth,
       child: Row(
         children: [
           columnMajorHeaders(" ", 65.0, 50.0),
-          columnMajorHeaders("Match\nCount", 85.0, 50.0),
-          columnMajorHeaders("Robot\nIssues / %", 85.0, 50.0),
+          columnMajorHeaders("Match\nCount", 90.0, 50.0),
+          columnMajorHeaders("Robot\nIssues / %", 90.0, 50.0),
           columnMajorHeaders(" ", 65.0, 50.0),
           columnMajorHeaders("Auto", 120.0, 50.0),
           columnMajorHeaders("Teleop", 120.0, 50.0),
@@ -142,36 +144,23 @@ class AllianceOverview extends StatelessWidget {
 
   Widget teamRow(BuildContext context, String allianceColor, int teamNumber, TeamInfoSummary teamInfoSummary) {
     return SizedBox(
-      width: (65.0 * 4) + (75.0 * 11.0) + (95.0 * 12),
+      width: tableWidth,
       child: Row(
         children: [
           leadLabel(context, teamNumber.toString(), 65.0, (allianceColor == "Red") ? Colors.red : Colors.blue),
           smallCellContainer(
             teamInfoSummary.numberOfMatches.toString(),
-            85.0,
+            90.0,
             false,
             true,
           ),
-
           smallCellContainer(
-            teamInfoSummary.numberOfMatches.toString(),
-            85.0,
+            "${(teamInfoSummary.summaryIssuesTotal).toString()} / "
+            "${(teamInfoSummary.summaryIssuesPercent).toStringAsFixed(2)}%",
+            90.0,
             false,
             true,
           ),
-
-          // smallCellContainer(
-          //   "${(teamInfoSummary.summaryOperationalIssuesGamePercents * 100).toStringAsFixed(2)}%",
-          //   85.0,
-          //   false,
-          //   true,
-          // ),
-          // smallCellContainer(
-          //   "${(teamInfoSummary.summaryMechanicalIssuesGamePercents * 100).toStringAsFixed(2)}%",
-          //   85.0,
-          //   false,
-          //   true,
-          // ),
 
           leadLabel(context, teamNumber.toString(), 65.0, (allianceColor == "Red") ? Colors.red : Colors.blue),
           smallCellContainer(

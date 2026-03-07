@@ -17,14 +17,14 @@
 #
 # Indexes
 #
-#  index_matches_on_blue1_id               (blue1_id)
-#  index_matches_on_blue2_id               (blue2_id)
-#  index_matches_on_blue3_id               (blue3_id)
-#  index_matches_on_comp_level_and_number  (comp_level,number) UNIQUE
-#  index_matches_on_red1_id                (red1_id)
-#  index_matches_on_red2_id                (red2_id)
-#  index_matches_on_red3_id                (red3_id)
-#  index_matches_on_scouted_event_id       (scouted_event_id)
+#  index_matches_on_blue1_id                                    (blue1_id)
+#  index_matches_on_blue2_id                                    (blue2_id)
+#  index_matches_on_blue3_id                                    (blue3_id)
+#  index_matches_on_red1_id                                     (red1_id)
+#  index_matches_on_red2_id                                     (red2_id)
+#  index_matches_on_red3_id                                     (red3_id)
+#  index_matches_on_scouted_event_id                            (scouted_event_id)
+#  index_matches_on_scouted_event_id_and_comp_level_and_number  (scouted_event_id,comp_level,number) UNIQUE
 #
 # Foreign Keys
 #

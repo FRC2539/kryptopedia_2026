@@ -1,5 +1,5 @@
 json.synced_to @synced_to.iso8601(6)
-json.pit_map_data @event.pit_map if @should_update_pit_map
+json.pit_map_data @pit_map if @should_update_pit_map
 
 json.items do
   json.array! @teams do |team|

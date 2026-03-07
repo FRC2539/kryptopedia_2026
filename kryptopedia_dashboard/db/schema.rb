@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_05_163254) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_07_140834) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,10 +69,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_05_163254) do
     t.index ["blue1_id"], name: "index_matches_on_blue1_id"
     t.index ["blue2_id"], name: "index_matches_on_blue2_id"
     t.index ["blue3_id"], name: "index_matches_on_blue3_id"
-    t.index ["comp_level", "number"], name: "index_matches_on_comp_level_and_number", unique: true
     t.index ["red1_id"], name: "index_matches_on_red1_id"
     t.index ["red2_id"], name: "index_matches_on_red2_id"
     t.index ["red3_id"], name: "index_matches_on_red3_id"
+    t.index ["scouted_event_id", "comp_level", "number"], name: "index_matches_on_scouted_event_id_and_comp_level_and_number", unique: true
     t.index ["scouted_event_id"], name: "index_matches_on_scouted_event_id"
   end
 

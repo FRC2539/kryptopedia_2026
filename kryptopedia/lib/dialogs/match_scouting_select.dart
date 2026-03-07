@@ -88,7 +88,6 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
       _selectedPosition = event.defaultAlliancePosition!;
     }
 
-    print(options.first.teams.map((t) => t.number).toList());
 
     _selectedMatch = options.firstWhere(
       (option) =>

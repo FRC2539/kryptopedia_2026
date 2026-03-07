@@ -56,17 +56,14 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
 
     List<ScoutMatchOption> options = [];
     for (EventMatch match in matches) {
-      List<Team> matchTeams = teams
-          .where(
-            (t) =>
-                match.blue1number == t.number ||
-                match.blue2number == t.number ||
-                match.blue3number == t.number ||
-                match.red1number == t.number ||
-                match.red2number == t.number ||
-                match.red3number == t.number,
-          )
-          .toList();
+      List<Team> matchTeams = [
+        teams.firstWhere((t) => t.number == match.blue1number),
+        teams.firstWhere((t) => t.number == match.blue2number),
+        teams.firstWhere((t) => t.number == match.blue3number),
+        teams.firstWhere((t) => t.number == match.red1number),
+        teams.firstWhere((t) => t.number == match.red2number),
+        teams.firstWhere((t) => t.number == match.red3number),
+      ];
       List<bool> scouted = matchTeams
           .map(
             (t) => scoutedMatches.any(
@@ -91,6 +88,8 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
       _selectedPosition = event.defaultAlliancePosition!;
     }
 
+    print(options.first.teams.map((t) => t.number).toList());
+
     _selectedMatch = options.firstWhere(
       (option) =>
           option.teams.any(
@@ -101,7 +100,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
             (t) =>
                 alliancePositions[option.teams.indexOf(t)] == _selectedPosition,
           )],
-      orElse: () => options.first,
+      orElse: () => options.last,
     );
     _selectedTeam = _selectedMatch.teams.firstWhere(
       (t) =>

@@ -101,6 +101,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
             (t) =>
                 alliancePositions[option.teams.indexOf(t)] == _selectedPosition,
           )],
+      orElse: () => options.first,
     );
     _selectedTeam = _selectedMatch.teams.firstWhere(
       (t) =>
@@ -150,9 +151,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                 if (!snapshot.hasData) return CircularProgressIndicator();
                 if (noMatches &&
                     snapshot.connectionState == ConnectionState.done) {
-                  return Text(
-                    "no matches ???",
-                  );
+                  return Text("no matches ???");
                 }
                 return Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -339,10 +338,10 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MatchScoutingBoxesEdition(
-                                    alliancePosition: _selectedPosition,
-                                    match: _selectedMatch.match,
-                                    team: _selectedTeam,
-                                    scouter: snapshot.data!.scouters.firstWhere(
+                                  alliancePosition: _selectedPosition,
+                                  match: _selectedMatch.match,
+                                  team: _selectedTeam,
+                                  scouter: snapshot.data!.scouters.firstWhere(
                                     (s) => s.id == _selectedScouter,
                                   ),
                                 ),

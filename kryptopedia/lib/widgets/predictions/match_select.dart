@@ -145,7 +145,7 @@ class _MatchSelectState extends State<MatchSelect> {
                         onChanged: (newValue) async {
                           setState(() {
                             _team2539MatchesOnly = newValue;
-                            _selectedMatch = -1;
+                            _selectedMatch = 1;
                           });
                           await getMatchList();
                         },

@@ -48,12 +48,20 @@ class Device {
   static double fontTable(BuildContext c) => isTablet(c) ? 10.0 : 10.0;
   static double fontRankingTable(BuildContext c) => isTablet(c) ? 15.0 : 12.0;
 
-  static double dialogHeight(BuildContext c, double fractionOfScreen) {
-    return Screen.height(c) * fractionOfScreen;
+  static double dialogHeight(
+    BuildContext c,
+    double fractionOfScreen,
+    double maxHeight,
+  ) {
+    return min(Screen.height(c) * fractionOfScreen, maxHeight);
   }
 
-  static double dialogWidth(BuildContext c, double fractionOfScreen) {
-    return Screen.width(c) * fractionOfScreen;
+  static double dialogWidth(
+    BuildContext c,
+    double fractionOfScreen,
+    double maxWidth,
+  ) {
+    return min(Screen.width(c) * fractionOfScreen, maxWidth);
   }
 
   static double fontSize(

@@ -158,6 +158,7 @@ class ScoutedMatch {
   }
 }
 
+// ignore: constant_identifier_names
 enum ClimbLevel { none, L1, L2, L3 }
 
 enum Penalties { none, one, few, many }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/util/singletons.dart';
+import 'package:kryptopedia/widgets/common/checkboxes.dart';
 import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/text_field.dart';
@@ -44,6 +45,16 @@ class _EndgameMatchScoutingState extends State<EndgameMatchScouting> {
           callback: (newValue) {
             scoutedMatchSingleton.penalties = newValue;
           },
+        ),
+        CheckboxList<RobotRole>(
+          title: "Roles",
+          options: [
+            MultiSelectOption(value: RobotRole.offense, label: "Offense"),
+            MultiSelectOption(value: RobotRole.defense, label: "Defense"),
+            MultiSelectOption(value: RobotRole.feeder, label: "Feeder"),
+          ],
+          initialValues: scoutedMatchSingleton.robotRoles,
+          callback: (values) => scoutedMatchSingleton.robotRoles = values,
         ),
         CheckboxListTile(
           title: const Text("Issues?"),

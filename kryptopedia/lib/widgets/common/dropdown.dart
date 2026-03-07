@@ -8,6 +8,7 @@ class DropdownList<T> extends StatefulWidget {
   final List<MultiSelectOption<T>> options;
   final String label;
   final T initialValue;
+  final Function(BuildContext context)? infoButtonAction;
 
   final ValueChanged<T> callback;
 
@@ -16,7 +17,9 @@ class DropdownList<T> extends StatefulWidget {
       required this.label,
       required this.options,
       required this.initialValue,
-      required this.callback});
+    required this.callback,
+    this.infoButtonAction,
+  });
 
   @override
   State<DropdownList> createState() => _DropdownListState<T>();
@@ -44,13 +47,23 @@ class _DropdownListState<T> extends State<DropdownList<T>> {
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
-            child: AutoSizeText(
-              widget.label,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: Device.fontLabel(context),
-              ),
-              maxLines: 3,
+            child: Row(
+              children: [
+                AutoSizeText(
+                  widget.label,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: Device.fontLabel(context)),
+                  maxLines: 3,
+                ),
+                if (widget.infoButtonAction != null)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: IconButton(
+                      icon: const Icon(Icons.info_outline),
+                      onPressed: () => widget.infoButtonAction!(context),
+                    ),
+                  ),
+              ],
             ),
           ),
           Container(
@@ -74,13 +87,6 @@ class _DropdownListState<T> extends State<DropdownList<T>> {
                       ),
                     ));
               }).toList(),
-/*
-      6666   777777
-    66           77
-    666666      77
-    66  66     77
-     6666     77
-*/
             ),
           ),
         ],

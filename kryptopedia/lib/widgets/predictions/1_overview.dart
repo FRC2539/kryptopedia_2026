@@ -42,7 +42,7 @@ class PredictionOverview extends StatelessWidget {
                       2: FixedColumnWidth(50.0),
                       3: FixedColumnWidth(65.0 * 2.0),
                       4: FixedColumnWidth(50.0),
-                      5: FixedColumnWidth(110.0 * 3),
+                      5: FixedColumnWidth(110.0 * 2 + 120),
                       6: FixedColumnWidth(90.0),
                     },
                     children: [
@@ -259,7 +259,7 @@ class PredictionOverview extends StatelessWidget {
             context,
           ),
         smallCellContainer(
-            110.0,
+            120.0,
             value2,
             backgroundColor,
             textColor,

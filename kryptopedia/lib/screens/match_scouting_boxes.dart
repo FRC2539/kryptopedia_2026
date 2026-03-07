@@ -1,3 +1,4 @@
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:haptic_feedback/haptic_feedback.dart';
@@ -46,6 +47,16 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
   }
 
   MatchState state = MatchState.auto;
+
+  void _toggleRobotRole(RobotRole role) {
+    final updatedRoles = List<RobotRole>.from(scoutedMatchSingleton.robotRoles);
+    if (updatedRoles.contains(role)) {
+      updatedRoles.remove(role);
+    } else {
+      updatedRoles.add(role);
+    }
+    scoutedMatchSingleton.robotRoles = updatedRoles;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,8 +183,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   int rows =
-                      (state == MatchState.teleop ||
-                          state == MatchState.summary)
+                      (state == MatchState.teleop)
                       ? 3
                       : 4;
                   int columns = (state == MatchState.teleop) ? 2 : 1;
@@ -314,35 +324,48 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       _buildGridButton(
                         color: Colors.blueAccent,
                         label: "Offense",
+                        filled: scoutedMatchSingleton.robotRoles.contains(
+                          RobotRole.offense,
+                        ),
                         onPressed: () {
-                          scoutedMatchSingleton.robotRoles = [
-                            RobotRole.offense,
-                          ];
+                          setState(() {
+                            _toggleRobotRole(RobotRole.offense);
+                          });
                           vibrate(HapticsType.medium);
-                          comments();
                         },
                       ),
                       _buildGridButton(
                         color: Colors.blueAccent,
                         label: "Defense",
+                        filled: scoutedMatchSingleton.robotRoles.contains(
+                          RobotRole.defense,
+                        ),
                         onPressed: () {
-                          scoutedMatchSingleton.robotRoles = [
-                            RobotRole.defense,
-                          ];
+                          setState(() {
+                            _toggleRobotRole(RobotRole.defense);
+                          });
                           vibrate(HapticsType.rigid);
-                          comments();
                         },
                       ),
                       _buildGridButton(
                         color: Colors.blueAccent,
-                        label: "Offense AND Defense",
+                        label: "Feeder",
+                        filled: scoutedMatchSingleton.robotRoles.contains(
+                          RobotRole.feeder,
+                        ),
                         onPressed: () {
-                          scoutedMatchSingleton.robotRoles = [
-                            RobotRole.offense,
-                            RobotRole.defense,
-                          ];
+                          setState(() {
+                            _toggleRobotRole(RobotRole.feeder);
+                          });
                           vibrate(HapticsType.rigid);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.blueAccent,
+                        label: "next",
+                        onPressed: () {
                           comments();
+                          vibrate(HapticsType.success);
                         },
                       ),
                     ],
@@ -367,6 +390,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
 
   Widget _buildGridButton({
     required Color color,
+    bool filled = false,
     String? label,
     void Function()? onPressed,
     void Function()? onLongPress,
@@ -382,6 +406,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             foregroundColor: color,
+            backgroundColor: color.withValues(alpha: filled ? 0.2 : 0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
             ),
@@ -415,52 +440,55 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextInputField(
-                label: "comments!",
-                hint:
-                    "general comments: describe anything eventful, mostly.\nparticularly, please be sure to describe any penalties, issues, or defense.",
-                isMultiline: true,
-                initialValue: scoutedMatchSingleton.generalComments,
-                callback: (comments) =>
-                    scoutedMatchSingleton.generalComments = comments,
-              ),
-              DropdownList(
-                label: 'Penalties?',
-                initialValue: Penalties.none,
-                options: [
-                  MultiSelectOption(value: Penalties.none, label: 'None'),
-                  MultiSelectOption(value: Penalties.one, label: 'One'),
-                  MultiSelectOption(value: Penalties.few, label: 'Few'),
-                  MultiSelectOption(value: Penalties.many, label: 'Many'),
-                ],
-                callback: (newValue) {
-                  scoutedMatchSingleton.penalties = newValue;
-                },
-              ),
-              CheckboxListTile(
-                title: const Text("Issues?"),
-                value: scoutedMatchSingleton.issues,
-                onChanged: (value) {
-                  setDialogState(() {
-                    scoutedMatchSingleton.issues = value!;
-                  });
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onLongPress: () => {
-                    Navigator.pop(context, true),
-                    vibrate(HapticsType.success),
-                  },
-                  onPressed: () {},
-                  child: Text('save (hold) (no more changes!)'),
+          child: SizedBox(
+            width: Device.dialogWidth(context, 3 / 4, 800),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextInputField(
+                  label: "comments!",
+                  hint:
+                      "general comments: describe anything eventful, mostly.\nparticularly, please be sure to describe any penalties, issues, or defense.",
+                  isMultiline: true,
+                  initialValue: scoutedMatchSingleton.generalComments,
+                  callback: (comments) =>
+                      scoutedMatchSingleton.generalComments = comments,
                 ),
-              ),
-            ],
+                DropdownList(
+                  label: 'Penalties?',
+                  initialValue: Penalties.none,
+                  options: [
+                    MultiSelectOption(value: Penalties.none, label: 'None'),
+                    MultiSelectOption(value: Penalties.one, label: 'One'),
+                    MultiSelectOption(value: Penalties.few, label: 'Few'),
+                    MultiSelectOption(value: Penalties.many, label: 'Many'),
+                  ],
+                  callback: (newValue) {
+                    scoutedMatchSingleton.penalties = newValue;
+                  },
+                ),
+                CheckboxListTile(
+                  title: const Text("Issues?"),
+                  value: scoutedMatchSingleton.issues,
+                  onChanged: (value) {
+                    setDialogState(() {
+                      scoutedMatchSingleton.issues = value!;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onLongPress: () => {
+                      Navigator.pop(context, true),
+                      vibrate(HapticsType.success),
+                    },
+                    onPressed: () {},
+                    child: Text('save (hold) (no more changes!)'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

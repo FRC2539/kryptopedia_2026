@@ -23,7 +23,9 @@ class _TeamSelectGridState extends State<TeamSelectGrid> {
 
   Future<List<Team>> getTeams() async {
     DbTeams dbTeams = DbTeams();
-    return await dbTeams.getTeams();
+    List<Team> teams = await dbTeams.getTeams();
+    teams.sort((a, b) => a.number.compareTo(b.number));
+    return teams;
   }
 
   @override
@@ -72,12 +74,12 @@ class _TeamSelectGridState extends State<TeamSelectGrid> {
                       style: const TextStyle(color: Colors.black, fontSize: 40),
                     ),
                     AutoSizeText(
-                    team.nickname,
+                      team.nickname,
                       style: const TextStyle(color: Colors.black, fontSize: 25),
                       maxLines: 1,
-                  ),
+                    ),
                   ],
-                )
+                ),
               ),
             );
           },

@@ -82,6 +82,8 @@ class CalculateAllTeamMetrics {
       }
 
       teamMetrics.robotWeight = scoutedPit.weight;
+
+      teamMetrics.kitBot = scoutedPit.isKitBot;
     }
 
     // Calculate Scouted Match information

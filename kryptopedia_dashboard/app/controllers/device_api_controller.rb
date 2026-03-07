@@ -75,6 +75,7 @@ class DeviceApiController < ApplicationController
     @scouting_data_items = @event.scouting_data_items.where(updated_at: since)
     @scouting_data_items = @scouting_data_items.where(deleted_at: nil) if from_clean
     @matches = @event.matches.where(updated_at: since)
+    @pit_map = @event.pit_map # force cache check/update
     @should_update_pit_map = since.include?(@event.pit_map_cache_updated)
     @preloaded_flags = @event.preloaded_flags.where(updated_at: since)
     @preloaded_flags = @preloaded_flags.where(deleted_at: nil) if from_clean

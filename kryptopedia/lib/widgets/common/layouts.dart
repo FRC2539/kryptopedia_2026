@@ -5,13 +5,14 @@ class ResponsiveLayout extends StatelessWidget {
   final LayoutMode portraitMode;
   final LayoutMode landscapeMode;
   final List<Widget> group1;
-  final List<Widget> group2;
+  final List<Widget>? group2;
   const ResponsiveLayout(
       {super.key,
       required this.portraitMode,
       required this.landscapeMode,
       required this.group1,
-      required this.group2});
+    this.group2,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class ResponsiveLayout extends StatelessWidget {
       case LayoutMode.singleColumn:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: group1 + group2,
+          children: group1 + (group2 ?? []),
         );
       case LayoutMode.twoColumn:
         return Row(
@@ -42,7 +43,7 @@ class ResponsiveLayout extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: group2,
+                children: group2 ?? [],
               ),
             ),
           ],
@@ -50,7 +51,7 @@ class ResponsiveLayout extends StatelessWidget {
       case LayoutMode.singleRow:
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: group1 + group2,
+          children: group1 + (group2 ?? []),
         );
     }
   }

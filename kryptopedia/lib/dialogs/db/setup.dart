@@ -69,7 +69,7 @@ class _EventSetupDialogState extends State<EventSetupDialog>
           ),
           SizedBox(
             height: Screen.height(context) * 0.6,
-            width: 500,
+            width: Device.dialogWidth(context, 3 / 4, 700),
             child: TabBarView(
               controller: _tabController,
               children: [
@@ -393,17 +393,22 @@ class _TestDataFormState extends State<TestDataForm> {
     DbMatches dbMatches = DbMatches();
     List<EventMatch> matches = [];
     for (int i = 1; i <= numberOfMatches; i++) {
-      // TODO cycle through teams more
+      final int startOffset = (i - 1) % teams.length;
+      final List<int> lineup = List.generate(
+        6,
+        (index) => teams[(startOffset + index) % teams.length].number,
+      );
+
       matches.add(
         EventMatch(
           i,
           "q",
-          teams[0].number,
-          teams[1].number,
-          teams[2].number,
-          teams[3].number,
-          teams[4].number,
-          teams[5].number,
+          lineup[0],
+          lineup[1],
+          lineup[2],
+          lineup[3],
+          lineup[4],
+          lineup[5],
         ),
       );
     }

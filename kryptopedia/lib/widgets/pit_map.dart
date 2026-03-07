@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
+import 'package:kryptopedia/screens/team_info.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 
@@ -45,8 +46,7 @@ class _PitMapState extends State<PitMap> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                // TeamInfo(passedTeamID: int.parse(entry.key.toString())),
-                Placeholder(),
+                TeamInfo(passedTeamID: int.parse(entry.key.toString())),
           ),
         );
         setState(() {});

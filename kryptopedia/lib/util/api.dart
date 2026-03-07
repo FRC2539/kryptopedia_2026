@@ -182,14 +182,14 @@ class Api {
 
   static Future<APIResponse> getTBATeamRankings(String eventCode) async {
     return await _makeTbaRequest(
-      "https://www.thebluealliance.com/api/v3/event/2025${eventCode.toLowerCase()}/rankings",
+      "https://www.thebluealliance.com/api/v3/event/2026${eventCode.toLowerCase()}/rankings",
       "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
     );
   }
 
   static Future<APIResponse> getTBATeamInsights(String eventCode) async {
     return await _makeTbaRequest(
-      "https://www.thebluealliance.com/api/v3/event/2025${eventCode.toLowerCase()}/oprs",
+      "https://www.thebluealliance.com/api/v3/event/2026${eventCode.toLowerCase()}/oprs",
       "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
     );
   }

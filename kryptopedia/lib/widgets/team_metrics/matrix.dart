@@ -106,6 +106,11 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
                                                 BuildContext context,
                                                 AsyncSnapshot snapshot,
                                               ) {
+                                                if (snapshot.hasError) {
+                                                  return Text(
+                                                    "Error: ${snapshot.error}",
+                                                  );
+                                                }
                                                 if (snapshot.hasData) {
                                                   return DataGrid(
                                                     currentTeamStats:
@@ -139,7 +144,7 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
   }
 
   Future<bool> getMetricsDataTable(
-    ValueNotifier<TeamsToShow> teamstoShowNotifer, 
+    ValueNotifier<TeamsToShow> teamstoShowNotifer,
     ValueNotifier<int> tbaUpdateNotifier,
   ) async {
     // Retrieve a list of teams at the event if needed
@@ -152,6 +157,7 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
       for (Team team in teams) {
         // Initial list.  Ensure all teams are displayed
         teamsToInclude[team.number.toString()] = true;
+        team.number;
 
         TeamMetrics tempStats = await calculateAllTeamMetrics
             .calculateTeamMetrics(team.number);

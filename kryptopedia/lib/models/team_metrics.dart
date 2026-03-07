@@ -20,8 +20,8 @@ class TeamMetrics {
   List<int> teleopClimbedTotals = [0, 0, 0, 0];
   List<double> teleopClimbedPercents = [0.0, 0.0, 0.0, 0.0];
 
-  List<int> summaryRolesTotals = [0, 0];
-  List<double> summaryRolesPercent = [0.0, 0.0];
+  List<int> summaryRolesTotals = [0, 0, 0];
+  List<double> summaryRolesPercent = [0.0, 0.0, 0.0];
 
   List<int> summaryPenaltiesTotals = [0, 0, 0, 0];
   List<double> summaryPenaltiesPercents = [0.0, 0.0, 0.0, 0.0];

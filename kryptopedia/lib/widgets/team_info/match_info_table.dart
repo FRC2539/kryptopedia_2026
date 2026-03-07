@@ -25,6 +25,9 @@ class TeamInfoMatchesTable extends StatelessWidget {
         FutureBuilder<List<TableRow>>(
           future: createMatchInfoTable(context),
           builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            }
             if (snapshot.hasData) {
               return Container(
                 padding: const EdgeInsets.only(
@@ -205,7 +208,6 @@ class TeamInfoMatchesTable extends StatelessWidget {
         ],
       ),
     );
-
     // Display Scouted Match Information
     for (int i = 0; i < scoutedMatches.length; i++) {
       EventMatch match = await dbMatch.getQualificationMatch(
@@ -522,7 +524,9 @@ class TeamInfoMatchesTable extends StatelessWidget {
               Colors.black,
               true,
             ),
-      ]));
+          ],
+        ),
+      );
     }
 
     return table;

@@ -62,9 +62,10 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
         );
       }
 
+      DbMatches dbMatch = DbMatches();
+      List<EventMatch> eventMatch = await dbMatch.getMatches();
+
       for (int i = 0; i < widget.scoutedMatches.length; i++) {
-        DbMatches dbMatch = DbMatches();
-        List<EventMatch> eventMatch = await dbMatch.getMatches();
         EventMatch match = eventMatch[i];
 
         if (context.mounted &&

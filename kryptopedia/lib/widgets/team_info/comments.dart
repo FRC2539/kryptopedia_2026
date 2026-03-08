@@ -49,6 +49,7 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
 
   Future<bool> formatScoutedComments(BuildContext context) async {
     // Generate our list of scouting comments
+
     scoutedComments = [];
 
     if (context.mounted) {
@@ -59,27 +60,27 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
         scoutedComments.add(
           createCommentBlock(context, widget.scoutedPit!.generalComments),
         );
+      }
 
-        for (int i = 0; i < widget.scoutedMatches.length; i++) {
-          DbMatches dbMatch = DbMatches();
-          List<EventMatch> eventMatch = await dbMatch.getMatches();
-          EventMatch match = eventMatch[i];
+      for (int i = 0; i < widget.scoutedMatches.length; i++) {
+        DbMatches dbMatch = DbMatches();
+        List<EventMatch> eventMatch = await dbMatch.getMatches();
+        EventMatch match = eventMatch[i];
 
-          if (context.mounted &&
-              widget.scoutedMatches[i].generalComments.isNotEmpty) {
-            scoutedComments.add(
-              TextLabel(
-                label: 'Match Scouting - ${match.number}',
-                headerLabel: true,
-              ),
-            );
-            scoutedComments.add(
-              createCommentBlock(
-                context,
-                widget.scoutedMatches[i].generalComments,
-              ),
-            );
-          }
+        if (context.mounted &&
+            widget.scoutedMatches[i].generalComments.isNotEmpty) {
+          scoutedComments.add(
+            TextLabel(
+              label: 'Match Scouting - ${match.number}',
+              headerLabel: true,
+            ),
+          );
+          scoutedComments.add(
+            createCommentBlock(
+              context,
+              widget.scoutedMatches[i].generalComments,
+            ),
+          );
         }
       }
     }

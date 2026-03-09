@@ -68,3 +68,5 @@ gem "sentry-ruby", "~> 6.3"
 gem "sentry-rails", "~> 6.3"
 
 gem "active_storage_validations", "~> 3.0"
+
+gem "aws-sdk-s3", require: false

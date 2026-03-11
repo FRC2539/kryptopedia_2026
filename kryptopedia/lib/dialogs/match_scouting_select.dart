@@ -88,19 +88,23 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
       _selectedPosition = event.defaultAlliancePosition!;
     }
 
+    int theDex = 1;
 
-    _selectedMatch = options.firstWhere(
-      (option) =>
-          option.teams.any(
+    for (
+      int i = options.length;
+      (i > 1) &&
+          !(options[i - 2].scouted[options[i - 2].teams.indexWhere(
             (t) =>
-                alliancePositions[option.teams.indexOf(t)] == _selectedPosition,
-          ) &&
-          !option.scouted[option.teams.indexWhere(
-            (t) =>
-                alliancePositions[option.teams.indexOf(t)] == _selectedPosition,
-          )],
-      orElse: () => options.last,
-    );
+                alliancePositions[options[i - 2].teams.indexOf(t)] ==
+                _selectedPosition, // <-- That is just a wacky way of finding the first match after all already scouted ones
+          )]);
+      i--
+    ) {
+      theDex = i;
+    }
+
+    _selectedMatch = options[theDex - 2];
+
     _selectedTeam = _selectedMatch.teams.firstWhere(
       (t) =>
           alliancePositions[_selectedMatch.teams.indexOf(t)] ==

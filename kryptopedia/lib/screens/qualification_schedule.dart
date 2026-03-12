@@ -9,6 +9,7 @@ import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/util/predictions.dart';
+import 'package:kryptopedia/widgets/common/box_header.dart';
 import 'package:kryptopedia/widgets/common/layouts.dart';
 import 'package:kryptopedia/widgets/icons.dart';
 
@@ -119,9 +120,14 @@ class _QualificationMatchScheduleState
                           bottomRight: Radius.circular(10),
                         ),
                       ),
-                      child: MatchBox(
-                        match: e,
-                        scoutedMatches: snapshot.data!.scoutedMatches,
+                      child: Column(
+                        children: [
+                          BoxHeader(e.name, Colors.white, Colors.orange),
+                          MatchBox(
+                            match: e,
+                            scoutedMatches: snapshot.data!.scoutedMatches,
+                          ),
+                        ],
                       ),
                     ),
                   ),

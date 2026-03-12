@@ -222,6 +222,14 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
         });
         break;
 
+      case ColType.kitBot:
+        currentTeamStats.sort((b, a) {
+          return (columnSelectorNotifier.value.ascending)
+              ? ((a.kitBot ? 1 : 0).compareTo(b.kitBot ? 1 : 0))
+              : ((b.kitBot ? 1 : 0).compareTo(a.kitBot ? 1 : 0));
+        });
+        break;
+
       case ColType.autoFuelScored:
         currentTeamStats.sort((a, b) {
           return (columnSelectorNotifier.value.ascending)

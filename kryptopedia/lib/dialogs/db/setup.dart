@@ -346,7 +346,7 @@ class _TestDataFormState extends State<TestDataForm> {
 
   int teamNumber = 2539;
   String teamNickname = "Krypton Cougars";
-  int numberOfTeams = 6;
+  int numberOfTeams = 7;
   int numberOfMatches = 5;
   int numberOfTeamMembers = 5;
 
@@ -436,6 +436,7 @@ class _TestDataFormState extends State<TestDataForm> {
       key: _formKey,
       child: Column(
         spacing: 8,
+        mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
             decoration: const InputDecoration(label: Text("Team #")),

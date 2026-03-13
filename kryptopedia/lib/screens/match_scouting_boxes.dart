@@ -1,4 +1,3 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:haptic_feedback/haptic_feedback.dart';
@@ -269,7 +268,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                 builder: (context, constraints) {
                   int rows =
                       (state == MatchState.teleop)
-                      ? 3
+                      ? 2
                       : 4;
                   int columns = (state == MatchState.teleop) ? 2 : 1;
 
@@ -337,7 +336,6 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                           vibrate(HapticsType.heavy);
                         },
                       ),
-                      _buildGridButton(color: Colors.black),
                       _buildGridButton(
                         color: Colors.purple,
                         label: "Subtract fuel scored",

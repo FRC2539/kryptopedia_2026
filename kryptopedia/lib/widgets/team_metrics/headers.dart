@@ -20,7 +20,10 @@ enum ColType {
   teleopFuelFedAverage,
   teleopClimbedL1,
   teleopClimbedL2,
-  teleopClimbedL3
+  teleopClimbedL3,
+  offensePercent,
+  defensePercent,
+  feederPercent
 }
 
 class ColumnSelector {
@@ -35,7 +38,7 @@ class TopHeaderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (75.0 * 21.0) + 85.0,
+      width: (75.0 * 25.0) + 85.0,
       child: Row(
         children: [
           headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
@@ -51,6 +54,8 @@ class TopHeaderRow extends StatelessWidget {
           headerCell("Fuel Info", 6 * 75.0, 30.0, null, ColType.notUsed),
           headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
           headerCell("Climbing Info", 4 * 75.0, 30.0, null, ColType.notUsed),
+          headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
+          headerCell("Roles Info", 3 * 75.0, 30.0, null, ColType.notUsed),
           headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
         ],
       ),
@@ -189,6 +194,22 @@ class BottomHeaderRow extends StatelessWidget {
           //   sortNotifier,
           //   ColType.teleopClimbedL3,
           // ),
+          headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
+          headerCell(
+            "Offense",
+            75.0,
+            50.0,
+            sortNotifier,
+            ColType.offensePercent,
+          ),
+          headerCell(
+            "Defense",
+            75.0,
+            50.0,
+            sortNotifier,
+            ColType.defensePercent,
+          ),
+          headerCell("Feeder", 75.0, 50.0, sortNotifier, ColType.feederPercent),
           headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
           // headerCell(
           //   "EPA-ish",

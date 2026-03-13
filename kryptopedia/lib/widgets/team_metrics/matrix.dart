@@ -310,6 +310,30 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
         });
         break;
 
+      case ColType.offensePercent:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.summaryRolesPercent[0].compareTo(b.summaryRolesPercent[0]))
+              : (b.summaryRolesPercent[0].compareTo(a.summaryRolesPercent[0]));
+        });
+        break;
+
+      case ColType.defensePercent:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.summaryRolesPercent[1].compareTo(b.summaryRolesPercent[1]))
+              : (b.summaryRolesPercent[1].compareTo(a.summaryRolesPercent[1]));
+        });
+        break;
+
+      case ColType.feederPercent:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.summaryRolesPercent[2].compareTo(b.summaryRolesPercent[2]))
+              : (b.summaryRolesPercent[2].compareTo(a.summaryRolesPercent[2]));
+        });
+        break;
+
       // case ColumnHeaders.totalPredictedScore:
       //   teamPredictions.sort((a, b) {
       //     return (columnSelectorNotifier.value.ascending)

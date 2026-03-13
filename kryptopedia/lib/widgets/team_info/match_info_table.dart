@@ -167,6 +167,14 @@ class TeamInfoMatchesTable extends StatelessWidget {
           ),
           TeamInfoTables.topHeader(
             context,
+            70.0,
+            "Feeder",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
             80.0,
             "No\nPenalties",
             Colors.white,
@@ -324,6 +332,17 @@ class TeamInfoMatchesTable extends StatelessWidget {
                 true,
               ),
               TeamInfoTables.displayCell(
+                scoutedMatches[i].robotRoles.contains(RobotRole.feeder)
+                    ? "\u2713"
+                    : "--",
+                false,
+                context,
+                70.0,
+                Colors.white,
+                Colors.black,
+                true,
+              ),
+              TeamInfoTables.displayCell(
                 scoutedMatches[i].penalties == Penalties.none ? "\u2713" : "--",
                 false,
                 context,
@@ -374,7 +393,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
       }
     }
 
-    table.add(TeamInfoTables.createSeparatorRow(16));
+    table.add(TeamInfoTables.createSeparatorRow(17));
 
     if (context.mounted) {
       table.add(
@@ -472,6 +491,15 @@ class TeamInfoMatchesTable extends StatelessWidget {
             ),
             TeamInfoTables.displayCell(
               "${stats.summaryRolesPercent[1].toStringAsFixed(0)}%",
+              false,
+              context,
+              70.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
+            TeamInfoTables.displayCell(
+              "${stats.summaryRolesPercent[2].toStringAsFixed(0)}%",
               false,
               context,
               70.0,

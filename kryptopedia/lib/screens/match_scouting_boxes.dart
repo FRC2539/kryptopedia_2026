@@ -9,7 +9,9 @@ import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/screens/match_scouting.dart';
+import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
+import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/util/vibrate.dart';
@@ -36,6 +38,18 @@ class MatchScoutingBoxesEdition extends StatefulWidget {
 }
 
 class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
+  late Future<FutureResponse> data;
+  late String _selectedScouter;
+  late List<TeamMember> scouters;
+  DbEvents dbEvents = DbEvents();
+
+  Future<FutureResponse> _future() async {
+    DbTeamMembers dbTeamMembers = DbTeamMembers();
+    List<TeamMember> teamMembers = await dbTeamMembers.getTeamMembers();
+
+    return FutureResponse(scouters: teamMembers);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +58,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
       widget.team.number,
       widget.scouter,
     );
+    data = _future();
+    _selectedScouter = widget.scouter.id;
   }
 
   MatchState state = MatchState.auto;
@@ -124,11 +140,53 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                 children: [
                   Container(), //it works :)
                   AutoSizeText(
-                    "Scouter: ${widget.scouter.name}",
+                    "                ",
                     style: TextStyle(
                       fontSize: Device.fontHeader(context) * 0.7,
                     ),
                     maxLines: 1,
+                  ),
+                  FutureBuilder(
+                    future: data,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError)
+                        return Text("ohhhh ${snapshot.error}");
+                      if (!snapshot.hasData) return CircularProgressIndicator();
+                      return DropdownButton<String>(
+                        value: _selectedScouter,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedScouter = newValue!;
+                            dbEvents.updateLastScouter(_selectedScouter);
+                          });
+                        },
+                        items: snapshot.data!.scouters
+                            .map<DropdownMenuItem<String>>((
+                              TeamMember scouter,
+                            ) {
+                              return DropdownMenuItem<String>(
+                                value: scouter.id,
+                                child: SizedBox(
+                                  width: Device.isTablet(context)
+                                      ? 425.0
+                                      : 225.0,
+                                  child: AutoSizeText(
+                                    scouter.name,
+                                    style: TextStyle(
+                                      fontSize: Device.fontSize(
+                                        context,
+                                        12.0,
+                                        22.0,
+                                      ),
+                                    ),
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              );
+                            })
+                            .toList(),
+                      );
+                    },
                   ),
                   IconButton(
                     onPressed: () async {
@@ -148,6 +206,33 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                     },
                     icon: const Icon(Icons.edit),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      switch (state) {
+                        case MatchState.auto:
+                          setState(() {
+                            state = MatchState.teleop;
+                          });
+                          break;
+                        case MatchState.teleop:
+                          setState(() {
+                            state = MatchState.end;
+                          });
+                          break;
+                        case MatchState.end:
+                          setState(() {
+                            state = MatchState.summary;
+                          });
+                          break;
+                        case MatchState.summary:
+                          setState(() {
+                            comments();
+                          });
+                          break;
+                      }
+                    },
+                    icon: const Icon(Icons.arrow_forward),
+                  )
                 ],
               ),
             ),
@@ -271,14 +356,6 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                           if (scoutedMatchSingleton.teleopFuelFed <= 0) return;
                           scoutedMatchSingleton.teleopFuelFed--;
                           vibrate(HapticsType.warning);
-                        },
-                      ),
-                      _buildGridButton(
-                        color: cougarOrange,
-                        label: "next",
-                        onPressed: () {
-                          state = MatchState.end;
-                          vibrate(HapticsType.success);
                         },
                       ),
                     ],
@@ -501,6 +578,12 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
     if (!mounted) return;
     Navigator.pop(context);
   }
+}
+
+class FutureResponse {
+  final List<TeamMember> scouters;
+
+  FutureResponse({required this.scouters});
 }
 
 enum MatchState { auto, teleop, end, summary }

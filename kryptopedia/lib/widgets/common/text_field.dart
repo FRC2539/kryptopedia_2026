@@ -5,6 +5,7 @@ import 'package:kryptopedia/util/deviceinfo.dart';
 class TextInputField extends StatefulWidget {
   final String label;
   final bool isMultiline;
+  final double? height;
   final String initialValue;
   final TextEditingController? controller;
   final String? hint;
@@ -14,6 +15,7 @@ class TextInputField extends StatefulWidget {
   const TextInputField({
     super.key,
     required this.label,
+    this.height,
     required this.isMultiline,
     required this.initialValue,
     this.controller,
@@ -59,10 +61,16 @@ class _TextInputFieldState extends State<TextInputField> {
         right: 20.0,
         left: 20.0,
       ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
+      child: SizedBox(
+        height: widget.height ?? 150.0,
+        child: Scrollbar(
+          thumbVisibility: true, // Always show scrollbar
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical, // Vertical scrolling
+
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+              child: TextField(
               maxLines: widget.isMultiline ? null : 1,
               decoration: InputDecoration(
                 labelText: "   ${widget.label}   ",
@@ -85,9 +93,10 @@ class _TextInputFieldState extends State<TextInputField> {
                   widget.callback(text);
                 });
               },
+              ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

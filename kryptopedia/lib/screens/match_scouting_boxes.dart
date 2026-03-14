@@ -231,7 +231,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       }
                     },
                     icon: const Icon(Icons.arrow_forward),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -271,9 +271,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                     MatchState.teleop => 3,
                     _ => 4,
                   };
-                      (state == MatchState.teleop)
-                      ? 3
-                      : 4;
+                  (state == MatchState.teleop) ? 3 : 4;
                   int columns = (state == MatchState.teleop) ? 2 : 1;
 
                   double itemHeight = constraints.maxHeight / rows;
@@ -286,10 +284,9 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                     MatchState.auto => [
                       _buildGridButton(
                         color: Colors.yellow,
-                        label:
-                            "Fuel Scored +3",
+                        label: "Fuel Scored +3",
                         onPressed: () {
-                          scoutedMatchSingleton.autoFuelScored++;
+                          scoutedMatchSingleton.autoFuelScored += 3;
                           vibrate(HapticsType.heavy);
                         },
                       ),

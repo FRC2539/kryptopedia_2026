@@ -73,6 +73,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
       scoutedMatches.first.teamNumber,
     );
 
+    if (!context.mounted) return [];
     // Display table headers
     table.add(
       TableRow(

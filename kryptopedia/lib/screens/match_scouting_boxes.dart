@@ -148,8 +148,9 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   FutureBuilder(
                     future: data,
                     builder: (context, snapshot) {
-                      if (snapshot.hasError)
-                        return Text("ohhhh ${snapshot.error}");
+                      if (snapshot.hasError) {
+                        return Text("an error! ${snapshot.error}");
+                      }
                       if (!snapshot.hasData) return CircularProgressIndicator();
                       return DropdownButton<String>(
                         value: _selectedScouter,

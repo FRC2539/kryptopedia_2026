@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 
@@ -28,7 +29,8 @@ class ResponsiveLayout extends StatelessWidget {
       case LayoutMode.singleColumn:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: group1 + (group2 ?? []),
+          children:
+              group1 + [AutoSizeText(""), AutoSizeText("")] + (group2 ?? []),
         );
       case LayoutMode.twoColumn:
         return Row(

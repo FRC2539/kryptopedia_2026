@@ -25,17 +25,14 @@ class IncomingWebhooksController < ApplicationController
     when "verification"
       key = data["verification_key"]
       Rails.cache.write("tba_webhook_verification_key", key, expires_in: 1.hour)
-      head :ok
-    when "ping"
-      head :ok
     when "schedule_updated"
       event_key = data["event_key"]
       events = ScoutedEvent.where(key: event_key, tba_sync: true)
       events.each do |event|
         event.download_matches_from_tba
       end
-    else
-      head :bad_request
     end
+
+    head :no_content
   end
 end

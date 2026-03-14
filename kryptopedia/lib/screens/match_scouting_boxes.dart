@@ -563,7 +563,6 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   initialValue: Penalties.none,
                   options: [
                     MultiSelectOption(value: Penalties.none, label: 'None'),
-                    MultiSelectOption(value: Penalties.one, label: 'One'),
                     MultiSelectOption(value: Penalties.few, label: 'Few'),
                     MultiSelectOption(value: Penalties.many, label: 'Many'),
                   ],

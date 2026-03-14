@@ -49,7 +49,7 @@ class _ScouterSelectDialogState extends State<ScouterSelectDialog> {
         ],
       ),
       content: SizedBox(
-        height: 100,
+        height: 125,
         width: Device.dialogWidth(context, 3 / 4, 700),
         child: FutureBuilder(
           future: teamMembers,

@@ -184,14 +184,6 @@ class TeamInfoMatchesTable extends StatelessWidget {
           TeamInfoTables.topHeader(
             context,
             80.0,
-            "One Penalty",
-            Colors.white,
-            false,
-            true,
-          ),
-          TeamInfoTables.topHeader(
-            context,
-            80.0,
             "Few Penalties",
             Colors.white,
             false,
@@ -352,15 +344,6 @@ class TeamInfoMatchesTable extends StatelessWidget {
                 true,
               ),
               TeamInfoTables.displayCell(
-                scoutedMatches[i].penalties == Penalties.one ? "\u2713" : "--",
-                false,
-                context,
-                80.0,
-                Colors.white,
-                Colors.black,
-                true,
-              ),
-              TeamInfoTables.displayCell(
                 scoutedMatches[i].penalties == Penalties.few ? "\u2713" : "--",
                 false,
                 context,
@@ -393,7 +376,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
       }
     }
 
-    table.add(TeamInfoTables.createSeparatorRow(17));
+    table.add(TeamInfoTables.createSeparatorRow(16));
 
     if (context.mounted) {
       table.add(
@@ -509,15 +492,6 @@ class TeamInfoMatchesTable extends StatelessWidget {
             ),
             TeamInfoTables.displayCell(
               "${stats.summaryPenaltiesPercents[0].toStringAsFixed(0)}%",
-              false,
-              context,
-              80.0,
-              Colors.white,
-              Colors.black,
-              true,
-            ),
-            TeamInfoTables.displayCell(
-              "${stats.summaryPenaltiesPercents[1].toStringAsFixed(0)}%",
               false,
               context,
               80.0,

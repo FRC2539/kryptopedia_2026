@@ -163,7 +163,9 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
         //request was denied
         //todo will not work well if cancelled from device mid-check where it finds out its been denied
         if (!mounted) return;
-        submitEnabled = true;
+        setState(() {
+          submitEnabled = true;
+        });
         Navigator.pop(context);
         return;
       }

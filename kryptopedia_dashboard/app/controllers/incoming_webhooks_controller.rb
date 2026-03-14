@@ -33,6 +33,6 @@ class IncomingWebhooksController < ApplicationController
       end
     end
 
-    head :no_content
+    head :accepted
   end
 end

@@ -41,6 +41,12 @@ module TeamConcern
     end
   end
 
+  def restrict_to_device
+    unless current_user.is_a?(Device) && current_user.team == @team
+      redirect_to root_path, alert: "no access!! go away!", status: :forbidden
+    end
+  end
+
   def default_url_options
     { team_number: @team.number }
   end

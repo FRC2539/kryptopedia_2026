@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_07_140834) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_14_195825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,14 +43,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_140834) do
   end
 
   create_table "devices", force: :cascade do |t|
-    t.bigint "active_event_id"
     t.datetime "created_at", null: false
     t.datetime "last_sync"
     t.string "name"
     t.bigint "owner_id"
     t.string "owner_type"
     t.datetime "updated_at", null: false
-    t.index ["active_event_id"], name: "index_devices_on_active_event_id"
     t.index ["owner_type", "owner_id"], name: "index_devices_on_owner"
   end
 
@@ -138,9 +136,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_140834) do
     t.datetime "created_at", null: false
     t.bigint "owner_id"
     t.string "owner_type"
+    t.bigint "scouted_event_id"
     t.datetime "updated_at", null: false
     t.index ["auth_token"], name: "index_sessions_on_auth_token", unique: true
     t.index ["owner_type", "owner_id"], name: "index_sessions_on_owner"
+    t.index ["scouted_event_id"], name: "index_sessions_on_scouted_event_id"
   end
 
   create_table "team_members", force: :cascade do |t|
@@ -163,7 +163,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_140834) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "devices", "scouted_events", column: "active_event_id"
   add_foreign_key "matches", "scouted_events"
   add_foreign_key "matches", "teams", column: "blue1_id"
   add_foreign_key "matches", "teams", column: "blue2_id"

@@ -2,17 +2,19 @@
 #
 # Table name: sessions
 #
-#  id         :bigint           not null, primary key
-#  auth_token :string
-#  owner_type :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  owner_id   :bigint
+#  id               :bigint           not null, primary key
+#  auth_token       :string
+#  owner_type       :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  owner_id         :bigint
+#  scouted_event_id :bigint
 #
 # Indexes
 #
-#  index_sessions_on_auth_token  (auth_token) UNIQUE
-#  index_sessions_on_owner       (owner_type,owner_id)
+#  index_sessions_on_auth_token        (auth_token) UNIQUE
+#  index_sessions_on_owner             (owner_type,owner_id)
+#  index_sessions_on_scouted_event_id  (scouted_event_id)
 #
 class Session < ApplicationRecord
   include Hashid::Rails
@@ -20,6 +22,7 @@ class Session < ApplicationRecord
   before_create :delete_other_sessions
 
   belongs_to :owner, polymorphic: true
+  belongs_to :scouted_event, optional: true
   has_one :session_request, dependent: :destroy
 
   has_secure_token :auth_token

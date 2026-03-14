@@ -1,7 +1,7 @@
 class DeviceApiController < ApplicationController
   include TeamConcern
 
-  before_action :restrict_to_team_member, except: [:preauth_info, :request_session, :check_session_request, :cancel_session_request]
+  before_action :restrict_to_device, except: [:preauth_info, :request_session, :check_session_request, :cancel_session_request]
   skip_before_action :verify_authenticity_token
 
   def preauth_info
@@ -43,8 +43,6 @@ class DeviceApiController < ApplicationController
   end
 
   def sync
-    render json: { error: "no" }, status: :forbidden and return if current_user.is_a? TeamMember # very good protection im so good at this
-
     @event = current_user.active_event
 
     body = JSON.parse(request.body.read) rescue nil

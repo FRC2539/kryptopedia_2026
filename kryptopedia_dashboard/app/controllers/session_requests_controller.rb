@@ -9,8 +9,7 @@ class SessionRequestsController < ApplicationController
       session_request.device.session.destroy!
     end
 
-    session_request.update!(session: Session.create(owner: session_request.device))
-    session_request.device.update!(active_event: session_request.scouted_event)
+    session_request.update!(session: Session.create(owner: session_request.device, scouted_event: session_request.scouted_event))
     redirect_to team_home_feed_path(@team), notice: "Session approved."
   end
 

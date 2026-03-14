@@ -266,9 +266,13 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  int rows =
+                  int rows = switch (state) {
+                    MatchState.auto => 5,
+                    MatchState.teleop => 3,
+                    _ => 4,
+                  };
                       (state == MatchState.teleop)
-                      ? 2
+                      ? 3
                       : 4;
                   int columns = (state == MatchState.teleop) ? 2 : 1;
 
@@ -283,10 +287,19 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       _buildGridButton(
                         color: Colors.yellow,
                         label:
-                            "Fuel Scored\n${scoutedMatchSingleton.autoFuelScored}",
+                            "Fuel Scored +3",
                         onPressed: () {
                           scoutedMatchSingleton.autoFuelScored++;
                           vibrate(HapticsType.heavy);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.yellow,
+                        label:
+                            "Fuel Scored\n${scoutedMatchSingleton.autoFuelScored}",
+                        onPressed: () {
+                          scoutedMatchSingleton.autoFuelScored++;
+                          vibrate(HapticsType.medium);
                         },
                       ),
                       _buildGridButton(
@@ -320,20 +333,19 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                     MatchState.teleop => [
                       _buildGridButton(
                         color: Colors.yellow,
-                        label:
-                            "Fuel Scored\n${scoutedMatchSingleton.teleopFuelScored}",
+                        label: "Fuel Scored +3",
                         onPressed: () {
-                          scoutedMatchSingleton.teleopFuelScored++;
+                          scoutedMatchSingleton.teleopFuelScored += 3;
                           vibrate(HapticsType.heavy);
                         },
                       ),
                       _buildGridButton(
-                        color: Colors.green,
+                        color: Colors.yellow,
                         label:
-                            "Fuel fed\n${scoutedMatchSingleton.teleopFuelFed}",
+                            "Fuel Scored\n${scoutedMatchSingleton.teleopFuelScored}",
                         onPressed: () {
-                          scoutedMatchSingleton.teleopFuelFed++;
-                          vibrate(HapticsType.heavy);
+                          scoutedMatchSingleton.teleopFuelScored++;
+                          vibrate(HapticsType.medium);
                         },
                       ),
                       _buildGridButton(
@@ -345,6 +357,23 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                           }
                           scoutedMatchSingleton.teleopFuelScored--;
                           vibrate(HapticsType.warning);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.green,
+                        label: "Fuel Fed +3",
+                        onPressed: () {
+                          scoutedMatchSingleton.teleopFuelFed += 3;
+                          vibrate(HapticsType.heavy);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.green,
+                        label:
+                            "Fuel fed\n${scoutedMatchSingleton.teleopFuelFed}",
+                        onPressed: () {
+                          scoutedMatchSingleton.teleopFuelFed++;
+                          vibrate(HapticsType.medium);
                         },
                       ),
                       _buildGridButton(

@@ -47,6 +47,23 @@ class ScoutedEvent < ApplicationRecord
     end
   end
 
+  def download_matches_from_tba
+    return unless tba_sync?
+
+    TBAService.event_matches(2026, code).each do |match_data|
+      comp_level = match_data["key"].delete_prefix("2026#{code}_").split("m").first
+      match = matches.find_or_initialize_by(comp_level: comp_level, number: match_data["match_number"])
+      match.update!(
+        red1: Team.find_or_create_by!(number: match_data["alliances"]["red"]["team_keys"][0].delete_prefix("frc").to_i),
+        red2: Team.find_or_create_by!(number: match_data["alliances"]["red"]["team_keys"][1].delete_prefix("frc").to_i),
+        red3: Team.find_or_create_by!(number: match_data["alliances"]["red"]["team_keys"][2].delete_prefix("frc").to_i),
+        blue1: Team.find_or_create_by!(number: match_data["alliances"]["blue"]["team_keys"][0].delete_prefix("frc").to_i),
+        blue2: Team.find_or_create_by!(number: match_data["alliances"]["blue"]["team_keys"][1].delete_prefix("frc").to_i),
+        blue3: Team.find_or_create_by!(number: match_data["alliances"]["blue"]["team_keys"][2].delete_prefix("frc").to_i)
+      )
+    end
+  end
+
   private
 
   def revive_or_create_join(team)

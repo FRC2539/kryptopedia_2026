@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#index"
 
+  get "webhooks" => "incoming_webhooks#index"
+  post "webhooks/tba" => "incoming_webhooks#tba"
+
   resources :teams, path: "", param: :number do
     get "/" => "teams#home_feed", as: :home_feed
     get "login" => "teams#login", as: :login

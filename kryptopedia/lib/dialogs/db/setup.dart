@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +30,7 @@ class _EventSetupDialogState extends State<EventSetupDialog>
     with TickerProviderStateMixin {
   late final TabController _tabController;
 
-//widget.authOnly = "team shared device" only, in a context where only "Event" is being recreated
+  //widget.authOnly = "team shared device" only, in a context where only "Event" is being recreated
 
   @override
   void initState() {
@@ -425,6 +427,20 @@ class _TestDataFormState extends State<TestDataForm> {
       members.add(TeamMember(id: "${i + 1}", name: "Team Member ${i + 1}"));
     }
     await Future.wait(members.map((m) => dbTeamMembers.upsertTeamMember(m)));
+
+    String pits = "";
+    for (int i = 0; i < numberOfTeams; i++) {
+      pits +=
+          '"A${i + 1}": { "position": {"x": 50, "y": ${i * 100 + 50} }, "size": {"x": 100, "y": 100 }, "team": "${teams[i].number}" }';
+      if (i != numberOfTeams - 1) {
+        pits += ",";
+      }
+    }
+
+    pits =
+        '{"pits": { $pits }, "size": { "x": 100, "y": ${numberOfTeams * 100} } }';
+
+    dbEvents.updatePitMapData(json.decode(pits));
 
     if (!mounted) return;
     Navigator.pop(context);

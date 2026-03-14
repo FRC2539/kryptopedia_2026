@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/models/team_member.dart';
+import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
@@ -68,11 +70,15 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
       for (int i = 0; i < widget.scoutedMatches.length; i++) {
         EventMatch match = eventMatch[i];
 
+        TeamMember scouter = await DbTeamMembers().getTeamMemberById(
+          widget.scoutedMatches[i].scouterId,
+        );
+
         if (context.mounted &&
             widget.scoutedMatches[i].generalComments.isNotEmpty) {
           scoutedComments.add(
             TextLabel(
-              label: 'Match Scouting - ${match.number}',
+              label: 'Match Scouting - ${match.number} - ${scouter.name}',
               headerLabel: true,
             ),
           );

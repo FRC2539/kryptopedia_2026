@@ -38,14 +38,14 @@ class TopHeaderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (75.0 * 25.0) + 85.0,
+      width: (75.0 * 24.0) + 85.0,
       child: Row(
         children: [
           headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
           headerCell("Event Info", 3 * 75.0, 30.0, null, ColType.notUsed),
           headerCell(
             "Robot Info",
-            85.0 + (3 * 75.0),
+            85.0 + (2 * 75.0),
             30.0,
             null,
             ColType.notUsed,
@@ -71,7 +71,7 @@ class BottomHeaderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (75.0 * 24.0) + 85.0,
+      width: (75.0 * 23.0) + 85.0,
       child: Row(
         children: [
           headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
@@ -92,7 +92,6 @@ class BottomHeaderRow extends StatelessWidget {
             sortNotifier,
             ColType.drivetrain,
           ),
-          headerCell("Wheels", 75.0, 50.0, sortNotifier, ColType.wheels),
           headerCell("Weight", 75.0, 50.0, sortNotifier, ColType.weight),
           headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
           headerCell(

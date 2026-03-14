@@ -11,7 +11,6 @@ class PitInfoRobotSpecs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String driveTrain = "Unknown";
-    String wheelType = "Unknown";
     switch (scoutedPit.drivetrain) {
       case Drivetrain.swerve:
         driveTrain = "Swerve";
@@ -24,20 +23,6 @@ class PitInfoRobotSpecs extends StatelessWidget {
         break;
       case Drivetrain.other:
         driveTrain = "Other";
-        break;
-    }
-    switch (scoutedPit.wheelType) {
-      case WheelType.colson:
-        wheelType = "Colson";
-        break;
-      case WheelType.billet:
-        wheelType = "Billet";
-        break;
-      case WheelType.spike:
-        wheelType = "Spike";
-        break;
-      case WheelType.other:
-        wheelType = "Other";
         break;
     }
 
@@ -135,28 +120,6 @@ class PitInfoRobotSpecs extends StatelessWidget {
                   ),
                   TeamInfoTables.displayCell(
                     driveTrain,
-                    false,
-                    context,
-                    140.0,
-                    Colors.white,
-                    Colors.black,
-                    false,
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  TeamInfoTables.displayCell(
-                    "Robot Wheel Type: ",
-                    true,
-                    context,
-                    200.0,
-                    Colors.black,
-                    Colors.white,
-                    false,
-                  ),
-                  TeamInfoTables.displayCell(
-                    wheelType,
                     false,
                     context,
                     140.0,

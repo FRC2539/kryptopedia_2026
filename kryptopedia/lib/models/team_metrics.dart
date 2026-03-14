@@ -32,7 +32,6 @@ class TeamMetrics {
   // Information Gathered from Pit Scouting
   bool kitBot = false;
   String driveTrain = "";
-  String wheelType = "";
   int robotWeight = -1;
 
   static int calculateIntMax(int a, int b) {

@@ -78,15 +78,6 @@ class DataGrid extends StatelessWidget {
               true,
             ),
             smallCellContainer(
-              (currentTeamStats[i].wheelType != "")
-                  ? currentTeamStats[i].wheelType
-                  : "--",
-              75.0,
-              CellColoring(Colors.white, Colors.black),
-              true,
-              true,
-            ),
-            smallCellContainer(
               (currentTeamStats[i].robotWeight >= 0)
                   ? currentTeamStats[i].robotWeight.toString()
                   : "--",

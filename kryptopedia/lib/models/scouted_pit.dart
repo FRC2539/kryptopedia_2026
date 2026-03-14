@@ -43,12 +43,6 @@ class ScoutedPit {
     _drivetrain = value.index;
   }
 
-  int _wheelType = 0;
-  WheelType get wheelType => WheelType.values[_wheelType];
-  set wheelType(WheelType value) {
-    _wheelType = value.index;
-  }
-
   int _fuelPickupMethods = 0; //1 << enum index
   List<FuelPickupMethod> get fuelPickupMethods => [
     if (_fuelPickupMethods & 1 != 0) FuelPickupMethod.ground,
@@ -89,7 +83,6 @@ class ScoutedPit {
     startingHeight = 20;
     extendedHeight = 28;
     drivetrain = Drivetrain.swerve;
-    wheelType = WheelType.colson;
 
     fuelPickupMethods = [];
     hasTurret = false;
@@ -116,7 +109,6 @@ class ScoutedPit {
   static const hasTurretKey = "has_turret";
   static const shooterNumberKey = "shooter_number";
   static const maxFuelCapacityKey = "max_fuel_capacity";
-  static const wheelTypeKey = "wheel_type";
   static const generalCommentsKey = "general_comments";
 
   ScoutedPit();
@@ -135,7 +127,6 @@ class ScoutedPit {
       extendedHeightKey: extendedHeight,
       isKitBotKey: _isKitBot,
       drivetrainKey: _drivetrain,
-      wheelTypeKey: _wheelType,
       fuelPickupMethodsKey: _fuelPickupMethods,
       hasTurretKey: _hasTurret,
       maxFuelCapacityKey: maxFuelCapacity,
@@ -157,7 +148,6 @@ class ScoutedPit {
       extendedHeight = map[extendedHeightKey],
       _isKitBot = map[isKitBotKey],
       _drivetrain = map[drivetrainKey],
-      _wheelType = map[wheelTypeKey],
       _fuelPickupMethods = map[fuelPickupMethodsKey],
       _hasTurret = map[hasTurretKey],
       maxFuelCapacity = map[maxFuelCapacityKey],
@@ -192,5 +182,3 @@ class ScoutedPit {
 enum FuelPickupMethod { ground, top }
 
 enum Drivetrain { swerve, tank, mecanum, other }
-
-enum WheelType { colson, billet, spike, other }

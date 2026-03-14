@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kryptopedia/dialogs/wheel_types.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
@@ -98,23 +97,6 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
               initialValue: scoutedPitSingleton.drivetrain,
               callback: (newValue) {
                 scoutedPitSingleton.drivetrain = newValue;
-              },
-            ),
-            DropdownList(
-              label: 'Robot\'s wheel type',
-              infoButtonAction: (context) => showDialog(
-                context: context,
-                builder: (context) => WheelTypesDialog(),
-              ),
-              options: [
-                MultiSelectOption(value: WheelType.colson, label: 'Colson'),
-                MultiSelectOption(value: WheelType.billet, label: 'Billet'),
-                MultiSelectOption(value: WheelType.spike, label: 'Spike'),
-                MultiSelectOption(value: WheelType.other, label: 'Other'),
-              ],
-              initialValue: scoutedPitSingleton.wheelType,
-              callback: (newValue) {
-                scoutedPitSingleton.wheelType = newValue;
               },
             ),
           ],

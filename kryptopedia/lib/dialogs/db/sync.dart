@@ -43,7 +43,7 @@ class _SyncPopupState extends State<SyncPopup> {
           ),
         ],
       ),
-      constraints: BoxConstraints(maxHeight: 400),
+      constraints: BoxConstraints(maxHeight: 500),
       content: FutureBuilder(
         future: event,
         builder: (context, snapshot) {
@@ -67,11 +67,28 @@ class _SyncPopupState extends State<SyncPopup> {
 
           return Column(
             spacing: 8,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(event.name, style: TextStyle(fontWeight: FontWeight.bold)),
               syncEnabled
                   ? Text("Last Sync: $lastSync")
                   : Text("local-only: database sync is disabled"),
+              ElevatedButton.icon(
+                onPressed: syncEnabled
+                    ? () async {
+                        setState(() {
+                          syncEnabled = false;
+                        });
+                        await syncFlow(context, withPhotos: false);
+                        this.event = getEvent();
+                        setState(() {
+                          syncEnabled = true;
+                        });
+                      }
+                    : null,
+                label: Text("Sync Data"),
+                icon: Icon(Icons.sync),
+              ),
               ElevatedButton.icon(
                 onPressed: syncEnabled
                     ? () async {
@@ -85,7 +102,7 @@ class _SyncPopupState extends State<SyncPopup> {
                         });
                       }
                     : null,
-                label: Text("Sync Data"),
+                label: Text("Sync Photos"),
                 icon: Icon(Icons.sync),
               ),
               Spacer(),

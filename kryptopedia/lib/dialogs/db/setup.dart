@@ -202,7 +202,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     await dbEvents.upsertEvent(eventData);
 
     if (!mounted) return;
-    await syncFlow(context, fromClean: widget.fromClean);
+    await syncFlow(context, fromClean: widget.fromClean, withPhotos: false);
 
     if (!mounted) return;
     Navigator.pop(context);

@@ -140,7 +140,7 @@ class PitMapPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (Map<String, dynamic> pit in pitMapData["pits"].values ?? []) {
+    for (Map<String, dynamic> pit in pitMapData["pits"]?.values ?? []) {
       final paint = Paint()
         ..color =
             scoutedPits.any((sPit) => sPit.teamNumber == int.parse(pit["team"]))
@@ -194,7 +194,7 @@ class PitMapPainter extends CustomPainter {
       }
     }
 
-    for (Map<String, dynamic> area in pitMapData["areas"].values ?? []) {
+    for (Map<String, dynamic> area in pitMapData["areas"]?.values ?? []) {
       final paint = Paint()
         ..color = Colors.blue
         ..style = PaintingStyle.fill;
@@ -242,7 +242,7 @@ class PitMapPainter extends CustomPainter {
       );
     }
 
-    for (Map<String, dynamic> label in pitMapData["labels"].values ?? []) {
+    for (Map<String, dynamic> label in pitMapData["labels"]?.values ?? []) {
       final textPainter = TextPainter(
         text: TextSpan(
           text: label["label"],
@@ -262,7 +262,7 @@ class PitMapPainter extends CustomPainter {
       );
     }
 
-    for (Map<String, dynamic> wall in pitMapData["walls"].values ?? []) {
+    for (Map<String, dynamic> wall in pitMapData["walls"]?.values ?? []) {
       final paint = Paint()
         ..color = Colors.blueGrey
         ..style = PaintingStyle.fill;

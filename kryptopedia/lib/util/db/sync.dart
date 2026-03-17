@@ -98,8 +98,10 @@ Future<APIResponse> syncData({
 
   if (kDebugMode) print(pulledData.data);
 
+  bool pulledPitMap = false;
   if (pulledData.data["pit_map_data"] != null) {
     await dbEvents.updatePitMapData(pulledData.data["pit_map_data"]);
+    pulledPitMap = true;
   }
 
   for (dynamic item in items) {
@@ -192,7 +194,7 @@ Future<APIResponse> syncData({
   return APIResponse(
     success: true,
     data:
-        "Uploaded ${dataToPush.length} items, downloaded ${items.length} items",
+        "Uploaded ${dataToPush.length} items, downloaded ${items.length} items${pulledPitMap ? ", and updated the pit map" : ""}.",
   );
 }
 
@@ -274,6 +276,7 @@ Future syncFlow(
   BuildContext context, {
   bool hard = false,
   bool fromClean = false,
+  bool withPhotos = true,
 }) async {
   showDialog(
     context: context,
@@ -283,8 +286,11 @@ Future syncFlow(
       title: "Syncing data",
       body: "Syncing data with server...",
       showOkButton: false,
+      showLoading: true,
     ),
   );
+
+  String finalMessage = "Data synced successfully! woohoo\n\n";
 
   APIResponse dataSyncResponse = await syncData(
     hard: hard,
@@ -300,47 +306,51 @@ Future syncFlow(
     );
     return;
   }
+  finalMessage += dataSyncResponse.data;
+  finalMessage += "\n";
 
-  APIResponse uploadResponse = await uploadPitPhotos(
-    await DbEvents().getEvent(),
-  );
-  if (!uploadResponse.success) {
-    if (!context.mounted) return;
-    Navigator.pop(context);
-    showDialog(
-      context: context,
-      builder: (context) => NotificationDialog(
-        title: "Photo Upload Error",
-        body: uploadResponse.data,
-      ),
+  if (withPhotos) {
+    APIResponse uploadResponse = await uploadPitPhotos(
+      await DbEvents().getEvent(),
     );
-    return;
-  }
+    if (!uploadResponse.success) {
+      if (!context.mounted) return;
+      Navigator.pop(context);
+      showDialog(
+        context: context,
+        builder: (context) => NotificationDialog(
+          title: "Photo Upload Error",
+          body: uploadResponse.data,
+        ),
+      );
+      return;
+    }
+    finalMessage += uploadResponse.data;
+    finalMessage += "\n";
 
-  APIResponse downloadResponse = await downloadPitPhotos(
-    await DbEvents().getEvent(),
-  );
-  if (!downloadResponse.success) {
-    if (!context.mounted) return;
-    Navigator.pop(context);
-    showDialog(
-      context: context,
-      builder: (context) => NotificationDialog(
-        title: "Photo Download Error",
-        body: downloadResponse.data,
-      ),
+    APIResponse downloadResponse = await downloadPitPhotos(
+      await DbEvents().getEvent(),
     );
-    return;
+    if (!downloadResponse.success) {
+      if (!context.mounted) return;
+      Navigator.pop(context);
+      showDialog(
+        context: context,
+        builder: (context) => NotificationDialog(
+          title: "Photo Download Error",
+          body: downloadResponse.data,
+        ),
+      );
+      return;
+    }
+    finalMessage += downloadResponse.data;
   }
 
   if (!context.mounted) return;
   Navigator.pop(context);
   await showDialog(
     context: context,
-    builder: (context) => NotificationDialog(
-      title: "Sync Complete",
-      body:
-          "Data synced successfully! woohoo\n\n${dataSyncResponse.data}\n${uploadResponse.data}\n${downloadResponse.data}",
-    ),
+    builder: (context) =>
+        NotificationDialog(title: "Sync Complete", body: finalMessage),
   );
 }

@@ -9,6 +9,7 @@ class NotificationDialog extends StatelessWidget {
   final Color titleColor;
   final String okButtonText;
   final bool showOkButton;
+  final bool showLoading;
 
   const NotificationDialog({
     super.key,
@@ -17,6 +18,7 @@ class NotificationDialog extends StatelessWidget {
     this.titleColor = Colors.orange,
     this.okButtonText = "Ok",
     this.showOkButton = true,
+    this.showLoading = false,
   });
 
   @override
@@ -42,6 +44,12 @@ class NotificationDialog extends StatelessWidget {
                 style: TextStyle(
                   fontSize: Device.fontSize(context, 15.0, 20.0),
                 ),
+              ),
+            ),
+            Visibility(
+              visible: showLoading,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
               ),
             ),
             Visibility(

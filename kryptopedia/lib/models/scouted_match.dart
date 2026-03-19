@@ -47,6 +47,12 @@ class ScoutedMatch {
     }
   }
 
+  int _startPosition = 0; //enum index
+  StartPosition get startPosition => StartPosition.values[_startPosition];
+  set startPosition(StartPosition value) {
+    _startPosition = value.index;
+  }
+
   int _issues = 0;
   bool get issues => _issues == 1;
   set issues(bool value) {
@@ -80,6 +86,7 @@ class ScoutedMatch {
     teleopFuelFed = 0;
 
     climbLevel = ClimbLevel.none;
+    startPosition = StartPosition.center;
     robotRoles = [];
     issues = false;
     penalties = Penalties.none;
@@ -99,6 +106,7 @@ class ScoutedMatch {
   static const teleopFuelScoredKey = "teleop_fuel_scored";
   static const teleopFuelFedKey = "teleop_fuel_fed";
   static const climbLevelKey = "climb_level";
+  static const startPositionKey = "start_position";
   static const robotRolesKey = "robot_roles";
   static const issuesKey = "issues";
   static const penaltiesKey = "penalties";
@@ -119,6 +127,7 @@ class ScoutedMatch {
       teleopFuelScoredKey: teleopFuelScored,
       teleopFuelFedKey: teleopFuelFed,
       climbLevelKey: _climbLevel,
+      startPositionKey: _startPosition,
       robotRolesKey: _robotRoles,
       issuesKey: _issues,
       penaltiesKey: _penalties,
@@ -138,6 +147,7 @@ class ScoutedMatch {
       teleopFuelScored = map[teleopFuelScoredKey],
       teleopFuelFed = map[teleopFuelFedKey],
       _climbLevel = map[climbLevelKey],
+      _startPosition = map[startPositionKey],
       _robotRoles = map[robotRolesKey],
       _issues = map[issuesKey],
       _penalties = map[penaltiesKey],
@@ -160,6 +170,8 @@ class ScoutedMatch {
 
 // ignore: constant_identifier_names
 enum ClimbLevel { none, L1, L2, L3 }
+
+enum StartPosition { lTrench, lBump, center, rBump, rTrench }
 
 enum Penalties { none, one, few, many }
 

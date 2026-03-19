@@ -24,6 +24,7 @@ class DbScoutedMatches {
       "${ScoutedMatch.robotRolesKey} INTEGER NOT NULL,"
       "${ScoutedMatch.issuesKey} INTEGER NOT NULL,"
       "${ScoutedMatch.penaltiesKey} INTEGER NOT NULL,"
+      "${ScoutedMatch.startPositionKey} TEXT NOT NULL,"
       "${ScoutedMatch.generalCommentsKey} TEXT NOT NULL)",
     );
   }

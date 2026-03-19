@@ -61,7 +61,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
     _selectedScouter = widget.scouter.id;
   }
 
-  MatchState state = MatchState.auto;
+  MatchState state = MatchState.start;
 
   void _toggleRobotRole(RobotRole role) {
     final updatedRoles = List<RobotRole>.from(scoutedMatchSingleton.robotRoles);
@@ -82,14 +82,21 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
     List<Color> colors = [];
     colors.add(allianceColor);
     switch (state) {
+      case MatchState.start:
+        colors.add(Colors.orangeAccent);
+        break;
       case MatchState.auto:
         colors.add(Colors.purple);
         break;
       case MatchState.teleop:
         colors.add(Colors.black);
         break;
-      default:
+      case MatchState.summary:
         colors.add(allianceColor);
+        break;
+      case MatchState.end:
+        colors.add(allianceColor);
+        break;
     }
 
     return PopScope(
@@ -99,7 +106,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
           return;
         }
         switch (state) {
-          case MatchState.auto:
+          case MatchState.start:
             bool? confirmation = await showDialog(
               context: context,
               builder: (context) => ConfirmationDialog(
@@ -112,6 +119,11 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
               return;
             }
             Navigator.pop(context);
+          case MatchState.auto:
+            setState(() {
+              state = MatchState.start;
+            });
+            break;
           case MatchState.teleop:
             setState(() {
               state = MatchState.auto;
@@ -209,6 +221,10 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   IconButton(
                     onPressed: () {
                       switch (state) {
+                        case MatchState.start:
+                          setState(() {
+                            state = MatchState.auto;
+                          });
                         case MatchState.auto:
                           setState(() {
                             state = MatchState.teleop;
@@ -248,7 +264,9 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "${widget.team.number} ${widget.team.nickname} | ${widget.match.name} | ${state == MatchState.auto
+                    "${widget.team.number} ${widget.team.nickname} | ${widget.match.name} | ${state == MatchState.start
+                        ? "Start"
+                        : state == MatchState.auto
                         ? "Auto"
                         : state == MatchState.teleop
                         ? "Teleop"
@@ -268,6 +286,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   int rows = switch (state) {
+                    MatchState.start => 5,
                     MatchState.auto => 5,
                     MatchState.teleop => 3,
                     _ => 4,
@@ -282,6 +301,73 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   double aspectRatio = itemHeight / itemWidth;
 
                   List<Widget> buttons = switch (state) {
+                    MatchState.start => [
+                      _buildGridButton(
+                        color: Colors.orangeAccent,
+                        label: "Left Trench",
+                        filled:
+                            scoutedMatchSingleton.startPosition ==
+                            StartPosition.lTrench,
+                        onPressed: () {
+                          scoutedMatchSingleton.startPosition =
+                              StartPosition.lTrench;
+                          state = MatchState.auto;
+                          vibrate(HapticsType.heavy);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.orangeAccent,
+                        label: "Left Bump",
+                        filled:
+                            scoutedMatchSingleton.startPosition ==
+                            StartPosition.lBump,
+                        onPressed: () {
+                          scoutedMatchSingleton.startPosition =
+                              StartPosition.lBump;
+                          state = MatchState.auto;
+                          vibrate(HapticsType.heavy);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.orangeAccent,
+                        label: "Center",
+                        filled:
+                            scoutedMatchSingleton.startPosition ==
+                            StartPosition.center,
+                        onPressed: () {
+                          scoutedMatchSingleton.startPosition =
+                              StartPosition.center;
+                          state = MatchState.auto;
+                          vibrate(HapticsType.heavy);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.orangeAccent,
+                        label: "Right Bump",
+                        filled:
+                            scoutedMatchSingleton.startPosition ==
+                            StartPosition.rBump,
+                        onPressed: () {
+                          scoutedMatchSingleton.startPosition =
+                              StartPosition.rBump;
+                          state = MatchState.auto;
+                          vibrate(HapticsType.heavy);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.orangeAccent,
+                        label: "Right Trench",
+                        filled:
+                            scoutedMatchSingleton.startPosition ==
+                            StartPosition.rTrench,
+                        onPressed: () {
+                          scoutedMatchSingleton.startPosition =
+                              StartPosition.rTrench;
+                          state = MatchState.auto;
+                          vibrate(HapticsType.heavy);
+                        },
+                      ),
+                    ],
                     MatchState.auto => [
                       _buildGridButton(
                         color: Colors.yellow,
@@ -610,4 +696,4 @@ class FutureResponse {
   FutureResponse({required this.scouters});
 }
 
-enum MatchState { auto, teleop, end, summary }
+enum MatchState { start, auto, teleop, end, summary }

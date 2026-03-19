@@ -45,23 +45,6 @@ class Api {
     }
   }
 
-  static Future<APIResponse> _makeTbaRequest(
-    String url,
-    String tbaAuthKey,
-  ) async {
-    try {
-      Response response;
-      response = await get(
-        Uri.parse(url),
-        headers: {"X-TBA-Auth-Key": tbaAuthKey},
-      );
-
-      return APIResponse(success: true, data: json.decode(response.body));
-    } catch (e) {
-      return APIResponse(success: false, data: e);
-    }
-  }
-
   static Future<APIResponse> preauthInfo(
     String serverURL,
     int teamNumber,
@@ -178,20 +161,6 @@ class Api {
     } catch (e) {
       return APIResponse(success: false, data: e);
     }
-  }
-
-  static Future<APIResponse> getTBATeamRankings(String eventCode) async {
-    return await _makeTbaRequest(
-      "https://www.thebluealliance.com/api/v3/event/2026${eventCode.toLowerCase()}/rankings",
-      "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
-    );
-  }
-
-  static Future<APIResponse> getTBATeamInsights(String eventCode) async {
-    return await _makeTbaRequest(
-      "https://www.thebluealliance.com/api/v3/event/2026${eventCode.toLowerCase()}/oprs",
-      "WPzUFYmmSy8xyxxysdXT258MnSE7y1piZBZQYv21rrWMDawjFFBaKhMcXLxpgLih",
-    );
   }
 }
 

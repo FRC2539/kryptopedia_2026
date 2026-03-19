@@ -26,10 +26,17 @@ class IncomingWebhooksController < ApplicationController
       key = data["verification_key"]
       Rails.cache.write("tba_webhook_verification_key", key, expires_in: 1.hour)
     when "schedule_updated"
-      event_key = data["event_key"]
-      events = ScoutedEvent.where(key: event_key, tba_sync: true)
+      event_code = data["event_key"].sub(/^\d+/, "")
+      events = ScoutedEvent.where(code: event_code, tba_sync: true)
       events.each do |event|
         event.download_matches_from_tba
+      end
+    when "match_score"
+      # not too many database queries im sure
+      event_code = data["event_key"].sub(/^\d+/, "")
+      events = ScoutedEvent.where(code: event_code, tba_sync: true)
+      events.each do |event|
+        event.purge_insights_cache!
       end
     end
 

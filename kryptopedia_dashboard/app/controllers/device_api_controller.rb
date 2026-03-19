@@ -78,6 +78,8 @@ class DeviceApiController < ApplicationController
     @preloaded_flags = @event.preloaded_flags.where(updated_at: since)
     @preloaded_flags = @preloaded_flags.where(deleted_at: nil) if from_clean
 
+    @insights = @event.teams_insights
+
     current_user.update! last_sync: @synced_to
   end
 

@@ -64,6 +64,29 @@ class ScoutedEvent < ApplicationRecord
     end
   end
 
+  def teams_insights
+    return {} unless teams and tba_sync?
+    Rails.cache.fetch("#{id}/insights", expires_in: 1.hour) do
+      statbotics_insights = StatboticsService.event_teams(2026, code).index_by { |t| t["team"] }
+      tba_insights = TBAService.event_oprs(2026, code)
+      teams.map do |team|
+        statbotics = statbotics_insights[team.number]
+        {
+          team_number: team.number,
+          opr: tba_insights["oprs"]["frc#{team.number}"],
+          dpr: tba_insights["dprs"]["frc#{team.number}"],
+          ccwm: tba_insights["ccwms"]["frc#{team.number}"],
+          ranking: statbotics ? statbotics["record"]["qual"]["rank"] : nil,
+          epa: statbotics ? statbotics["epa"]["total_points"]["mean"] : nil
+        }
+      end
+    end
+  end
+
+  def purge_insights_cache!
+    Rails.cache.delete("#{id}/insights")
+  end
+
   private
 
   def revive_or_create_join(team)

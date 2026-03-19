@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/dialogs/match_scouting_select.dart';
 import 'package:kryptopedia/dialogs/pit_scouting_select.dart';
+import 'package:kryptopedia/dialogs/predictions_debug.dart';
 import 'package:kryptopedia/screens/alliance_selection.dart';
 import 'package:kryptopedia/screens/match_preview.dart';
 import 'package:kryptopedia/screens/manage_team_flags.dart';
@@ -57,6 +58,15 @@ class MainMenu extends StatelessWidget {
             title: "Alliance Selection",
             icon: Icons.dashboard_customize,
             landscapeWidget: AllianceSelection(),
+          ),
+          MenuItemDefinition(
+            title: "Predictions Debug",
+            icon: Icons.bug_report,
+            onTap: (context) => showDialog(
+              context: context,
+              builder: (context) => PredictionsDebugDialog(),
+            ),
+            debugOnly: true,
           ),
         ])),
 

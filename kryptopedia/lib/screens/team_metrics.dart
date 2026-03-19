@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:kryptopedia/models/event.dart';
-import 'package:kryptopedia/models/eventinsights.dart';
-import 'package:kryptopedia/models/eventranking.dart';
-import 'package:kryptopedia/models/tba_event_insights.dart';
-import 'package:kryptopedia/models/tba_event_ranking.dart';
-import 'package:kryptopedia/models/tba_rankings.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_flag_application.dart';
-import 'package:kryptopedia/util/db/events.dart';
-import 'package:kryptopedia/util/db/tba_insights.dart';
-import 'package:kryptopedia/util/db/tba_ranking.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
-import 'package:kryptopedia/util/api.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/widgets/team_metrics/matrix.dart';
 
@@ -26,7 +16,6 @@ class TeamMetrics extends StatefulWidget {
 
 class _TeamMetricsState extends State<TeamMetrics> {
   bool showFlags = false;
-  bool importTBAInfo = false;
 
   int updateCount = 0;
   List<int> teams = [];
@@ -52,102 +41,6 @@ class _TeamMetricsState extends State<TeamMetrics> {
         teams.add(team.number);
       }
       teamsToShowNotifier.value = TeamsToShow.init(teams, false);
-    }
-
-    // Check if we should be pulling TBA information
-    if (importTBAInfo) {
-      DbEvents dbEvents = DbEvents();
-      Event activeEvent = (await dbEvents.getEvent());
-
-      // Pull current rankings from the Blue Alliance
-      APIResponse eventRankingResponse = await Api.getTBATeamRankings(
-        activeEvent.code,
-      );
-
-      if (eventRankingResponse.success && eventRankingResponse.data != null) {
-        // Create the table
-        DbEventRanking dbEventRanking = DbEventRanking();
-        await dbEventRanking.createEventRankingTable();
-
-        // Decode the the response
-        TBAEventRanking tbaEventRanking = TBAEventRanking.fromJson(
-          eventRankingResponse.data,
-        );
-
-        for (TBARankings tbaRankings in tbaEventRanking.rankings) {
-          await dbEventRanking.insertEventRanking(
-            EventRanking(
-              int.parse(tbaRankings.teamKey.substring(3)),
-              tbaRankings.rank,
-            ),
-          );
-        }
-      }
-
-      // Pull current rankings from the Blue Alliance
-      APIResponse eventInsightsResponse = await Api.getTBATeamInsights(
-        activeEvent.code,
-      );
-
-      if (eventInsightsResponse.success && eventInsightsResponse.data != null) {
-        // Create the table
-        DbEventInsights dbEventInsights = DbEventInsights();
-        await dbEventInsights.createEventInsightsTable();
-
-        // Decode the the response
-        TBAEventInsights tbaEventInsights = TBAEventInsights.fromJson(
-          eventInsightsResponse.data,
-        );
-
-        for (MapEntry<String, dynamic> oprsItem
-            in tbaEventInsights.oprs.entries) {
-          double oprsValue = oprsItem.value as double;
-          double dprsValue = tbaEventInsights.dprs[oprsItem.key] as double;
-          double ccwmsValue = tbaEventInsights.ccwms[oprsItem.key] as double;
-
-          await dbEventInsights.insertEventInsights(
-            EventInsights(
-              int.parse(oprsItem.key.substring(3)),
-              oprsValue,
-              dprsValue,
-              ccwmsValue,
-            ),
-          );
-        }
-      }
-
-      SnackBar? snackBar;
-      if (eventRankingResponse.success) {
-        snackBar = SnackBar(
-          content: Text(
-            'TBA information successfully pulled.',
-            style: TextStyle(fontSize: 16),
-          ),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.greenAccent,
-          showCloseIcon: true,
-        );
-
-        // Let the matrix know that potential changes to tba information have been made.
-        tbaUpdateNotifier.value = 1;
-      } else {
-        snackBar = SnackBar(
-          content: Text(
-            'TBA information failed to be pulled.',
-            style: TextStyle(fontSize: 16),
-          ),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.redAccent,
-          showCloseIcon: true,
-        );
-      }
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-
-      importTBAInfo = false;
     }
 
     // Create Flag Section
@@ -259,14 +152,6 @@ class _TeamMetricsState extends State<TeamMetrics> {
           Row(
             children: [
               IconButton(
-                icon: Icon(Icons.leaderboard, color: Colors.white),
-                onPressed: () {
-                  setState(() {
-                    if (!importTBAInfo) importTBAInfo = true;
-                  });
-                },
-              ),
-              IconButton(
                 icon: Icon(
                   showFlags ? Icons.flag : Icons.flag_outlined,
                   color: Colors.white,
@@ -320,7 +205,7 @@ class _TeamMetricsState extends State<TeamMetrics> {
                   ),
                 ),
                 TeamMetricsMatrix(
-                  teamstoShowNotifer: teamsToShowNotifier,
+                  teamsToShowNotifier: teamsToShowNotifier,
                   tbaUpdateNotifier: tbaUpdateNotifier,
                 ),
               ],

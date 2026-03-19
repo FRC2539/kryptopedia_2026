@@ -10,6 +10,7 @@ import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_flag_application.dart';
+import 'package:kryptopedia/models/team_insights_record.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/api.dart';
 import 'package:kryptopedia/util/db/events.dart';
@@ -18,6 +19,7 @@ import 'package:kryptopedia/util/db/preloaded_flags.dart';
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
+import 'package:kryptopedia/util/db/team_insights.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 
@@ -95,6 +97,7 @@ Future<APIResponse> syncData({
   DbTeamMembers dbTeamMembers = DbTeamMembers();
   DbMatches dbMatches = DbMatches();
   DbPreloadedFlags dbPreloadedFlags = DbPreloadedFlags();
+  DbTeamInsightsRecords dbTeamInsightsRecords = DbTeamInsightsRecords();
 
   if (kDebugMode) print(pulledData.data);
 
@@ -142,6 +145,15 @@ Future<APIResponse> syncData({
         }
         PreloadedFlag preloadedFlag = PreloadedFlag(item["name"]);
         await dbPreloadedFlags.upsertPreloadedFlag(preloadedFlag);
+      }
+
+      if (type == "team_insights") {
+        TeamInsightsRecord teamInsightsRecord = TeamInsightsRecord.fromMap(
+          item["data"],
+        );
+        await dbTeamInsightsRecords.upsertTeamInsightsRecord(
+          teamInsightsRecord,
+        );
       }
 
       //ScoutingDataItems vv

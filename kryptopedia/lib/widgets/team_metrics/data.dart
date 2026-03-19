@@ -51,9 +51,9 @@ class DataGrid extends StatelessWidget {
               true,
             ),
             smallCellContainer(
-              currentTeamStats[i].teamOprs.toStringAsFixed(2),
+              currentTeamStats[i].teamOPR.toStringAsFixed(2),
               75.0,
-              getIntShading(currentTeamStats[i].teamOprs.round(), 65),
+              getIntShading(currentTeamStats[i].teamOPR.round(), 65),
               true,
               true,
             ),

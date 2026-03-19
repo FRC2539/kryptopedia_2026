@@ -6,6 +6,7 @@ import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
 import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/scouted_pits.dart';
+import 'package:kryptopedia/util/db/team_insights.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:path/path.dart';
@@ -67,6 +68,7 @@ class DbHelper {
     DbTeamFlagApplications dbTeamFlagApplications = DbTeamFlagApplications();
     DbScoutedMatches dbScoutedMatches = DbScoutedMatches();
     DbPreloadedFlags dbPreloadedFlags = DbPreloadedFlags();
+    DbTeamInsightsRecords dbTeamInsightsRecords = DbTeamInsightsRecords();
 
     await Future.wait([
       dbTeams.ensureTableExists(db),
@@ -77,6 +79,7 @@ class DbHelper {
       dbTeamFlagApplications.ensureTableExists(db),
       dbScoutedMatches.ensureTableExists(db),
       dbPreloadedFlags.ensureTableExists(db),
+      dbTeamInsightsRecords.ensureTableExists(db),
     ]);
   }
 

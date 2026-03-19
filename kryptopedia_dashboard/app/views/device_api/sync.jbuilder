@@ -32,13 +32,22 @@ json.items do
   json.array! @scouting_data_items do |item|
     json.type item.data_type
     json.deleted !!item.deleted_at
-    # TODO: do not send full items for deletions!
-    json.data item.data.merge({ "uid" => item.uid, "scouter_id" => item.team_member&.hashid, "server_photo_updated" => item.image.attached? ? item.image.blob.created_at.to_i * 1000 : nil })
+    # TODO: dont send full items for deletions!
+    json.data item.data.merge({
+                                "uid" => item.uid,
+                                "scouter_id" => item.team_member&.hashid,
+                                "server_photo_updated" => item.image.attached? ? item.image.blob.created_at.to_i * 1000 : nil })
   end
 
   json.array! @preloaded_flags do |flag|
     json.type "preloaded_flag"
     json.deleted !!flag.deleted_at
     json.name flag.name
+  end
+
+  json.array! @insights do |insights|
+    json.type "team_insights"
+    json.deleted false
+    json.data insights
   end
 end

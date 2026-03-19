@@ -42,5 +42,9 @@ module TBAService
     def event_teams(year, event_code)
       _conn.get("event/#{year}#{event_code}/teams/simple").body
     end
+
+    def event_oprs(year, event_code)
+      _conn.get("event/#{year}#{event_code}/oprs").body
+    end
   end
 end

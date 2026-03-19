@@ -4,7 +4,7 @@ class TeamMetrics {
 
   int matchCount = 0;
   int teamRanking = 0;
-  double teamOprs = 0.0;
+  double teamOPR = 0.0;
   // double teamEpa = 0.0;
 
   // Information Match Scoring

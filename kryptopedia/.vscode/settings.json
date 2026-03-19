@@ -1,5 +1,13 @@
 {
-  "cSpell.words": ["Colson", "Kryptopedia", "Mecanum", "Teleop", "woohoo"],
+  "cSpell.words": [
+    "ccwm",
+    "Colson",
+    "Kryptopedia",
+    "Mecanum",
+    "Statbotics",
+    "Teleop",
+    "woohoo"
+  ],
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "modificationsIfAvailable",
   "editor.defaultFormatter": "Dart-Code.dart-code"

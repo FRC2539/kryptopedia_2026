@@ -16,12 +16,12 @@ class TeamsToShow {
 }
 
 class TeamMetricsMatrix extends StatefulWidget {
-  final ValueNotifier<TeamsToShow> teamstoShowNotifer;
+  final ValueNotifier<TeamsToShow> teamsToShowNotifier;
   final ValueNotifier<int> tbaUpdateNotifier;
 
   const TeamMetricsMatrix({
     super.key,
-    required this.teamstoShowNotifer,
+    required this.teamsToShowNotifier,
     required this.tbaUpdateNotifier,
   });
 
@@ -98,7 +98,7 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
                                       ) {
                                         return FutureBuilder(
                                           future: getMetricsDataTable(
-                                            widget.teamstoShowNotifer,
+                                            widget.teamsToShowNotifier,
                                             widget.tbaUpdateNotifier,
                                           ),
                                           builder:
@@ -133,7 +133,7 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
                           valueListenable: columnSelectorNotifier,
                         );
                       },
-                  valueListenable: widget.teamstoShowNotifer,
+                  valueListenable: widget.teamsToShowNotifier,
                 ),
               ],
             ),
@@ -209,8 +209,8 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
       case ColType.eventOPR:
         currentTeamStats.sort((a, b) {
           return (columnSelectorNotifier.value.ascending)
-              ? (a.teamOprs.compareTo(b.teamOprs))
-              : (b.teamOprs.compareTo(a.teamOprs));
+              ? (a.teamOPR.compareTo(b.teamOPR))
+              : (b.teamOPR.compareTo(a.teamOPR));
         });
         break;
 

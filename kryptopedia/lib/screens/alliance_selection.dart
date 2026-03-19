@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:kryptopedia/models/alliance_selection_team.dart';
 import 'package:kryptopedia/models/team.dart';
-import 'package:kryptopedia/util/db/tba_ranking.dart';
+import 'package:kryptopedia/models/team_insights_record.dart';
 import 'package:kryptopedia/util/db/team_flag_applications.dart';
+import 'package:kryptopedia/util/db/team_insights.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/widgets/alliance_selection/alliance_picks.dart';
@@ -438,7 +439,7 @@ class _AllianceSelectionState extends State<AllianceSelection> {
                     ],
                   ),
                   TeamMetricsMatrix(
-                    teamstoShowNotifer: teamsToShowNotifier,
+                    teamsToShowNotifier: teamsToShowNotifier,
                     tbaUpdateNotifier: tbaUpdateNotifier,
                   ),
                 ],
@@ -462,13 +463,15 @@ class _AllianceSelectionState extends State<AllianceSelection> {
 
       for (Team team in teamsAtEvent) {
         // Retrieve Event Rankings
-        DbEventRanking dbEventRanking = DbEventRanking();
-        int? ranking = await dbEventRanking.getTeamRanking(team.number);
+        DbTeamInsightsRecords dbTeamInsightsRecords = DbTeamInsightsRecords();
+        TeamInsightsRecord? insights = await dbTeamInsightsRecords
+            .getTeamInsights(team.number);
+
 
         eventTeams.add(
           AllianceSelectionEventTeam(
             team,
-            (ranking != null) ? ranking : 0,
+            (insights?.ranking != null) ? insights!.ranking! : 0,
             false,
             false,
           ),

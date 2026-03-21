@@ -14,11 +14,13 @@ import 'package:kryptopedia/widgets/team_info/pit_info_specs.dart';
 class TeamInfoPitInfo extends StatefulWidget {
   final ScoutedPit? scoutedPit;
   final Team team;
+  final Function(BuildContext context)? onUpdate;
 
   const TeamInfoPitInfo({
     super.key,
     required this.scoutedPit,
     required this.team,
+    this.onUpdate,
   });
 
   @override
@@ -71,7 +73,8 @@ class _TeamInfoPitInfoState extends State<TeamInfoPitInfo> {
                       ),
                     ),
                   );
-                  //TODO widget.ScoutedPit is potentially outdated at this point, somehow trigger a whole page refresh?
+                  if (!context.mounted) return;
+                  widget.onUpdate?.call(context);
                 },
                 child: Text("Scout Pit"),
               ),

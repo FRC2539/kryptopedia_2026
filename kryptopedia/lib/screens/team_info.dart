@@ -61,6 +61,11 @@ class _TeamInfoState extends State<TeamInfo> {
                               (team) =>
                                   team.number == _teamChangedNotifier.value,
                             ),
+                            onUpdate: (context) {
+                              setState(() {
+                                retrieveInformation();
+                              });
+                            },
                           ),
                           TeamInfoComments(
                             scoutedMatches: scoutedMatches,

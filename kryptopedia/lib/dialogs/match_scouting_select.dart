@@ -92,11 +92,33 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
       _selectedPosition = event.defaultAlliancePosition!;
     }
 
-    int selectedIndex = options.indexWhere(
-      (option) => !(option.scouted[_selectedPosition] ?? false),
-    );
-    if (selectedIndex == -1) {
-      selectedIndex = 0;
+    int selectedIndex = 0;
+
+    if (scoutedMatches.isNotEmpty) {
+      final lastScoutedMatch = scoutedMatches.reduce(
+        (current, next) =>
+            next.matchNumber > current.matchNumber ? next : current,
+      );
+
+      final lastScoutedMatchIndex = options.indexWhere(
+        (option) =>
+            option.match.number == lastScoutedMatch.matchNumber &&
+            option.match.compLevel == lastScoutedMatch.matchCompLevel,
+      );
+
+      if (lastScoutedMatchIndex != -1) {
+        selectedIndex = (lastScoutedMatchIndex + 1).clamp(
+          0,
+          options.length - 1,
+        );
+      }
+    } else {
+      final firstUnscoutedIndex = options.indexWhere(
+        (option) => !(option.scouted[_selectedPosition] ?? false),
+      );
+      if (firstUnscoutedIndex != -1) {
+        selectedIndex = firstUnscoutedIndex;
+      }
     }
 
     _selectedMatch = options[selectedIndex];
@@ -280,7 +302,6 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                               _selectedPosition = selectedEntry.key;
                               dbEvents.updateAlliancePosition(
                                 _selectedPosition,
-                              
                               );
                             });
                           },

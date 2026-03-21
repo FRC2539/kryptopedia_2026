@@ -16,15 +16,6 @@ import 'package:kryptopedia/util/db/matches.dart';
 
 import 'package:kryptopedia/util/deviceinfo.dart';
 
-final List<String> alliancePositions = [
-  'Blue 1',
-  'Blue 2',
-  'Blue 3',
-  'Red 1',
-  'Red 2',
-  'Red 3',
-];
-
 class ScoutMatchSelectionDialog extends StatefulWidget {
   const ScoutMatchSelectionDialog({super.key});
 
@@ -37,7 +28,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
   late ScoutMatchOption _selectedMatch;
   late String _selectedScouter;
   late Future<FutureResponse> data;
-  String _selectedPosition = alliancePositions.first;
+  AlliancePosition _selectedPosition = AlliancePosition.values.first;
   late Team _selectedTeam;
   bool noMatches = false;
 
@@ -56,24 +47,37 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
 
     List<ScoutMatchOption> options = [];
     for (EventMatch match in matches) {
-      List<Team> matchTeams = [
-        teams.firstWhere((t) => t.number == match.blue1number),
-        teams.firstWhere((t) => t.number == match.blue2number),
-        teams.firstWhere((t) => t.number == match.blue3number),
-        teams.firstWhere((t) => t.number == match.red1number),
-        teams.firstWhere((t) => t.number == match.red2number),
-        teams.firstWhere((t) => t.number == match.red3number),
-      ];
-      List<bool> scouted = matchTeams
-          .map(
-            (t) => scoutedMatches.any(
-              (sm) =>
-                  sm.teamNumber == t.number &&
-                  sm.matchNumber == match.number &&
-                  sm.matchCompLevel == match.compLevel,
-            ),
-          )
-          .toList();
+      Map<AlliancePosition, Team> matchTeams = {
+        AlliancePosition.blue1: teams.firstWhere(
+          (t) => t.number == match.blue1number,
+        ),
+        AlliancePosition.blue2: teams.firstWhere(
+          (t) => t.number == match.blue2number,
+        ),
+        AlliancePosition.blue3: teams.firstWhere(
+          (t) => t.number == match.blue3number,
+        ),
+        AlliancePosition.red1: teams.firstWhere(
+          (t) => t.number == match.red1number,
+        ),
+        AlliancePosition.red2: teams.firstWhere(
+          (t) => t.number == match.red2number,
+        ),
+        AlliancePosition.red3: teams.firstWhere(
+          (t) => t.number == match.red3number,
+        ),
+      };
+      Map<AlliancePosition, bool> scouted = matchTeams.map(
+        (position, team) => MapEntry(
+          position,
+          scoutedMatches.any(
+            (sm) =>
+                sm.teamNumber == team.number &&
+                sm.matchNumber == match.number &&
+                sm.matchCompLevel == match.compLevel,
+          ),
+        ),
+      );
       options.add(
         ScoutMatchOption(match: match, teams: matchTeams, scouted: scouted),
       );
@@ -88,28 +92,18 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
       _selectedPosition = event.defaultAlliancePosition!;
     }
 
-    int theDex = 1;
-
-    for (
-      int i = options.length;
-      (i > 1) &&
-          !(options[i - 2].scouted[options[i - 2].teams.indexWhere(
-            (t) =>
-                alliancePositions[options[i - 2].teams.indexOf(t)] ==
-                _selectedPosition, // <-- That is just a wacky way of finding the first match after all already scouted ones
-          )]);
-      i--
-    ) {
-      theDex = i;
+    int selectedIndex = options.indexWhere(
+      (option) => !(option.scouted[_selectedPosition] ?? false),
+    );
+    if (selectedIndex == -1) {
+      selectedIndex = 0;
     }
 
-    _selectedMatch = options[theDex - 2];
+    _selectedMatch = options[selectedIndex];
 
-    _selectedTeam = _selectedMatch.teams.firstWhere(
-      (t) =>
-          alliancePositions[_selectedMatch.teams.indexOf(t)] ==
-          _selectedPosition,
-    );
+    _selectedTeam =
+        _selectedMatch.teams[_selectedPosition] ??
+        _selectedMatch.teams.values.first;
 
     DbTeamMembers dbTeamMembers = DbTeamMembers();
     List<TeamMember> teamMembers = await dbTeamMembers.getTeamMembers();
@@ -227,12 +221,9 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                           onChanged: (ScoutMatchOption? newValue) {
                             setState(() {
                               _selectedMatch = newValue!;
-                              _selectedTeam = _selectedMatch.teams.firstWhere(
-                                (t) =>
-                                    alliancePositions[_selectedMatch.teams
-                                        .indexOf(t)] ==
-                                    _selectedPosition,
-                              );
+                              _selectedTeam =
+                                  _selectedMatch.teams[_selectedPosition] ??
+                                  _selectedMatch.teams.values.first;
                             });
                           },
                           items: snapshot.data!.matches
@@ -280,47 +271,57 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                           onChanged: (Team? newValue) {
                             setState(() {
                               _selectedTeam = newValue!;
-                              _selectedPosition =
-                                  alliancePositions[_selectedMatch.teams
-                                      .indexOf(newValue)];
+                              final selectedEntry = _selectedMatch.teams.entries
+                                  .firstWhere(
+                                    (entry) => entry.value == newValue,
+                                    orElse: () =>
+                                        MapEntry(_selectedPosition, newValue),
+                                  );
+                              _selectedPosition = selectedEntry.key;
                               dbEvents.updateAlliancePosition(
                                 _selectedPosition,
+                              
                               );
                             });
                           },
-                          items: _selectedMatch.teams.map((Team team) {
-                            return DropdownMenuItem(
-                              value: team,
-                              child: SizedBox(
-                                width: Device.isTablet(context) ? 425.0 : 225.0,
-                                child: AutoSizeText(
-                                  "${alliancePositions[_selectedMatch.teams.indexOf(team)]} - ${team.number} ${team.nickname}",
-                                  style: TextStyle(
-                                    fontWeight:
-                                        _selectedMatch.scouted[_selectedMatch
-                                            .teams
-                                            .indexOf(team)]
-                                        ? FontWeight.w200
-                                        : FontWeight.normal,
-                                    fontSize: Device.fontSize(
-                                      context,
-                                      12.0,
-                                      22.0,
+                          items: _selectedMatch.teams.entries
+                              .map<DropdownMenuItem<Team>>((entry) {
+                                final position = entry.key;
+                                final team = entry.value;
+                                return DropdownMenuItem<Team>(
+                                  value: team,
+                                  child: SizedBox(
+                                    width: Device.isTablet(context)
+                                        ? 425.0
+                                        : 225.0,
+                                    child: AutoSizeText(
+                                      "${position.name} - ${team.number} ${team.nickname}",
+                                      style: TextStyle(
+                                        fontWeight:
+                                            (_selectedMatch.scouted[position] ??
+                                                false)
+                                            ? FontWeight.w200
+                                            : FontWeight.normal,
+                                        fontSize: Device.fontSize(
+                                          context,
+                                          12.0,
+                                          22.0,
+                                        ),
+                                      ),
+                                      maxLines: 2,
                                     ),
                                   ),
-                                  maxLines: 2,
-                                ),
-                              ),
-                            );
-                          }).toList(),
+                                );
+                              })
+                              .toList(),
                         ),
                       ),
                       SizedBox(height: 8),
                       Center(
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_selectedMatch.scouted[_selectedMatch.teams
-                                .indexOf(_selectedTeam)]) {
+                            if (_selectedMatch.scouted[_selectedPosition] ??
+                                false) {
                               bool? confirmation = await showDialog(
                                 context: context,
                                 builder: (context) => ConfirmationDialog(
@@ -381,10 +382,9 @@ class FutureResponse {
   FutureResponse({required this.matches, required this.scouters});
 }
 
-//* teams and scouted are blue then red 1-3
 class ScoutMatchOption {
-  final List<Team> teams;
-  final List<bool> scouted;
+  final Map<AlliancePosition, Team> teams;
+  final Map<AlliancePosition, bool> scouted;
   final EventMatch match;
 
   ScoutMatchOption({

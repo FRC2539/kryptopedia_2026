@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/models/team_member.dart';
@@ -15,7 +16,7 @@ import 'package:kryptopedia/widgets/match_scouting/3_endgame-summary.dart';
 class MatchScouting extends StatefulWidget {
   final Team team;
   final EventMatch match;
-  final String alliancePosition;
+  final AlliancePosition alliancePosition;
   final TeamMember scouter;
   final bool preserve;
 

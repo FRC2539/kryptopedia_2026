@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 
@@ -30,7 +31,7 @@ class PageBanner extends StatelessWidget {
 class MatchBanner extends StatelessWidget {
   final EventMatch match;
   final String team;
-  final String alliancePosition;
+  final AlliancePosition alliancePosition;
 
   const MatchBanner({
     super.key,
@@ -41,7 +42,7 @@ class MatchBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = alliancePosition.startsWith("Red")
+    Color backgroundColor = redAlliancePositions.contains(alliancePosition)
         ? Colors.red
         : Colors.blue;
         

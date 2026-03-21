@@ -196,7 +196,6 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
       teamNumber,
       0,
       null,
-      alliancePositions.first,
     );
     DbEvents dbEvents = DbEvents();
     await dbEvents.upsertEvent(eventData);
@@ -376,7 +375,6 @@ class _TestDataFormState extends State<TestDataForm> {
       teamNumber,
       0,
       null,
-      alliancePositions.first,
     );
 
     DbEvents dbEvents = DbEvents();

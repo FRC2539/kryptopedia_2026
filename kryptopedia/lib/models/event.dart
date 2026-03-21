@@ -9,7 +9,16 @@ class Event {
   String? authToken;
   int teamNumber;
   String? lastScouter;
-  String? defaultAlliancePosition;
+
+  int? _defaultAlliancePosition; //enum index
+  AlliancePosition? get defaultAlliancePosition =>
+      _defaultAlliancePosition == null
+      ? null
+      : AlliancePosition.values[_defaultAlliancePosition!];
+  set defaultAlliancePosition(AlliancePosition? value) {
+    _defaultAlliancePosition = value?.index;
+  }
+
 
   String? _pitMapDataJSON;
   Map<String, dynamic>? get pitMapDataJSON =>
@@ -44,7 +53,6 @@ class Event {
     this.teamNumber,
     this._lastSync,
     this.lastScouter,
-    this.defaultAlliancePosition,
   );
 
   bool get syncEnabled => (serverURL != null && authToken != null);
@@ -60,7 +68,7 @@ class Event {
       teamNumberKey: teamNumber,
       lastSyncKey: _lastSync,
       lastScouterKey: lastScouter,
-      defaultAlliancePositionKey: defaultAlliancePosition,
+      defaultAlliancePositionKey: _defaultAlliancePosition,
       pitMapDataJSONKey: _pitMapDataJSON,
     };
   }
@@ -75,6 +83,20 @@ class Event {
       teamNumber = map[teamNumberKey],
       _lastSync = map[lastSyncKey],
       lastScouter = map[lastScouterKey],
-      defaultAlliancePosition = map[defaultAlliancePositionKey],
+      _defaultAlliancePosition = map[defaultAlliancePositionKey],
       _pitMapDataJSON = map[pitMapDataJSONKey];
 }
+
+enum AlliancePosition { red1, red2, red3, blue1, blue2, blue3 }
+
+final List<AlliancePosition> redAlliancePositions = [
+  AlliancePosition.red1,
+  AlliancePosition.red2,
+  AlliancePosition.red3,
+];
+
+final List<AlliancePosition> blueAlliancePositions = [
+  AlliancePosition.blue1,
+  AlliancePosition.blue2,
+  AlliancePosition.blue3,
+];

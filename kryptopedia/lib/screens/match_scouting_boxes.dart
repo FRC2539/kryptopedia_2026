@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:kryptopedia/dialogs/generic_confirmation.dart';
 import 'package:kryptopedia/main.dart';
+import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/team.dart';
@@ -18,7 +19,7 @@ import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/text_field.dart';
 
 class MatchScoutingBoxesEdition extends StatefulWidget {
-  final String alliancePosition;
+  final AlliancePosition alliancePosition;
   final Team team;
   final EventMatch match;
   final TeamMember scouter;
@@ -76,7 +77,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
   @override
   Widget build(BuildContext context) {
     Color allianceColor =
-        widget.alliancePosition.toLowerCase().startsWith('red')
+        redAlliancePositions.contains(widget.alliancePosition)
         ? Colors.red
         : Colors.blue;
     List<Color> colors = [];

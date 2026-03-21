@@ -8,7 +8,7 @@ class MatchesController < ApplicationController
 
   def download_matches_from_tba
     redirect_to edit_team_scouted_event_path(@scouted_event), alert: "TBA Sync is disabled" unless @scouted_event.tba_sync?
-    @scouted_event.download_matches_from_tba
+    @scouted_event.download_matches_from_tba!
     redirect_to team_scouted_event_matches_path(@scouted_event), notice: "Matches downloaded!"
   end
 end

@@ -7,7 +7,7 @@ class ScoutedMatch {
   String scouterId = "";
   String uid = "";
 
-  String matchCompLevel = "q";
+  String matchCompLevel = "qm";
   int matchNumber = 0;
   int teamNumber = 0;
 

@@ -144,7 +144,7 @@ class _QualificationMatchScheduleState
 
   Future<MatchesScheduleInitialData> getInitialData() async {
     List<EventMatch> matches = await dbMatches.getMatches();
-    matches = matches.where((match) => match.compLevel == "q").toList();
+    matches = matches.where((match) => match.compLevel == "qm").toList();
     if (_oneTeamOnly != 0) {
       matches = matches.where((element) {
         return [

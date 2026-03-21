@@ -13,7 +13,7 @@ class EventMatch {
 
   String get compLevelName {
     switch (compLevel) {
-      case "q":
+      case "qm":
         return "Qualification";
       default:
         return compLevel;

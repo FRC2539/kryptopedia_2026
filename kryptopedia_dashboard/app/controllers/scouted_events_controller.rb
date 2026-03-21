@@ -43,7 +43,7 @@ class ScoutedEventsController < ApplicationController
   private
 
   def scouted_event_params
-    params.require(:scouted_event).permit(:name, :code, :tba_sync)
+    params.require(:scouted_event).permit(:name, :code, :tba_sync, :min_app_version, :max_app_version)
   end
 
 end

@@ -29,7 +29,7 @@ class IncomingWebhooksController < ApplicationController
       event_code = data["event_key"].sub(/^\d+/, "")
       events = ScoutedEvent.where(code: event_code, tba_sync: true)
       events.each do |event|
-        event.download_matches_from_tba
+        event.download_matches_from_tba!
       end
     when "match_score"
       # not too many database queries im sure

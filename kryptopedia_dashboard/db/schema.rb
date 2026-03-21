@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_14_195825) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_21_145545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -96,6 +96,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_195825) do
   create_table "scouted_events", force: :cascade do |t|
     t.string "code"
     t.datetime "created_at", null: false
+    t.string "max_app_version"
+    t.string "min_app_version"
     t.string "name"
     t.datetime "pit_map_cache_updated"
     t.boolean "tba_sync", default: false, null: false

@@ -49,7 +49,7 @@ class DbMatches {
     final List<Map<String, dynamic>> matches = await db.query(
       EventMatch.tableName,
       where: "${EventMatch.compLevelKey} = ?",
-      whereArgs: ["q"],
+      whereArgs: ["qm"],
     );
 
     return List.generate(matches.length, (i) {
@@ -63,7 +63,7 @@ class DbMatches {
     final List<Map<String, dynamic>> result = await db.query(
       EventMatch.tableName,
       where: "${EventMatch.compLevelKey} = ? AND ${EventMatch.numberKey} = ?",
-      whereArgs: ["q", matchNumber],
+      whereArgs: ["qm", matchNumber],
     );
 
     EventMatch returnValue = EventMatch.fromMap(result.first);

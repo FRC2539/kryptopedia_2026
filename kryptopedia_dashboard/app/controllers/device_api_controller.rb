@@ -2,10 +2,16 @@ class DeviceApiController < ApplicationController
   include TeamConcern
 
   before_action :restrict_to_device, except: [:preauth_info, :request_session, :check_session_request, :cancel_session_request]
+  before_action :get_headers
   skip_before_action :verify_authenticity_token
 
   def preauth_info
     @events = @team.scouted_events
+    # filter event min/max app version. version is a semvar string. min and max are optional and we should default to allowing all events
+    @events = @events.select do |event|
+      (event.min_app_version.nil? || Gem::Version.new(@app_version) >= Gem::Version.new(event.min_app_version)) &&
+        (event.max_app_version.nil? || Gem::Version.new(@app_version) <= Gem::Version.new(event.max_app_version))
+    end
     @devices = @team.devices
   end
 
@@ -103,6 +109,13 @@ class DeviceApiController < ApplicationController
     redirect_to url_for(item.image), allow_other_host: true
   rescue ActiveRecord::RecordNotFound
     head :not_found
+  end
+
+  private
+
+  def get_headers
+    @app_version = request.headers["X-App-Version"]
+    head :bad_request unless @app_version.present?
   end
 
 end

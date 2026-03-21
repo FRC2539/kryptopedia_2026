@@ -4,6 +4,8 @@
 #
 #  id                    :bigint           not null, primary key
 #  code                  :string
+#  max_app_version       :string
+#  min_app_version       :string
 #  name                  :string
 #  pit_map_cache_updated :datetime
 #  tba_sync              :boolean          default(FALSE), not null
@@ -47,11 +49,11 @@ class ScoutedEvent < ApplicationRecord
     end
   end
 
-  def download_matches_from_tba
+  def download_matches_from_tba!
     return unless tba_sync?
 
     TBAService.event_matches(2026, code).each do |match_data|
-      comp_level = match_data["key"].delete_prefix("2026#{code}_").split("m").first
+      comp_level = match_data["comp_level"]
       match = matches.find_or_initialize_by(comp_level: comp_level, number: match_data["match_number"])
       match.update!(
         red1: Team.find_or_create_by!(number: match_data["alliances"]["red"]["team_keys"][0].delete_prefix("frc").to_i),

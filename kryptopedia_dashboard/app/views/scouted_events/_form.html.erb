@@ -14,6 +14,16 @@
     <%= f.check_box :tba_sync %>
     <%= error_messages_for scouted_event, :tba_sync %>
   </div>
+  <div>
+    <%= f.label :min_app_version %>
+    <%= f.text_field :min_app_version %>
+    <%= error_messages_for scouted_event, :min_app_version %>
+  </div>
+  <div>
+    <%= f.label :max_app_version %>
+    <%= f.text_field :max_app_version %>
+    <%= error_messages_for scouted_event, :max_app_version %>
+  </div>
   <p><%= scouted_event.test ? "test event" : "real deal event" %></p>
   <div>
     <%= f.submit %>

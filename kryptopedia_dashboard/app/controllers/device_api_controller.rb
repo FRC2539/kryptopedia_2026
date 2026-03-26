@@ -7,10 +7,12 @@ class DeviceApiController < ApplicationController
 
   def preauth_info
     @events = @team.scouted_events
-    # filter event min/max app version. version is a semvar string. min and max are optional and we should default to allowing all events
+
     @events = @events.select do |event|
-      (event.min_app_version.nil? || Gem::Version.new(@app_version) >= Gem::Version.new(event.min_app_version)) &&
-        (event.max_app_version.nil? || Gem::Version.new(@app_version) <= Gem::Version.new(event.max_app_version))
+      current_version = Gem::Version.new(@app_version)
+      return false if event.min_app_version.present? and current_version < Gem::Version.new(event.min_app_verision)
+      return false if event.max_app_version.present? and current_version > Gem::Version.new(event.max_app_version)
+      true
     end
     @devices = @team.devices
   end

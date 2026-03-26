@@ -40,6 +40,9 @@ class ScoutedEvent < ApplicationRecord
   validates :code, presence: true, uniqueness: { scope: :team_id }
   validates :test, inclusion: [true, false]
 
+  normalizes :min_app_version, :max_app_version, with: -> { it.presence }
+
+
   def pit_map
     Rails.cache.fetch("#{code}/pit_map", expires_in: 1.hour) do
       self.update!(pit_map_cache_updated: Time.current)

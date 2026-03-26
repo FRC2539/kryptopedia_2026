@@ -10,7 +10,7 @@ class DeviceApiController < ApplicationController
 
     @events = @events.select do |event|
       current_version = Gem::Version.new(@app_version)
-      return false if event.min_app_version.present? and current_version < Gem::Version.new(event.min_app_verision)
+      return false if event.min_app_version.present? and current_version < Gem::Version.new(event.min_app_version)
       return false if event.max_app_version.present? and current_version > Gem::Version.new(event.max_app_version)
       true
     end

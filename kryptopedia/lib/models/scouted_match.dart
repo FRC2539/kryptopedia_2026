@@ -171,7 +171,7 @@ class ScoutedMatch {
 // ignore: constant_identifier_names
 enum ClimbLevel { none, L1, L2, L3 }
 
-enum StartPosition { lTrench, lBump, center, rBump, rTrench }
+enum StartPosition { lTrench, lBump, center, rBump, rTrench, none }
 
 enum Penalties { none, one, few, many }
 

@@ -264,7 +264,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   int rows = switch (state) {
-                    MatchState.start => 5,
+                    MatchState.start => 6,
                     MatchState.auto => 5,
                     MatchState.teleop => 3,
                     _ => 4,
@@ -353,6 +353,21 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                           state = MatchState.auto;
                           setStartPosition = true;
                           vibrate(HapticsType.heavy);
+                        },
+                      ),
+                      _buildGridButton(
+                        color: Colors.redAccent,
+                        label: "No-show",
+                        filled:
+                            scoutedMatchSingleton.startPosition ==
+                                StartPosition.none &&
+                            setStartPosition,
+                        onPressed: () {
+                          scoutedMatchSingleton.startPosition =
+                              StartPosition.none;
+                          scoutedMatchSingleton.issues = true;
+                          vibrate(HapticsType.error);
+                          comments();
                         },
                       ),
                     ],

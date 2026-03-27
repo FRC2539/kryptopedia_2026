@@ -229,7 +229,7 @@ class _TeamDeviceFormState extends State<TeamDeviceForm> {
     }
     if (devices.isEmpty) {
       return setState(() {
-        apiError = "no teams exist!";
+        apiError = "no devices exist!";
       });
     }
 

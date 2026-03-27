@@ -42,6 +42,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
   late String _selectedScouter;
   late List<TeamMember> scouters;
   DbEvents dbEvents = DbEvents();
+  bool setStartPosition = false;
 
   Future<FutureResponse> _future() async {
     DbTeamMembers dbTeamMembers = DbTeamMembers();
@@ -76,8 +77,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
 
   @override
   Widget build(BuildContext context) {
-    Color allianceColor =
-        redAlliancePositions.contains(widget.alliancePosition)
+    Color allianceColor = redAlliancePositions.contains(widget.alliancePosition)
         ? Colors.red
         : Colors.blue;
     List<Color> colors = [];
@@ -151,13 +151,6 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(), //it works :)
-                  AutoSizeText(
-                    "                ",
-                    style: TextStyle(
-                      fontSize: Device.fontHeader(context) * 0.7,
-                    ),
-                    maxLines: 1,
-                  ),
                   FutureBuilder(
                     future: data,
                     builder: (context, snapshot) {
@@ -201,54 +194,38 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       );
                     },
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MatchScouting(
-                            team: widget.team,
-                            match: widget.match,
-                            scouter: widget.scouter,
-                            alliancePosition: widget.alliancePosition,
-                            preserve: true,
-                          ),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MatchScouting(
+                                team: widget.team,
+                                match: widget.match,
+                                scouter: widget.scouter,
+                                alliancePosition: widget.alliancePosition,
+                                preserve: true,
+                              ),
+                            ),
+                          );
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.edit),
+                      ),
+                      Visibility(
+                        visible: state == MatchState.teleop,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              state = MatchState.end;
+                            });
+                          },
+                          icon: const Icon(Icons.arrow_forward),
                         ),
-                      );
-                      setState(() {});
-                    },
-                    icon: const Icon(Icons.edit),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      switch (state) {
-                        case MatchState.start:
-                          setState(() {
-                            state = MatchState.auto;
-                          });
-                        case MatchState.auto:
-                          setState(() {
-                            state = MatchState.teleop;
-                          });
-                          break;
-                        case MatchState.teleop:
-                          setState(() {
-                            state = MatchState.end;
-                          });
-                          break;
-                        case MatchState.end:
-                          setState(() {
-                            state = MatchState.summary;
-                          });
-                          break;
-                        case MatchState.summary:
-                          setState(() {
-                            comments();
-                          });
-                          break;
-                      }
-                    },
-                    icon: const Icon(Icons.arrow_forward),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -308,11 +285,13 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         label: "Left Trench",
                         filled:
                             scoutedMatchSingleton.startPosition ==
-                            StartPosition.lTrench,
+                                StartPosition.lTrench &&
+                            setStartPosition,
                         onPressed: () {
                           scoutedMatchSingleton.startPosition =
                               StartPosition.lTrench;
                           state = MatchState.auto;
+                          setStartPosition = true;
                           vibrate(HapticsType.heavy);
                         },
                       ),
@@ -321,11 +300,13 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         label: "Left Bump",
                         filled:
                             scoutedMatchSingleton.startPosition ==
-                            StartPosition.lBump,
+                                StartPosition.lBump &&
+                            setStartPosition,
                         onPressed: () {
                           scoutedMatchSingleton.startPosition =
                               StartPosition.lBump;
                           state = MatchState.auto;
+                          setStartPosition = true;
                           vibrate(HapticsType.heavy);
                         },
                       ),
@@ -334,11 +315,13 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         label: "Center",
                         filled:
                             scoutedMatchSingleton.startPosition ==
-                            StartPosition.center,
+                                StartPosition.center &&
+                            setStartPosition,
                         onPressed: () {
                           scoutedMatchSingleton.startPosition =
                               StartPosition.center;
                           state = MatchState.auto;
+                          setStartPosition = true;
                           vibrate(HapticsType.heavy);
                         },
                       ),
@@ -347,11 +330,13 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         label: "Right Bump",
                         filled:
                             scoutedMatchSingleton.startPosition ==
-                            StartPosition.rBump,
+                                StartPosition.rBump &&
+                            setStartPosition,
                         onPressed: () {
                           scoutedMatchSingleton.startPosition =
                               StartPosition.rBump;
                           state = MatchState.auto;
+                          setStartPosition = true;
                           vibrate(HapticsType.heavy);
                         },
                       ),
@@ -360,11 +345,13 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         label: "Right Trench",
                         filled:
                             scoutedMatchSingleton.startPosition ==
-                            StartPosition.rTrench,
+                                StartPosition.rTrench &&
+                            setStartPosition,
                         onPressed: () {
                           scoutedMatchSingleton.startPosition =
                               StartPosition.rTrench;
                           state = MatchState.auto;
+                          setStartPosition = true;
                           vibrate(HapticsType.heavy);
                         },
                       ),
@@ -629,8 +616,11 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => Dialog(
-          child: SizedBox(
-            width: Device.dialogWidth(context, 3 / 4, 800),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: Device.dialogHeight(context, 3 / 4, 500),
+              maxWidth: Device.dialogWidth(context, 3 / 4, 800),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -639,6 +629,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   hint:
                       "general comments: describe anything eventful, mostly.\nparticularly, please be sure to describe any penalties, issues, or defense.",
                   isMultiline: true,
+                  minLines: 2,
+                  maxLines: 6,
                   initialValue: scoutedMatchSingleton.generalComments,
                   callback: (comments) =>
                       scoutedMatchSingleton.generalComments = comments,

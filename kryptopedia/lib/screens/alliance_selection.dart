@@ -66,6 +66,9 @@ class _AllianceSelectionState extends State<AllianceSelection> {
       body: FutureBuilder(
         future: getTeamList(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          }
           if (snapshot.hasData) {
             if (snapshot.data) {
               return Column(
@@ -466,7 +469,6 @@ class _AllianceSelectionState extends State<AllianceSelection> {
         DbTeamInsightsRecords dbTeamInsightsRecords = DbTeamInsightsRecords();
         TeamInsightsRecord? insights = await dbTeamInsightsRecords
             .getTeamInsights(team.number);
-
 
         eventTeams.add(
           AllianceSelectionEventTeam(

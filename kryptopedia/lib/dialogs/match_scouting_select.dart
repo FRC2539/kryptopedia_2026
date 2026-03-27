@@ -316,7 +316,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
                                         ? 425.0
                                         : 225.0,
                                     child: AutoSizeText(
-                                      "${position.name} - ${team.number} ${team.nickname}",
+                                      "${alliancePositionNames[position]} - ${team.number} ${team.nickname}",
                                       style: TextStyle(
                                         fontWeight:
                                             (_selectedMatch.scouted[position] ??

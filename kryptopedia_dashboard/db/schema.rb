@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_21_145545) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_23_225444) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_21_145545) do
     t.index ["owner_type", "owner_id"], name: "index_devices_on_owner"
   end
 
+  create_table "match_scouting_assignments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "match_id", null: false
+    t.string "position", null: false
+    t.bigint "team_member_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_scouting_assignments_on_match_id"
+    t.index ["team_member_id"], name: "index_match_scouting_assignments_on_team_member_id"
+  end
+
   create_table "matches", force: :cascade do |t|
     t.bigint "blue1_id"
     t.bigint "blue2_id"
@@ -63,6 +73,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_21_145545) do
     t.bigint "red2_id"
     t.bigint "red3_id"
     t.bigint "scouted_event_id", null: false
+    t.datetime "start_time"
     t.datetime "updated_at", null: false
     t.index ["blue1_id"], name: "index_matches_on_blue1_id"
     t.index ["blue2_id"], name: "index_matches_on_blue2_id"
@@ -165,6 +176,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_21_145545) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "match_scouting_assignments", "matches"
+  add_foreign_key "match_scouting_assignments", "team_members"
   add_foreign_key "matches", "scouted_events"
   add_foreign_key "matches", "teams", column: "blue1_id"
   add_foreign_key "matches", "teams", column: "blue2_id"

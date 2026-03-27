@@ -42,7 +42,6 @@ class ScoutedEvent < ApplicationRecord
 
   normalizes :min_app_version, :max_app_version, with: -> { it.presence }
 
-
   def pit_map
     Rails.cache.fetch("#{code}/pit_map", expires_in: 1.hour) do
       self.update!(pit_map_cache_updated: Time.current)
@@ -57,23 +56,26 @@ class ScoutedEvent < ApplicationRecord
 
     TBAService.event_matches(2026, code).each do |match_data|
       comp_level = match_data["comp_level"]
-      match = matches.find_or_initialize_by(comp_level: comp_level, number: match_data["match_number"])
+      match_number = comp_level != "sf" ? match_data["match_number"] : match_data["set_number"]
+      match = matches.find_or_initialize_by(comp_level: comp_level, number: match_number)
       match.update!(
         red1: Team.find_or_create_by!(number: match_data["alliances"]["red"]["team_keys"][0].delete_prefix("frc").to_i),
         red2: Team.find_or_create_by!(number: match_data["alliances"]["red"]["team_keys"][1].delete_prefix("frc").to_i),
         red3: Team.find_or_create_by!(number: match_data["alliances"]["red"]["team_keys"][2].delete_prefix("frc").to_i),
         blue1: Team.find_or_create_by!(number: match_data["alliances"]["blue"]["team_keys"][0].delete_prefix("frc").to_i),
         blue2: Team.find_or_create_by!(number: match_data["alliances"]["blue"]["team_keys"][1].delete_prefix("frc").to_i),
-        blue3: Team.find_or_create_by!(number: match_data["alliances"]["blue"]["team_keys"][2].delete_prefix("frc").to_i)
+        blue3: Team.find_or_create_by!(number: match_data["alliances"]["blue"]["team_keys"][2].delete_prefix("frc").to_i),
+        start_time: Time.at(match_data["time"])
       )
     end
   end
 
   def teams_insights
-    return {} unless teams and tba_sync?
+    return [] unless teams and tba_sync?
     Rails.cache.fetch("#{id}/insights", expires_in: 1.hour) do
       statbotics_insights = StatboticsService.event_teams(2026, code).index_by { |t| t["team"] }
       tba_insights = TBAService.event_oprs(2026, code)
+      return [] if tba_insights.empty?
       teams.map do |team|
         statbotics = statbotics_insights[team.number]
         {
@@ -90,6 +92,10 @@ class ScoutedEvent < ApplicationRecord
 
   def purge_insights_cache!
     Rails.cache.delete("#{id}/insights")
+  end
+
+  def match_scouting_assignments
+    MatchScoutingAssignment.joins(:match).where(matches: { scouted_event_id: id })
   end
 
   private

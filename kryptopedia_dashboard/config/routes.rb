@@ -36,6 +36,9 @@ Rails.application.routes.draw do
         post "restore" => "scouting_data_items#restore", as: :restore
       end
       resources :preloaded_flags
+      get "schedule" => "scouted_events#schedule", as: :schedule
+      get "schedule/edit" => "scouted_events#edit_schedule", as: :edit_schedule
+      patch "schedule" => "scouted_events#update_schedule", as: :update_schedule
     end
 
     resources :team_members

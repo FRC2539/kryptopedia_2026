@@ -5,6 +5,7 @@
 #  id               :bigint           not null, primary key
 #  comp_level       :string           not null
 #  number           :integer          not null
+#  start_time       :datetime
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  blue1_id         :bigint
@@ -53,5 +54,5 @@ class Match < ApplicationRecord
     "#{comp_level.upcase} ##{number}"
   end
 
-  default_scope { order(:comp_level, :number) }
+  default_scope { order(:start_time, :comp_level, :number) }
 end

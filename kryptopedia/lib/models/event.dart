@@ -100,3 +100,12 @@ final List<AlliancePosition> blueAlliancePositions = [
   AlliancePosition.blue2,
   AlliancePosition.blue3,
 ];
+
+Map<AlliancePosition, String> alliancePositionNames = {
+  AlliancePosition.red1: "Red 1",
+  AlliancePosition.red2: "Red 2",
+  AlliancePosition.red3: "Red 3",
+  AlliancePosition.blue1: "Blue 1",
+  AlliancePosition.blue2: "Blue 2",
+  AlliancePosition.blue3: "Blue 3",
+};

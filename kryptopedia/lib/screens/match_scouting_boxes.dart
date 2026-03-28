@@ -477,6 +477,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       _buildGridButton(
                         color: Colors.blueAccent,
                         label: "Level 3 Climb",
+                        description: "bumpers completely above second rung",
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L3;
                           state = MatchState.summary;
@@ -486,6 +487,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       _buildGridButton(
                         color: Colors.blueAccent,
                         label: "Level 2 Climb",
+                        description: "bumpers completely above first rung",
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L2;
                           state = MatchState.summary;
@@ -495,6 +497,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       _buildGridButton(
                         color: Colors.blueAccent,
                         label: "Level 1 Climb",
+                        description: "completely off the ground",
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L1;
                           state = MatchState.summary;
@@ -583,17 +586,13 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
     required Color color,
     bool filled = false,
     String? label,
+    String? description,
     void Function()? onPressed,
     void Function()? onLongPress,
   }) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: GestureDetector(
-        onHorizontalDragUpdate: (details) {
-          if (details.delta.dx > 10) {
-            // Swipe Right
-          }
-        },
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             foregroundColor: color,
@@ -616,10 +615,24 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   });
                 }
               : null,
-          child: Text(
-            label ?? "",
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                label ?? "",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              if (description != null)
+                Text(
+                  description,
+                  style: const TextStyle(fontSize: 11),
+                  textAlign: TextAlign.center,
+                ),
+            ],
           ),
         ),
       ),

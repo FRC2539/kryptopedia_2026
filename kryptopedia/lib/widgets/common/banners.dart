@@ -4,7 +4,6 @@ import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 
-
 class PageBanner extends StatelessWidget {
   final Color color;
   final List<Widget> children;
@@ -45,7 +44,7 @@ class MatchBanner extends StatelessWidget {
     Color backgroundColor = redAlliancePositions.contains(alliancePosition)
         ? Colors.red
         : Colors.blue;
-        
+
     return PageBanner(
       color: backgroundColor,
       children: [
@@ -59,7 +58,7 @@ class MatchBanner extends StatelessWidget {
           maxLines: 1,
         ),
         AutoSizeText(
-          "$alliancePosition in ${match.name}",
+          "${alliancePositionNames[alliancePosition]} in ${match.name}",
           style: TextStyle(
             fontSize: Device.fontHeader2(context),
             color: Colors.white,

@@ -84,14 +84,14 @@ class _MatchScoutingState extends State<MatchScouting> {
                 EndgameMatchScouting(),
                 if (!widget.preserve)
                   ScoutingSave(
-                  saveFunction: () async {
-                    DbScoutedMatches dbScoutedMatch = DbScoutedMatches();
-                    await dbScoutedMatch.upsertScoutedMatch(
-                      scoutedMatchSingleton,
-                    );
-                    return "Team: ${widget.team.number}\n${widget.team.nickname}";
-                  },
-                ),
+                    saveFunction: () async {
+                      DbScoutedMatches dbScoutedMatch = DbScoutedMatches();
+                      await dbScoutedMatch.upsertScoutedMatch(
+                        scoutedMatchSingleton,
+                      );
+                      return "Team: ${widget.team.number}\n${widget.team.nickname}";
+                    },
+                  ),
               ],
             ),
           ),

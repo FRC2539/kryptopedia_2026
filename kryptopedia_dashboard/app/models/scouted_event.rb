@@ -72,7 +72,7 @@ class ScoutedEvent < ApplicationRecord
 
   def teams_insights
     return [] unless teams and tba_sync?
-    Rails.cache.fetch("#{id}/insights", expires_in: 1.hour) do
+    # Rails.cache.fetch("#{id}/insights", expires_in: 1.hour) do
       statbotics_insights = StatboticsService.event_teams(2026, code).index_by { |t| t["team"] }
       tba_insights = TBAService.event_oprs(2026, code)
       return [] if tba_insights.empty?
@@ -87,7 +87,7 @@ class ScoutedEvent < ApplicationRecord
           epa: statbotics ? statbotics["epa"]["total_points"]["mean"] : nil
         }
       end
-    end
+    # end
   end
 
   def purge_insights_cache!

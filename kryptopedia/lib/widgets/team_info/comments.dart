@@ -3,10 +3,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
-import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/scouted_pit.dart';
-import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/widgets/common/info_not_available.dart';
 import 'package:kryptopedia/widgets/common/label.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
@@ -30,6 +28,7 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
 
   @override
   Widget build(BuildContext context) {
+    scoutedComments = [];
     return ScoutingSection(
       title: 'Match and Pit Scouting Comments',
       children: [
@@ -64,12 +63,7 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
         );
       }
 
-      DbMatches dbMatch = DbMatches();
-      List<EventMatch> eventMatch = await dbMatch.getMatches();
-
       for (int i = 0; i < widget.scoutedMatches.length; i++) {
-        EventMatch match = eventMatch[i];
-
         TeamMember scouter = await DbTeamMembers().getTeamMemberById(
           widget.scoutedMatches[i].scouterId,
         );
@@ -78,7 +72,8 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
             widget.scoutedMatches[i].generalComments.isNotEmpty) {
           scoutedComments.add(
             TextLabel(
-              label: 'Match Scouting - ${match.number} - ${scouter.name}',
+              label:
+                  'Match Scouting - ${widget.scoutedMatches[i].matchNumber} - ${scouter.name}',
               headerLabel: true,
             ),
           );

@@ -62,11 +62,11 @@ class MainMenu extends StatelessWidget {
           MenuItemDefinition(
             title: "Predictions Debug",
             icon: Icons.bug_report,
+            debugOnly: true,
             onTap: (context) => showDialog(
               context: context,
               builder: (context) => PredictionsDebugDialog(),
             ),
-            debugOnly: true,
           ),
         ])),
 

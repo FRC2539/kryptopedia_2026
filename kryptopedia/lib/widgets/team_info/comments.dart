@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/models/match.dart';
 import 'package:kryptopedia/models/team_member.dart';
+import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
@@ -24,19 +26,56 @@ class TeamInfoComments extends StatefulWidget {
 }
 
 class _TeamInfoCommentsState extends State<TeamInfoComments> {
-  List<Widget> scoutedComments = [];
-
   @override
   Widget build(BuildContext context) {
-    scoutedComments = [];
     return ScoutingSection(
       title: 'Match and Pit Scouting Comments',
       children: [
-        FutureBuilder<bool>(
-          future: formatScoutedComments(context),
+        FutureBuilder<List<ScoutingComment>>(
+          future: getScoutingComments(),
           builder: (context, snapshot) {
-            if (snapshot.hasData && scoutedComments.isNotEmpty) {
-              return Column(children: scoutedComments);
+            if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+              List<ScoutingComment> data = snapshot.data!;
+              return Column(
+                children: data
+                    .map(
+                      (i) => Column(
+                        children: [
+                          TextLabel(label: i.title, headerLabel: true),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AutoSizeText(
+                                    i.comment,
+                                    style: TextStyle(
+                                      fontSize: Device.fontLabel(context),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    '- ${i.scouterName}',
+                                    style: TextStyle(
+                                      fontSize: Device.fontLabel(context) * 0.9,
+                                      color: Colors.white54,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
+              );
             } else {
               return InformationNotAvailable(
                 infoDescription: 'Scouting comments',
@@ -48,72 +87,62 @@ class _TeamInfoCommentsState extends State<TeamInfoComments> {
     );
   }
 
-  Future<bool> formatScoutedComments(BuildContext context) async {
+  Future<List<ScoutingComment>> getScoutingComments() async {
     // Generate our list of scouting comments
 
-    scoutedComments = [];
+    List<ScoutingComment> scoutedComments = [];
 
-    if (context.mounted) {
-      if (widget.scoutedPit != null) {
+    if (widget.scoutedPit != null &&
+        widget.scoutedPit!.generalComments.isNotEmpty) {
+      TeamMember scouter = await DbTeamMembers().getTeamMemberById(
+        widget.scoutedPit!.scouterId,
+      );
+
+      scoutedComments.add(
+        ScoutingComment(
+          title: 'Pit Scouting',
+          scouterName: scouter.name,
+          comment: widget.scoutedPit!.generalComments,
+        ),
+      );
+    }
+
+    DbMatches dbMatch = DbMatches();
+    List<EventMatch> eventMatch = await dbMatch.getMatches();
+
+    for (int i = 0; i < widget.scoutedMatches.length; i++) {
+      EventMatch match = eventMatch.firstWhere(
+        (m) =>
+            m.number == widget.scoutedMatches[i].matchNumber &&
+            m.compLevel == widget.scoutedMatches[i].matchCompLevel,
+      );
+      TeamMember scouter = await DbTeamMembers().getTeamMemberById(
+        widget.scoutedMatches[i].scouterId,
+      );
+
+      if (widget.scoutedMatches[i].generalComments.isNotEmpty) {
         scoutedComments.add(
-          TextLabel(label: 'Pit Scouting Comments', headerLabel: true),
+          ScoutingComment(
+            title: match.name,
+            scouterName: scouter.name,
+            comment: widget.scoutedMatches[i].generalComments,
+          ),
         );
-        scoutedComments.add(
-          createCommentBlock(context, widget.scoutedPit!.generalComments),
-        );
-      }
-
-      for (int i = 0; i < widget.scoutedMatches.length; i++) {
-        TeamMember scouter = await DbTeamMembers().getTeamMemberById(
-          widget.scoutedMatches[i].scouterId,
-        );
-
-        if (context.mounted &&
-            widget.scoutedMatches[i].generalComments.isNotEmpty) {
-          scoutedComments.add(
-            TextLabel(
-              label:
-                  'Match Scouting - ${widget.scoutedMatches[i].matchNumber} - ${scouter.name}',
-              headerLabel: true,
-            ),
-          );
-          scoutedComments.add(
-            createCommentBlock(
-              context,
-              widget.scoutedMatches[i].generalComments,
-            ),
-          );
-        }
       }
     }
-    return true;
-  }
 
-  Widget createCommentBlock(BuildContext context, String comment) {
-    return Container(
-      margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-      padding: const EdgeInsets.only(
-        top: 5.0,
-        right: 20.0,
-        left: 20.0,
-        bottom: 20.0,
-      ),
-      width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(25.0),
-          bottomRight: Radius.circular(25.0),
-        ),
-      ),
-      child: AutoSizeText(
-        (comment.isEmpty) ? 'No comments provided.' : comment,
-        style: TextStyle(
-          fontSize: Device.fontLabel(context),
-          color: Colors.white,
-          fontWeight: FontWeight.normal,
-        ),
-      ),
-    );
+    return scoutedComments;
   }
+}
+
+class ScoutingComment {
+  final String title;
+  final String scouterName;
+  final String comment;
+
+  ScoutingComment({
+    required this.title,
+    required this.scouterName,
+    required this.comment,
+  });
 }

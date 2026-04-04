@@ -10,11 +10,11 @@ class MenuSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visibleItems = items.where((item) {
-      return (landscape(context)
+      return ((landscape(context)
                   ? item.landscapeWidget != null
-                  : item.portraitWidget != null) &&
-              (kDebugMode || !item.debugOnly) ||
-          item.onTap != null;
+                  : item.portraitWidget != null) ||
+              item.onTap != null) &&
+          (kDebugMode || !item.debugOnly);
     }).toList();
 
     return Container(

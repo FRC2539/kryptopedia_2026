@@ -38,17 +38,16 @@ class MatchScoutingBoxesEdition extends StatefulWidget {
 }
 
 class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
-  late Future<FutureResponse> data;
-  late String _selectedScouter;
-  late List<TeamMember> scouters;
+  late TeamMember _selectedScouter;
+  late Future<List<TeamMember>> scouters;
   DbEvents dbEvents = DbEvents();
   bool setStartPosition = false;
 
-  Future<FutureResponse> _future() async {
+  Future<List<TeamMember>> _future() async {
     DbTeamMembers dbTeamMembers = DbTeamMembers();
     List<TeamMember> teamMembers = await dbTeamMembers.getTeamMembers();
 
-    return FutureResponse(scouters: teamMembers);
+    return teamMembers;
   }
 
   @override
@@ -59,8 +58,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
       widget.team.number,
       widget.scouter,
     );
-    data = _future();
-    _selectedScouter = widget.scouter.id;
+    scouters = _future();
+    _selectedScouter = widget.scouter;
   }
 
   MatchState state = MatchState.start;
@@ -152,31 +151,28 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                 children: [
                   Container(), //it works :)
                   FutureBuilder(
-                    future: data,
+                    future: scouters,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Text("an error! ${snapshot.error}");
                       }
                       if (!snapshot.hasData) return CircularProgressIndicator();
                       return DropdownButton<String>(
-                        value: _selectedScouter,
+                        value: _selectedScouter.id,
                         onChanged: (String? newValue) {
                           setState(() {
-                            _selectedScouter = newValue!;
-                            dbEvents.updateLastScouter(_selectedScouter);
+                            _selectedScouter = snapshot.data!.firstWhere(
+                              (scouter) => scouter.id == newValue,
+                            );
+                            scoutedMatchSingleton.scouterId = newValue!;
+                            dbEvents.updateLastScouter(newValue);
                           });
                         },
-                        items: snapshot.data!.scouters
-                            .map<DropdownMenuItem<String>>((
-                              TeamMember scouter,
-                            ) {
-                              return DropdownMenuItem<String>(
+                        items: snapshot.data!
+                            .map(
+                              (scouter) => DropdownMenuItem<String>(
                                 value: scouter.id,
-                                child: SizedBox(
-                                  width: Device.isTablet(context)
-                                      ? 425.0
-                                      : 225.0,
-                                  child: AutoSizeText(
+                                child: AutoSizeText(
                                     scouter.name,
                                     style: TextStyle(
                                       fontSize: Device.fontSize(
@@ -186,10 +182,9 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                                       ),
                                     ),
                                     maxLines: 2,
-                                  ),
                                 ),
-                              );
-                            })
+                              ),
+                            )
                             .toList(),
                       );
                     },
@@ -204,7 +199,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                               builder: (context) => MatchScouting(
                                 team: widget.team,
                                 match: widget.match,
-                                scouter: widget.scouter,
+                                scouter: _selectedScouter,
                                 alliancePosition: widget.alliancePosition,
                                 preserve: true,
                               ),
@@ -709,12 +704,6 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
     if (!mounted) return;
     Navigator.pop(context);
   }
-}
-
-class FutureResponse {
-  final List<TeamMember> scouters;
-
-  FutureResponse({required this.scouters});
 }
 
 enum MatchState { start, auto, teleop, end, summary }

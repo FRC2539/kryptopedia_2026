@@ -8,7 +8,7 @@ import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/models/team_member.dart';
 import 'package:kryptopedia/models/team.dart';
 import 'package:kryptopedia/screens/match_scouting_boxes.dart';
-import 'package:kryptopedia/util/db/events.dart';
+import 'package:kryptopedia/util/db/events.dart' hide alliancePositionNames;
 import 'package:kryptopedia/util/db/scouted_matches.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
@@ -89,7 +89,8 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
     }
 
     if (event.defaultAlliancePosition != null) {
-      _selectedPosition = event.defaultAlliancePosition!;
+      _selectedPosition =
+          alliancePositionValues[event.defaultAlliancePosition]!;
     }
 
     int selectedIndex = 0;
@@ -165,7 +166,7 @@ class _ScoutMatchSelectionDialogState extends State<ScoutMatchSelectionDialog> {
             FutureBuilder<FutureResponse>(
               future: data,
               builder: (context, snapshot) {
-                if (snapshot.hasError) return Text("ohhhh ${snapshot.error}");
+                //if (snapshot.hasError) return Text("ohhhh ${snapshot.error}");
                 if (!snapshot.hasData) return CircularProgressIndicator();
                 if (noMatches &&
                     snapshot.connectionState == ConnectionState.done) {
@@ -414,3 +415,12 @@ class ScoutMatchOption {
     required this.match,
   });
 }
+
+Map<String, AlliancePosition> alliancePositionValues = {
+  "Red 1": AlliancePosition.red1,
+  "Red 2": AlliancePosition.red2,
+  "Red 3": AlliancePosition.red3,
+  "Blue 1": AlliancePosition.blue1,
+  "Blue 2": AlliancePosition.blue2,
+  "Blue 3": AlliancePosition.blue3,
+};

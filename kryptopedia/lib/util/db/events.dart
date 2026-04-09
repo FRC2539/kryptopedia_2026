@@ -21,7 +21,7 @@ class DbEvents {
       "${Event.teamNumberKey} INTEGER NOT NULL, "
       "${Event.lastSyncKey} INTEGER NOT NULL, "
       "${Event.lastScouterKey} TEXT, "
-      "${Event.defaultAlliancePositionKey} INTEGER, "
+      "${Event.defaultAlliancePositionKey} TEXT, "
       "${Event.pitMapDataJSONKey} TEXT)"
     );
   }
@@ -78,25 +78,34 @@ class DbEvents {
     return result;
   }
 
-  Future<String> updateAlliancePosition(
+  Future<int> updateAlliancePosition(
     AlliancePosition alliancePosition,
   ) async {
     Database db = await dbHelper.db;
 
-    String result = db.update(Event.tableName, {
-      Event.defaultAlliancePositionKey: alliancePosition.index,
-    }, where: "${Event.idKey} = 0").toString();
+    int result = await db.update(Event.tableName, {
+      Event.defaultAlliancePositionKey: alliancePositionNames[alliancePosition],
+    }, where: "${Event.idKey} = 0");
     
     return result;
   }
 
-  Future<String> updatePitMapData(Map<String, dynamic> pitMapDataJSON) async {
+  Future<int> updatePitMapData(Map<String, dynamic> pitMapDataJSON) async {
     Database db = await dbHelper.db;
 
-    String result = db.update(Event.tableName, {
+    int result = await db.update(Event.tableName, {
       Event.pitMapDataJSONKey: jsonEncode(pitMapDataJSON),
-    }, where: "${Event.idKey} = 0").toString();
+    }, where: "${Event.idKey} = 0");
     
     return result;
   }
 }
+
+Map<AlliancePosition, String> alliancePositionNames = {
+  AlliancePosition.red1: "Red 1",
+  AlliancePosition.red2: "Red 2",
+  AlliancePosition.red3: "Red 3",
+  AlliancePosition.blue1: "Blue 1",
+  AlliancePosition.blue2: "Blue 2",
+  AlliancePosition.blue3: "Blue 3",
+};

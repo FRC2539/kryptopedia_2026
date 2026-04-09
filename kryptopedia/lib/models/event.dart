@@ -10,13 +10,10 @@ class Event {
   int teamNumber;
   String? lastScouter;
 
-  int? _defaultAlliancePosition; //enum index
-  AlliancePosition? get defaultAlliancePosition =>
-      _defaultAlliancePosition == null
-      ? null
-      : AlliancePosition.values[_defaultAlliancePosition!];
+  String? _defaultAlliancePosition = "Red 1";
+  String? get defaultAlliancePosition => _defaultAlliancePosition;
   set defaultAlliancePosition(AlliancePosition? value) {
-    _defaultAlliancePosition = value?.index;
+    _defaultAlliancePosition = alliancePositionNames[value];
   }
 
 
@@ -31,18 +28,18 @@ class Event {
     _lastSync = value.millisecondsSinceEpoch;
   }
 
-  static const String tableName = "events";
-  static const String idKey = "id";
-  static const String codeKey = "code";
-  static const String nameKey = "name";
-  static const String yearKey = "year";
-  static const String serverURLKey = "server_URL";
-  static const String authTokenKey = "auth_token";
-  static const String teamNumberKey = "team_number";
-  static const String lastSyncKey = "last_sync";
-  static const String lastScouterKey = "last_scouter";
-  static const String defaultAlliancePositionKey = "default_alliance_position";
-  static const String pitMapDataJSONKey = "pit_map_data_json";
+  static const tableName = "events";
+  static const idKey = "id";
+  static const codeKey = "code";
+  static const nameKey = "name";
+  static const yearKey = "year";
+  static const serverURLKey = "server_URL";
+  static const authTokenKey = "auth_token";
+  static const teamNumberKey = "team_number";
+  static const lastSyncKey = "last_sync";
+  static const lastScouterKey = "last_scouter";
+  static const defaultAlliancePositionKey = "default_alliance_position";
+  static const pitMapDataJSONKey = "pit_map_data_json";
 
   Event(
     this.name,

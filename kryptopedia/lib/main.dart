@@ -31,7 +31,6 @@ class MainApp extends StatelessWidget {
       //see https://stackoverflow.com/a/68446126/17675751
       home: Scaffold(
         body: Navigator(
-          initialRoute: "/",
           onGenerateRoute: (setting) {
             return MaterialPageRoute(builder: (context) => MainScreen());
           },

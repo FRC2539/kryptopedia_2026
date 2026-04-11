@@ -15,6 +15,10 @@ class EventMatch {
     switch (compLevel) {
       case "qm":
         return "Qualification";
+      case "sf":
+        return "Semifinals";
+      case "f":
+        return "Finals";
       default:
         return compLevel;
     }

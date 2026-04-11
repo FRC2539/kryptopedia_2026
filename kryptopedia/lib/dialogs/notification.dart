@@ -10,6 +10,7 @@ class NotificationDialog extends StatelessWidget {
   final String okButtonText;
   final bool showOkButton;
   final bool showLoading;
+  final double? loadingProgress;
 
   const NotificationDialog({
     super.key,
@@ -19,6 +20,7 @@ class NotificationDialog extends StatelessWidget {
     this.okButtonText = "Ok",
     this.showOkButton = true,
     this.showLoading = false,
+    this.loadingProgress,
   });
 
   @override
@@ -50,6 +52,7 @@ class NotificationDialog extends StatelessWidget {
               visible: showLoading,
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                value: loadingProgress,
               ),
             ),
             Visibility(

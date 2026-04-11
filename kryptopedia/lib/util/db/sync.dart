@@ -23,7 +23,8 @@ import 'package:kryptopedia/util/db/team_insights.dart';
 import 'package:kryptopedia/util/db/team_members.dart';
 import 'package:kryptopedia/util/db/teams.dart';
 
-Future<APIResponse> syncData({
+Future<APIResponse> syncData(
+  BuildContext context, {
   bool hard = false,
   bool fromClean = false,
 }) async {
@@ -114,7 +115,7 @@ Future<APIResponse> syncData({
 
       if (type == "team") {
         if (deleted) {
-          dbTeams.deleteTeam(item["number"]);
+          await dbTeams.deleteTeam(item["number"]);
           continue;
         }
         Team team = Team(item["number"], item["nickname"]);
@@ -123,7 +124,7 @@ Future<APIResponse> syncData({
 
       if (type == "team_member") {
         if (deleted) {
-          dbTeamMembers.deleteTeamMember(item["id"]);
+          await dbTeamMembers.deleteTeamMember(item["id"]);
           continue;
         }
         TeamMember teamMember = TeamMember(id: item["id"], name: item["name"]);
@@ -132,7 +133,8 @@ Future<APIResponse> syncData({
 
       if (type == "match") {
         if (deleted) {
-          dbMatches.deleteMatch(item["number"], item["comp_level"]);
+          await dbMatches.deleteMatch(item["number"], item["comp_level"]);
+          continue;
         }
         EventMatch match = EventMatch.fromMap(item);
         await dbMatches.upsertMatch(match);
@@ -140,7 +142,7 @@ Future<APIResponse> syncData({
 
       if (type == "preloaded_flag") {
         if (deleted) {
-          dbPreloadedFlags.deletePreloadedFlag(item["name"]);
+          await dbPreloadedFlags.deletePreloadedFlag(item["name"]);
           continue;
         }
         PreloadedFlag preloadedFlag = PreloadedFlag(item["name"]);
@@ -160,7 +162,7 @@ Future<APIResponse> syncData({
 
       if (type == "scouted_pit") {
         if (deleted) {
-          dbScoutedPits.deleteScoutedPit(item["data"]["uid"]);
+          await dbScoutedPits.deleteScoutedPit(item["data"]["uid"]);
           continue;
         }
         ScoutedPit scoutedPit = ScoutedPit.fromMap(item["data"]);
@@ -169,7 +171,7 @@ Future<APIResponse> syncData({
 
       if (type == "scouted_match") {
         if (deleted) {
-          dbScoutedMatches.deleteScoutedMatch(item["data"]["uid"]);
+          await dbScoutedMatches.deleteScoutedMatch(item["data"]["uid"]);
           continue;
         }
         ScoutedMatch scoutedMatch = ScoutedMatch.fromMap(item["data"]);
@@ -178,7 +180,7 @@ Future<APIResponse> syncData({
 
       if (type == "team_flag_application") {
         if (deleted) {
-          dbTeamFlagApplications.deleteTeamFlagApplication(
+          await dbTeamFlagApplications.deleteTeamFlagApplication(
             item["data"][TeamFlagApplication.nameKey],
             item["data"][TeamFlagApplication.teamNumberKey],
           );
@@ -210,101 +212,37 @@ Future<APIResponse> syncData({
   );
 }
 
-Future<APIResponse> uploadPitPhotos(Event event) async {
-  DbScoutedPits dbScoutedPits = DbScoutedPits();
-
-  List<ScoutedPit> scoutedPits = await dbScoutedPits.getScoutedPits();
-  int successCount = 0;
-  for (ScoutedPit pit in scoutedPits) {
-    try {
-      if (pit.serverPhotoUpdated != null || pit.local) continue;
-      String path = await pit.photoPath;
-      if (!await File(path).exists()) continue;
-      APIResponse response = await Api.uploadPhoto(
-        event.serverURL!,
-        event.teamNumber,
-        event.authToken!,
-        pit.uid,
-        path,
-      );
-      if (!response.success) throw response.data;
-      await dbScoutedPits.updateScoutedPitPhotoTimestamp(
-        pit.uid,
-        response.data,
-      );
-      successCount++;
-    } catch (e) {
-      return APIResponse(
-        success: false,
-        data: "Error uploading photo for ${pit.teamNumber}: $e",
-      );
-    }
-  }
-  return APIResponse(success: true, data: "Uploaded $successCount photos");
-}
-
-Future<APIResponse> downloadPitPhotos(Event event) async {
-  DbScoutedPits dbScoutedPits = DbScoutedPits();
-
-  List<ScoutedPit> scoutedPits = await dbScoutedPits.getScoutedPits();
-  int successCount = 0;
-  for (ScoutedPit pit in scoutedPits) {
-    try {
-      if (pit.serverPhotoUpdated == null || pit.local) continue;
-      File existingFile = File(await pit.photoPath);
-      if (await existingFile.exists() &&
-          existingFile.lastModifiedSync().isAfter(pit.serverPhotoUpdated!)) {
-        continue;
-      }
-      APIResponse response = await Api.downloadPitPhoto(
-        event.serverURL!,
-        event.teamNumber,
-        event.authToken!,
-        pit.uid,
-      );
-      if (!response.success) {
-        return APIResponse(
-          success: false,
-          data:
-              "Error downloading photo for ${pit.teamNumber}: ${response.data}",
-        );
-      }
-      String path = await pit.photoPath;
-      File file = File(path);
-      await file.create(recursive: true);
-      await file.writeAsBytes(response.data);
-      successCount++;
-    } catch (e) {
-      return APIResponse(
-        success: false,
-        data: "Error downloading photo for ${pit.teamNumber}: $e",
-      );
-    }
-  }
-  return APIResponse(success: true, data: "Downloaded $successCount photos");
-}
-
 Future syncFlow(
   BuildContext context, {
   bool hard = false,
   bool fromClean = false,
   bool withPhotos = true,
 }) async {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    useRootNavigator: false,
-    builder: (context) => NotificationDialog(
-      title: "Syncing data",
-      body: "Syncing data with server...",
-      showOkButton: false,
-      showLoading: true,
-    ),
-  );
-
   String finalMessage = "Data synced successfully! woohoo\n\n";
 
+  ValueNotifier<String> syncStatus = ValueNotifier<String>("Starting data...");
+  ValueNotifier<double?> loadingProgress = ValueNotifier<double?>(null);
+
+  if (context.mounted) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: false,
+      builder: (context) => ValueListenableBuilder<String>(
+        valueListenable: syncStatus,
+        builder: (context, status, _) => NotificationDialog(
+          title: "Syncing data...",
+          body: status,
+          showOkButton: false,
+          showLoading: true,
+          loadingProgress: loadingProgress.value,
+        ),
+      ),
+    );
+  }
+
   APIResponse dataSyncResponse = await syncData(
+    context,
     hard: hard,
     fromClean: fromClean,
   );
@@ -321,41 +259,99 @@ Future syncFlow(
   finalMessage += dataSyncResponse.data;
   finalMessage += "\n";
 
-  if (withPhotos) {
-    APIResponse uploadResponse = await uploadPitPhotos(
-      await DbEvents().getEvent(),
-    );
-    if (!uploadResponse.success) {
-      if (!context.mounted) return;
-      Navigator.pop(context);
-      showDialog(
-        context: context,
-        builder: (context) => NotificationDialog(
-          title: "Photo Upload Error",
-          body: uploadResponse.data,
-        ),
-      );
-      return;
-    }
-    finalMessage += uploadResponse.data;
-    finalMessage += "\n";
+  Event event = await DbEvents().getEvent();
 
-    APIResponse downloadResponse = await downloadPitPhotos(
-      await DbEvents().getEvent(),
-    );
-    if (!downloadResponse.success) {
-      if (!context.mounted) return;
-      Navigator.pop(context);
-      showDialog(
-        context: context,
-        builder: (context) => NotificationDialog(
-          title: "Photo Download Error",
-          body: downloadResponse.data,
-        ),
-      );
-      return;
+  if (withPhotos) {
+    syncStatus.value = "Uploading photos...";
+
+    DbScoutedPits dbScoutedPits = DbScoutedPits();
+    List<ScoutedPit> scoutedPits = await dbScoutedPits.getScoutedPits();
+
+    List<ScoutedPit> pitsWithPhotos = [];
+    for (ScoutedPit pit in scoutedPits) {
+      if (pit.serverPhotoUpdated == null &&
+          !pit.local &&
+          await File(await pit.photoPath).exists()) {
+        pitsWithPhotos.add(pit);
+      }
     }
-    finalMessage += downloadResponse.data;
+
+    for (int i = 0; i < pitsWithPhotos.length; i++) {
+      ScoutedPit pit = pitsWithPhotos[i];
+      syncStatus.value =
+          "Uploading photo for team ${pit.teamNumber}... ${i + 1}/${pitsWithPhotos.length}";
+      try {
+        APIResponse response = await Api.uploadPhoto(
+          event.serverURL!,
+          event.teamNumber,
+          event.authToken!,
+          pit.uid,
+          await pit.photoPath,
+        );
+        if (!response.success) throw response.data;
+        await dbScoutedPits.updateScoutedPitPhotoTimestamp(
+          pit.uid,
+          response.data,
+        );
+      } catch (e) {
+        if (!context.mounted) return;
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) => NotificationDialog(
+            title: "Photo Upload Error",
+            body: "Error uploading photo for team ${pit.teamNumber}: $e",
+          ),
+        );
+        return;
+      }
+    }
+
+    finalMessage += "Uploaded ${pitsWithPhotos.length} photos.\n";
+    syncStatus.value = "Downloading photos...";
+
+    List<ScoutedPit> pitsWithServerPhotos = [];
+    for (ScoutedPit pit in scoutedPits) {
+      File localFile = File(await pit.photoPath);
+      if (pit.serverPhotoUpdated != null &&
+          !pit.local &&
+          (!localFile.existsSync() ||
+              localFile.lastModifiedSync().isBefore(pit.serverPhotoUpdated!))) {
+        pitsWithServerPhotos.add(pit);
+      }
+    }
+
+    for (int i = 0; i < pitsWithServerPhotos.length; i++) {
+      ScoutedPit pit = pitsWithServerPhotos[i];
+      syncStatus.value =
+          "Downloading photo for team ${pit.teamNumber}... ${i + 1}/${pitsWithServerPhotos.length}";
+      try {
+        APIResponse response = await Api.downloadPitPhoto(
+          event.serverURL!,
+          event.teamNumber,
+          event.authToken!,
+          pit.uid,
+        );
+        if (!response.success) throw response.data;
+        String path = await pit.photoPath;
+        File file = File(path);
+        await file.create(recursive: true);
+        await file.writeAsBytes(response.data);
+      } catch (e) {
+        if (!context.mounted) return;
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) => NotificationDialog(
+            title: "Photo Download Error",
+            body: "Error downloading photo for team ${pit.teamNumber}: $e",
+          ),
+        );
+        return;
+      }
+    }
+
+    finalMessage += "Downloaded ${pitsWithServerPhotos.length} photos.\n";
   }
 
   if (!context.mounted) return;

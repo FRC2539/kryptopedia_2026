@@ -282,7 +282,13 @@ class PredictionOverview extends StatelessWidget {
       Color textColor, bool headers, BuildContext context) {
     return TableCell(
       child: smallCellContainer(
-          100.0, value1, backgroundColor, textColor, headers, context),
+        240.0,
+        value1,
+        backgroundColor,
+        textColor,
+        headers,
+        context,
+      ),
     );
   }
 

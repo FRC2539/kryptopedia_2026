@@ -77,7 +77,7 @@ class AllianceScorePrediction {
 
   int get fuelRankingPoints {
     int total = autoFuelPoints + teleopFuelPoints;
-    if (total < 100) {
+    if (total < 240) {
       return 0;
     } else if (total < 360) {
       return 1;

@@ -106,7 +106,11 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.colorize),
             onPressed: () {
               setState(() {
-                index = Random().nextInt(Colors.accents.length);
+                int? nindex = index;
+                while (index == nindex) {
+                  nindex = Random().nextInt(Colors.accents.length);
+                }
+                index = nindex;
               });
             },
           ),

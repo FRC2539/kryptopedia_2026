@@ -227,6 +227,9 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
             ),
           ],
         ),
+        backgroundColor: index != null
+            ? Colors.accents[index!]
+            : Colors.transparent,
         body: Column(
           children: [
             Container(
@@ -591,7 +594,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             foregroundColor: color,
-            backgroundColor: color.withValues(alpha: filled ? 0.2 : 0),
+            backgroundColor: Color.fromARGB(200, 0, 0, 0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
             ),

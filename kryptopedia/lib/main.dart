@@ -5,9 +5,11 @@ import 'package:kryptopedia/dialogs/db/sync.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/device.dart';
 import 'package:kryptopedia/widgets/menu/main_menu.dart';
+import 'dart:math';
 
 const Color cougarOrange = Color.fromARGB(225, 242, 101, 34);
 const Color cougarOffBlack = Color.fromARGB(225, 47, 45, 45);
+int? index;
 
 void main() {
   runApp(const MainApp());
@@ -78,6 +80,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: index != null
+          ? Colors.accents[index!]
+          : Colors.transparent,
       appBar: AppBar(
         actions: <Widget>[
           ConfettiWidget(
@@ -85,6 +90,26 @@ class _MainScreenState extends State<MainScreen> {
             confettiController: _confettiController,
             numberOfParticles: 20,
             colors: const [cougarOrange, cougarOffBlack],
+          ),
+          IconButton(
+            color: index != null ? Colors.accents[index!] : Colors.transparent,
+            splashColor: cougarOffBlack,
+            icon: Icon(Icons.format_color_reset),
+            onPressed: () {
+              setState(() {
+                index = null;
+              });
+            },
+          ),
+          IconButton(
+            color: index != null ? Colors.accents[index!] : Colors.transparent,
+            splashColor: cougarOrange,
+            icon: Icon(Icons.colorize),
+            onPressed: () {
+              setState(() {
+                index = Random().nextInt(Colors.accents.length);
+              });
+            },
           ),
           IconButton(
             splashColor: cougarOrange,

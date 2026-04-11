@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:kryptopedia/main.dart';
 //import 'package:kryptopedia/util/db/eventalliances.dart';
 
 import 'package:kryptopedia/util/deviceinfo.dart';
@@ -90,6 +91,9 @@ class _MatchPreviewState extends State<MatchPreview> {
           ),*/
         ],
       ),
+      backgroundColor: index != null
+          ? Colors.accents[index!]
+          : Colors.transparent,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

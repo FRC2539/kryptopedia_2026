@@ -94,7 +94,7 @@ class _PitMapState extends State<PitMap> {
                       screenSize.height / pitMapData["size"]["y"];
                   final double scale = scaleX < scaleY ? scaleX : scaleY;
                   _transformationController.value = Matrix4.identity()
-                    ..scaleByDouble(scale, 1, 1, 1)
+                    ..scaleByDouble(scale, scale, scale, 1)
                     ..translateByDouble(
                       (screenSize.width - pitMapData["size"]["x"] * scale) / 2,
                       (screenSize.height - pitMapData["size"]["y"] * scale) / 2,

@@ -232,7 +232,7 @@ class _ModifyFlagDialogState extends State<ModifyFlagDialog> {
           builder: (context) => ConfirmationDialog(
             title: "Delete flag?",
             body:
-                "Flags must have at least one team. Continuing will delete this flag.\nTo create an empty flag, ask Dominic :)",
+                "Flags must have at least one team. Continuing will delete this flag.\nTo preload an empty flag, ask Dominic :)",
           ),
         );
         if (confirmation != true) return;

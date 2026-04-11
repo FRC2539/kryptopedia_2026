@@ -83,7 +83,10 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
     colors.add(allianceColor);
     switch (state) {
       case MatchState.start:
-        colors.add(Colors.orangeAccent);
+        colors.add(switch (allianceColor) {
+          Colors.blue => Colors.orangeAccent,
+          _ => Colors.lightGreenAccent,
+        });
         break;
       case MatchState.auto:
         colors.add(Colors.purple);
@@ -92,9 +95,11 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
         colors.add(Colors.black);
         break;
       case MatchState.summary:
+        colors.add(Colors.green);
         colors.add(allianceColor);
         break;
       case MatchState.end:
+        colors.add(Colors.green);
         colors.add(allianceColor);
         break;
     }

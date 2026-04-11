@@ -20,6 +20,8 @@ class _PitMapState extends State<PitMap> {
       TransformationController();
   final Map<int, Rect> _pitBounds = {}; // Store team number -> bounds mapping
 
+  bool saveZoom = false;
+
   Future<FutureData> getData() async {
     final scoutedPits = await dbScoutedPits.getScoutedPits();
     final event = await dbEvents.getEvent();
@@ -49,7 +51,9 @@ class _PitMapState extends State<PitMap> {
                 TeamInfo(passedTeamID: int.parse(entry.key.toString())),
           ),
         );
-        setState(() {});
+        setState(() {
+          saveZoom = true;
+        });
       }
     }
   }
@@ -80,23 +84,25 @@ class _PitMapState extends State<PitMap> {
               Map<String, dynamic> pitMapData = snapshot.data!.pitMapData!;
               List<ScoutedPit> scoutedPits = snapshot.data!.scoutedPits;
 
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                // zoom out to fit and center the whole map
-                final Size screenSize = MediaQuery.of(context).size;
-                final double scaleX =
-                    screenSize.width / pitMapData["size"]["x"];
-                final double scaleY =
-                    screenSize.height / pitMapData["size"]["y"];
-                final double scale = scaleX < scaleY ? scaleX : scaleY;
-                _transformationController.value = Matrix4.identity()
-                  ..scaleByDouble(scale, 1, 1, 1)
-                  ..translateByDouble(
-                    (screenSize.width - pitMapData["size"]["x"] * scale) / 2,
-                    (screenSize.height - pitMapData["size"]["y"] * scale) / 2,
-                    0,
-                    1
-                  );
-              });
+              if (!saveZoom) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  // zoom out to fit and center the whole map
+                  final Size screenSize = MediaQuery.of(context).size;
+                  final double scaleX =
+                      screenSize.width / pitMapData["size"]["x"];
+                  final double scaleY =
+                      screenSize.height / pitMapData["size"]["y"];
+                  final double scale = scaleX < scaleY ? scaleX : scaleY;
+                  _transformationController.value = Matrix4.identity()
+                    ..scaleByDouble(scale, 1, 1, 1)
+                    ..translateByDouble(
+                      (screenSize.width - pitMapData["size"]["x"] * scale) / 2,
+                      (screenSize.height - pitMapData["size"]["y"] * scale) / 2,
+                      0,
+                      1,
+                    );
+                });
+              }
 
               _pitBounds.clear(); // Clear previous bounds
               return CustomPaint(

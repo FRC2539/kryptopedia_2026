@@ -29,6 +29,9 @@ class TeamMetrics {
   int summaryIssuesTotal = 0;
   double summaryIssuesPercent = 0.0;
 
+  List<int> startPositionTotals = [0, 0, 0, 0, 0, 0];
+  List<double> startPositionPercents = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+
   // Information Gathered from Pit Scouting
   bool kitBot = false;
   String driveTrain = "";

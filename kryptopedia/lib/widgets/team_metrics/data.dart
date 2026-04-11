@@ -264,6 +264,73 @@ class DataGrid extends StatelessWidget {
               75.0,
               Colors.grey.shade200,
             ),
+            smallCellContainer(
+              "${currentTeamStats[i].startPositionPercents[0].toString()}%",
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].startPositionPercents[0],
+                maxTeamStats.startPositionPercents[0],
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              "${currentTeamStats[i].startPositionPercents[1].toString()}%",
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].startPositionPercents[1],
+                maxTeamStats.startPositionPercents[1],
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              "${currentTeamStats[i].startPositionPercents[2].toString()}%",
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].startPositionPercents[2],
+                maxTeamStats.startPositionPercents[2],
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              "${currentTeamStats[i].startPositionPercents[0].toString()}%",
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].startPositionPercents[0],
+                maxTeamStats.startPositionPercents[0],
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              "${currentTeamStats[i].startPositionPercents[1].toString()}%",
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].startPositionPercents[1],
+                maxTeamStats.startPositionPercents[1],
+              ),
+              true,
+              true,
+            ),
+            smallCellContainer(
+              "${currentTeamStats[i].startPositionPercents[2].toString()}%",
+              75.0,
+              getDoubleShading(
+                currentTeamStats[i].startPositionPercents[2],
+                maxTeamStats.startPositionPercents[2],
+              ),
+              true,
+              true,
+            ),
+
+            leadLabel(
+              context,
+              currentTeamStats[i].teamId.toString(),
+              75.0,
+              Colors.grey.shade200,
+            ),
           ],
         ),
       );
@@ -271,7 +338,7 @@ class DataGrid extends StatelessWidget {
 
     return Expanded(
       child: Container(
-        width: (75.0 * 25.0) + 85.0,
+        width: (75.0 * 31.0) + 85.0,
         padding: EdgeInsets.only(top: 10.0),
         child: ListView(children: [Column(children: metricsTeamRows)]),
       ),

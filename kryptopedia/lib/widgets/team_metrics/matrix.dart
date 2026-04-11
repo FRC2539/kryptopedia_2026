@@ -334,6 +334,53 @@ class _TeamMetricsMatrixState extends State<TeamMetricsMatrix> {
         });
         break;
 
+      case ColType.startPositionLTrench:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.startPositionTotals[0].compareTo(b.startPositionTotals[0]))
+              : (b.startPositionTotals[0].compareTo(a.startPositionTotals[0]));
+        });
+        break;
+
+      case ColType.startPositionLBump:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.startPositionTotals[1].compareTo(b.startPositionTotals[1]))
+              : (b.startPositionTotals[1].compareTo(a.startPositionTotals[1]));
+        });
+        break;
+
+      case ColType.startPositionCenter:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.startPositionTotals[2].compareTo(b.startPositionTotals[2]))
+              : (b.startPositionTotals[2].compareTo(a.startPositionTotals[2]));
+        });
+        break;
+
+      case ColType.startPositionRBump:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.startPositionTotals[3].compareTo(b.startPositionTotals[3]))
+              : (b.startPositionTotals[3].compareTo(a.startPositionTotals[3]));
+        });
+        break;
+
+      case ColType.startPositionRTrench:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.startPositionTotals[4].compareTo(b.startPositionTotals[4]))
+              : (b.startPositionTotals[4].compareTo(a.startPositionTotals[4]));
+        });
+        break;
+
+      case ColType.startPositionNone:
+        currentTeamStats.sort((a, b) {
+          return (columnSelectorNotifier.value.ascending)
+              ? (a.startPositionTotals[5].compareTo(b.startPositionTotals[5]))
+              : (b.startPositionTotals[5].compareTo(a.startPositionTotals[5]));
+        });
+        break;
       // case ColumnHeaders.totalPredictedScore:
       //   teamPredictions.sort((a, b) {
       //     return (columnSelectorNotifier.value.ascending)

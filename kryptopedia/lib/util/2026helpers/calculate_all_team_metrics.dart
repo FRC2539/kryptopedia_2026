@@ -138,6 +138,28 @@ class CalculateAllTeamMetrics {
       if (scoutedMatches[i].issues) {
         teamMetrics.summaryIssuesTotal++;
       }
+
+      // Calculate the totals for start positions
+      switch (scoutedMatches[i].startPosition) {
+        case StartPosition.lTrench:
+          teamMetrics.startPositionTotals[0]++;
+          break;
+        case StartPosition.lBump:
+          teamMetrics.startPositionTotals[1]++;
+          break;
+        case StartPosition.center:
+          teamMetrics.startPositionTotals[2]++;
+          break;
+        case StartPosition.rBump:
+          teamMetrics.startPositionTotals[3]++;
+          break;
+        case StartPosition.rTrench:
+          teamMetrics.startPositionTotals[4]++;
+          break;
+        case StartPosition.none:
+          teamMetrics.startPositionTotals[5]++;
+          break;
+      }
     }
 
     // Calculate the averages if the team has been scouted at least once.
@@ -174,6 +196,14 @@ class CalculateAllTeamMetrics {
 
       teamMetrics.summaryIssuesPercent =
           (teamMetrics.summaryIssuesTotal / scoutedMatches.length) * 100.0;
+
+      // Calculate start position averages
+      for (int i = 0; i < teamMetrics.startPositionTotals.length; i++) {
+        teamMetrics.startPositionPercents[i] =
+            (teamMetrics.startPositionTotals[i] / scoutedMatches.length) *
+            100.0;
+      }
+
     }
 
     // Return Team stats to caller

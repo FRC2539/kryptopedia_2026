@@ -23,7 +23,13 @@ enum ColType {
   teleopClimbedL3,
   offensePercent,
   defensePercent,
-  feederPercent
+  feederPercent,
+  startPositionLTrench,
+  startPositionLBump,
+  startPositionCenter,
+  startPositionRBump,
+  startPositionRTrench,
+  startPositionNone,
 }
 
 class ColumnSelector {
@@ -38,7 +44,7 @@ class TopHeaderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (75.0 * 24.0) + 85.0,
+      width: (75.0 * 31.0) + 85.0,
       child: Row(
         children: [
           headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
@@ -57,6 +63,14 @@ class TopHeaderRow extends StatelessWidget {
           headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
           headerCell("Roles Info", 3 * 75.0, 30.0, null, ColType.notUsed),
           headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
+          headerCell(
+            "Start Positions Info",
+            6 * 75.0,
+            30.0,
+            null,
+            ColType.notUsed,
+          ),
+          headerCell(" ", 75.0, 30.0, null, ColType.notUsed),
         ],
       ),
     );
@@ -71,7 +85,7 @@ class BottomHeaderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (75.0 * 23.0) + 85.0,
+      width: (75.0 * 30.0) + 85.0,
       child: Row(
         children: [
           headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
@@ -209,6 +223,49 @@ class BottomHeaderRow extends StatelessWidget {
             ColType.defensePercent,
           ),
           headerCell("Feeder", 75.0, 50.0, sortNotifier, ColType.feederPercent),
+          headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
+          headerCell(
+            "Left Trench",
+            75.0,
+            50.0,
+            sortNotifier,
+            ColType.startPositionLTrench,
+          ),
+          headerCell(
+            "Left Bump",
+            75.0,
+            50.0,
+            sortNotifier,
+            ColType.startPositionLBump,
+          ),
+          headerCell(
+            "Center",
+            75.0,
+            50.0,
+            sortNotifier,
+            ColType.startPositionCenter,
+          ),
+          headerCell(
+            "Right Bump",
+            75.0,
+            50.0,
+            sortNotifier,
+            ColType.startPositionRBump,
+          ),
+          headerCell(
+            "Right Trench",
+            75.0,
+            50.0,
+            sortNotifier,
+            ColType.startPositionRTrench,
+          ),
+          headerCell(
+            "No Show",
+            75.0,
+            50.0,
+            sortNotifier,
+            ColType.startPositionNone,
+          ),
           headerCell("Team #", 75.0, 50.0, sortNotifier, ColType.teamNumber),
           // headerCell(
           //   "EPA-ish",

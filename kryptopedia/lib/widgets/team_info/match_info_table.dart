@@ -88,6 +88,14 @@ class TeamInfoMatchesTable extends StatelessWidget {
           ),
           TeamInfoTables.topHeader(
             context,
+            100.0,
+            "Start Position",
+            Colors.white,
+            false,
+            true,
+          ),
+          TeamInfoTables.topHeader(
+            context,
             70.0,
             "Auto Fuel Scored",
             Colors.white,
@@ -108,7 +116,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
             "Teleop Fuel Scored",
             Colors.white,
             false,
-            true,
+            false,
           ),
           TeamInfoTables.topHeader(
             context,
@@ -116,7 +124,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
             "Teleop Fuel Fed",
             Colors.white,
             false,
-            true,
+            false,
           ),
           TeamInfoTables.topHeader(
             context,
@@ -132,7 +140,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
             "Offense",
             Colors.white,
             false,
-            true,
+            false,
           ),
           TeamInfoTables.topHeader(
             context,
@@ -140,7 +148,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
             "Defense",
             Colors.white,
             false,
-            true,
+            false,
           ),
           TeamInfoTables.topHeader(
             context,
@@ -181,6 +189,22 @@ class TeamInfoMatchesTable extends StatelessWidget {
             children: [
               TeamInfoTables.displayCell(
                 match.number.toString(),
+                false,
+                context,
+                100.0,
+                Colors.white,
+                Colors.black,
+                false,
+              ),
+              TeamInfoTables.displayCell(
+                switch (scoutedMatches[i].startPosition) {
+                  StartPosition.lTrench => "Left Trench",
+                  StartPosition.lBump => "Left Bump",
+                  StartPosition.center => "Center",
+                  StartPosition.rBump => "Right Bump",
+                  StartPosition.rTrench => "Right Trench",
+                  StartPosition.none => "No-show",
+                },
                 false,
                 context,
                 100.0,
@@ -300,7 +324,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
       }
     }
 
-    table.add(TeamInfoTables.createSeparatorRow(11));
+    table.add(TeamInfoTables.createSeparatorRow(12));
 
     if (context.mounted) {
       table.add(
@@ -314,7 +338,15 @@ class TeamInfoMatchesTable extends StatelessWidget {
               false,
               false,
             ),
-
+            TeamInfoTables.displayCell(
+              "--",
+              false,
+              context,
+              100.0,
+              Colors.white,
+              Colors.black,
+              true,
+            ),
             TeamInfoTables.displayCell(
               (stats.autoFuelScoreAverage).toStringAsFixed(2),
               false,

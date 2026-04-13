@@ -26,8 +26,8 @@ class TeamMetrics {
   List<int> summaryPenaltiesTotals = [0, 0, 0, 0];
   List<double> summaryPenaltiesPercents = [0.0, 0.0, 0.0, 0.0];
 
-  int summaryIssuesTotal = 0;
-  double summaryIssuesPercent = 0.0;
+  List<int> summaryIssuesTotal = [0, 0, 0];
+  List<double> summaryIssuesPercent = [0.0, 0.0, 0.0];
 
   List<int> startPositionTotals = [0, 0, 0, 0, 0, 0];
   List<double> startPositionPercents = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];

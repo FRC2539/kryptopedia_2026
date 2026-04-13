@@ -21,7 +21,7 @@ class CalculateTeamInfoAverages {
 
     for (int i = 0; i < scoutedMatches.length; i++) {
       // Calculate issue totals
-      if (scoutedMatches[i].issues) teamInfoSummary.summaryIssuesTotal++;
+      teamInfoSummary.summaryIssuesTotal[scoutedMatches[i].issues]++;
 
       // Calculate Autonomous Totals
       if (scoutedMatches[i].autoClimbed) teamInfoSummary.autoClimbedTotal++;
@@ -79,8 +79,11 @@ class CalculateTeamInfoAverages {
 
     // Calculate Autonomous Averages and Percents
     if (scoutedMatches.isNotEmpty) {
-      teamInfoSummary.summaryIssuesPercent =
-          (teamInfoSummary.summaryIssuesTotal / scoutedMatches.length) * 100.0;
+      for (int i = 0; i < teamInfoSummary.summaryIssuesTotal.length; i++) {
+        teamInfoSummary.summaryIssuesPercent[i] =
+            (teamInfoSummary.summaryIssuesTotal[i] / scoutedMatches.length) *
+            100.0;
+      }
           
       teamInfoSummary.autoFuelScoreAverage =
           teamInfoSummary.autoFuelScoreTotal / scoutedMatches.length;

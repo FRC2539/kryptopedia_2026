@@ -310,7 +310,11 @@ class TeamInfoMatchesTable extends StatelessWidget {
                 true,
               ),
               TeamInfoTables.displayCell(
-                scoutedMatches[i].issues ? "\u2713" : "--",
+                switch (scoutedMatches[i].issues) {
+                  1 => "Minor",
+                  2 => "Major",
+                  _ => "None",
+                },
                 false,
                 context,
                 70.0,
@@ -429,7 +433,7 @@ class TeamInfoMatchesTable extends StatelessWidget {
               true,
             ),
             TeamInfoTables.displayCell(
-              "${stats.summaryIssuesPercent.toStringAsFixed(0)}%",
+              "${stats.summaryIssuesPercent[1].toStringAsFixed(0)}%,${stats.summaryIssuesPercent[2].toStringAsFixed(0)}%",
               false,
               context,
               70.0,

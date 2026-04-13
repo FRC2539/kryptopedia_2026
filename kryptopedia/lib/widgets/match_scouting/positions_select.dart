@@ -65,7 +65,7 @@ class _StartPositionsSelectState extends State<StartPositionsSelect> {
           return Text(snapshot.error.toString());
         }
         if (snapshot.hasData) {
-          FieldSide fieldSide = snapshot.data!;
+          FieldSide side = snapshot.data!;
 
           return LayoutBuilder(
             builder: (context, constraints) {
@@ -76,25 +76,47 @@ class _StartPositionsSelectState extends State<StartPositionsSelect> {
                 height = constraints.maxHeight;
                 width = height * 3 / 5;
               }
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: GestureDetector(
-                  onTapUp: (details) => _onTapUp(details),
-                  child: CustomPaint(
-                    painter: StartPositionPainter(
-                      alliance: widget.alliance,
-                      fieldSide: fieldSide,
-                      station1Label: widget.station1Label,
-                      station2Label: widget.station2Label,
-                      station3Label: widget.station3Label,
-                      selectedPosition: selectedPosition,
-                      onPositionPainted: (pos, bounds) {
-                        positionBounds[pos] = bounds;
-                      },
+              return Stack(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: GestureDetector(
+                        onTapUp: (details) => _onTapUp(details),
+                        child: CustomPaint(
+                          painter: StartPositionPainter(
+                            alliance: widget.alliance,
+                            fieldSide: side,
+                            station1Label: widget.station1Label,
+                            station2Label: widget.station2Label,
+                            station3Label: widget.station3Label,
+                            selectedPosition: selectedPosition,
+                            onPositionPainted: (pos, bounds) {
+                              positionBounds[pos] = bounds;
+                            },
+                          ),
+                          size: Size(width, height),
+                        ),
+                      ),
                     ),
-                    size: Size(width, height),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: FloatingActionButton(
+                      onPressed: () async {
+                        DbEvents dbEvents = DbEvents();
+                        dbEvents.updateFieldSide(
+                          side == FieldSide.oppositeScoringTableSide
+                              ? FieldSide.scoringTableSide
+                              : FieldSide.oppositeScoringTableSide,
+                        );
+                        fieldSide = _getFieldSide();
+                        setState(() {});
+                      },
+                      child: Icon(Icons.rotate_left),
+                    ),
+                  ),
+                ],
               );
             },
           );
@@ -192,25 +214,22 @@ class StartPositionPainter extends CustomPainter {
       tp.paint(canvas, Offset(x, y));
     }
 
+    Paint fieldElementOutlinePaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    Paint fieldElementFillPaint = Paint()
+      ..color = Colors.blueGrey.withValues(alpha: 0.3)
+      ..style = PaintingStyle.fill;
+
     //furthest from line, 1/5 tall and 1/3 wide
     double hubWidth = size.width / 3;
     double hubHeight = size.height / 5;
     double hubX = fieldOnRightSide ? 0 : size.width - hubWidth;
     double hubY = size.height / 2 - hubHeight / 2;
     Rect hubRect = Rect.fromLTWH(hubX, hubY, hubWidth, hubHeight);
-    canvas.drawRect(
-      hubRect,
-      Paint()
-        ..color = color.withValues(alpha: 0.8)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
-    );
-    canvas.drawRect(
-      hubRect,
-      Paint()
-        ..color = color.withValues(alpha: 0.3)
-        ..style = PaintingStyle.fill,
-    );
+    canvas.drawRect(hubRect, fieldElementOutlinePaint);
+    canvas.drawRect(hubRect, fieldElementFillPaint);
 
     //bumps are a touch taller than the hub
     double bumpWidth = hubWidth;
@@ -219,20 +238,18 @@ class StartPositionPainter extends CustomPainter {
     for (int i = 0; i < 2; i++) {
       double bumpY = hubY + (i == 0 ? -bumpHeight : hubHeight);
       Rect bumpRect = Rect.fromLTWH(bumpX, bumpY, bumpWidth, bumpHeight);
-      canvas.drawRect(
-        bumpRect,
-        Paint()
-          ..color = color.withValues(alpha: 0.8)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2,
-      );
-      canvas.drawRect(
-        bumpRect,
-        Paint()
-          ..color = color.withValues(alpha: 0.3)
-          ..style = PaintingStyle.fill,
-      );
+      canvas.drawRect(bumpRect, fieldElementOutlinePaint);
+      canvas.drawRect(bumpRect, fieldElementFillPaint);
     }
+
+    Paint positionOutlinePaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4;
+
+    Paint selectedPositionFillPaint = Paint()
+      ..color = color.withValues(alpha: 0.5)
+      ..style = PaintingStyle.fill;
 
     //trench positions are the remaining top and bottom space
     //all positions will go to a little further to stations than center
@@ -247,24 +264,13 @@ class StartPositionPainter extends CustomPainter {
         Rect.fromLTWH(trenchX, trenchY, trenchWidth, trenchHeight),
         Radius.circular(8),
       );
-      canvas.drawRRect(
-        trenchRect,
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 4,
-      );
+      canvas.drawRRect(trenchRect, positionOutlinePaint);
       StartPosition pos =
           (i == 0 && fieldOnRightSide || i == 1 && !fieldOnRightSide)
           ? StartPosition.rTrench
           : StartPosition.lTrench;
       if (pos == selectedPosition) {
-        canvas.drawRRect(
-          trenchRect,
-          Paint()
-            ..color = color.withValues(alpha: 0.5)
-            ..style = PaintingStyle.fill,
-        );
+        canvas.drawRRect(trenchRect, selectedPositionFillPaint);
       }
       onPositionPainted?.call(pos, trenchRect.outerRect);
     }
@@ -278,24 +284,13 @@ class StartPositionPainter extends CustomPainter {
         Rect.fromLTWH(bumpPosX, bumpPosY, bumpPosWidth, bumpPosHeight),
         Radius.circular(8),
       );
-      canvas.drawRRect(
-        bumpPosRect,
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 4,
-      );
+      canvas.drawRRect(bumpPosRect, positionOutlinePaint);
       StartPosition pos =
           (i == 0 && fieldOnRightSide || i == 1 && !fieldOnRightSide)
           ? StartPosition.rBump
           : StartPosition.lBump;
       if (pos == selectedPosition) {
-        canvas.drawRRect(
-          bumpPosRect,
-          Paint()
-            ..color = color.withValues(alpha: 0.5)
-            ..style = PaintingStyle.fill,
-        );
+        canvas.drawRRect(bumpPosRect, selectedPositionFillPaint);
       }
       onPositionPainted?.call(pos, bumpPosRect.outerRect);
     }
@@ -308,20 +303,9 @@ class StartPositionPainter extends CustomPainter {
       Rect.fromLTWH(centerPosX, centerPosY, centerPosWidth, centerPosHeight),
       Radius.circular(8),
     );
-    canvas.drawRRect(
-      centerPosRect,
-      Paint()
-        ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4,
-    );
+    canvas.drawRRect(centerPosRect, positionOutlinePaint);
     if (StartPosition.center == selectedPosition) {
-      canvas.drawRRect(
-        centerPosRect,
-        Paint()
-          ..color = color.withValues(alpha: 0.5)
-          ..style = PaintingStyle.fill,
-      );
+      canvas.drawRRect(centerPosRect, selectedPositionFillPaint);
     }
     onPositionPainted?.call(StartPosition.center, centerPosRect.outerRect);
   }

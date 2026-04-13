@@ -570,8 +570,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
       padding: const EdgeInsets.all(2.0),
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
-            foregroundColor: color,
-            backgroundColor: Color.fromARGB(200, 0, 0, 0),
+          foregroundColor: index == null ? color : Colors.black,
+          backgroundColor: color.withAlpha(filled ? 100 : 0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
             ),

@@ -53,11 +53,7 @@ class ScoutedMatch {
     _startPosition = value.index;
   }
 
-  int _issues = 0;
-  bool get issues => _issues == 1;
-  set issues(bool value) {
-    _issues = value ? 1 : 0;
-  }
+  int issues = 0;
 
   int _penalties = 0; //enum index
   Penalties get penalties => Penalties.values[_penalties];
@@ -88,7 +84,7 @@ class ScoutedMatch {
     climbLevel = ClimbLevel.none;
     startPosition = StartPosition.center;
     robotRoles = [];
-    issues = false;
+    issues = 0;
     penalties = Penalties.none;
 
     generalComments = "";
@@ -129,7 +125,7 @@ class ScoutedMatch {
       climbLevelKey: _climbLevel,
       startPositionKey: _startPosition,
       robotRolesKey: _robotRoles,
-      issuesKey: _issues,
+      issuesKey: issues,
       penaltiesKey: _penalties,
       generalCommentsKey: generalComments,
     };
@@ -149,7 +145,7 @@ class ScoutedMatch {
       _climbLevel = map[climbLevelKey],
       _startPosition = map[startPositionKey],
       _robotRoles = map[robotRolesKey],
-      _issues = map[issuesKey],
+      issues = map[issuesKey],
       _penalties = map[penaltiesKey],
       generalComments = map[generalCommentsKey];
 

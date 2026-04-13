@@ -156,7 +156,7 @@ class AllianceOverview extends StatelessWidget {
           ),
           smallCellContainer(
             "${(teamInfoSummary.summaryIssuesTotal).toString()} / "
-            "${(teamInfoSummary.summaryIssuesPercent).toStringAsFixed(2)}%",
+            "${(teamInfoSummary.summaryIssuesPercent[1]).toStringAsFixed(2)}%,${(teamInfoSummary.summaryIssuesPercent[2]).toStringAsFixed(2)}%",
             90.0,
             false,
             true,

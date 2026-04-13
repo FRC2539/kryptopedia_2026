@@ -529,7 +529,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                                 onPressed: () {
                                   scoutedMatchSingleton.startPosition =
                                       StartPosition.none;
-                                  scoutedMatchSingleton.issues = true;
+                                  scoutedMatchSingleton.issues = 2;
                                   vibrate(HapticsType.error);
                                   comments();
                                 },
@@ -649,13 +649,16 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                     scoutedMatchSingleton.penalties = newValue;
                   },
                 ),
-                CheckboxListTile(
-                  title: const Text("Issues?"),
-                  value: scoutedMatchSingleton.issues,
-                  onChanged: (value) {
-                    setDialogState(() {
-                      scoutedMatchSingleton.issues = value!;
-                    });
+                DropdownList(
+                  label: "Issues?",
+                  initialValue: 0,
+                  options: [
+                    MultiSelectOption(value: 0, label: "None"),
+                    MultiSelectOption(value: 1, label: "Minor"),
+                    MultiSelectOption(value: 2, label: "Major"),
+                  ],
+                  callback: (value) {
+                    scoutedMatchSingleton.issues = value;
                   },
                 ),
                 Padding(

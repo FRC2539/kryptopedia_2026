@@ -20,8 +20,8 @@ class TeamInfoSummary {
   List<int> teleopClimbedTotals = [0, 0, 0, 0];
   List<double> teleopClimbedPercents = [0.0, 0.0, 0.0, 0.0];
 
-  int summaryIssuesTotal = 0;
-  double summaryIssuesPercent = 0.0;
+  List<int> summaryIssuesTotal = [0, 0, 0];
+  List<double> summaryIssuesPercent = [0.0, 0.0, 0.0];
   
   TeamInfoSummary() {
     // Do nothing

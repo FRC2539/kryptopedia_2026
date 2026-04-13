@@ -55,16 +55,19 @@ class _EndgameMatchScoutingState extends State<EndgameMatchScouting> {
           initialValues: scoutedMatchSingleton.robotRoles,
           callback: (values) => scoutedMatchSingleton.robotRoles = values,
         ),
-        CheckboxListTile(
-          title: const Text("Issues?"),
-          value: scoutedMatchSingleton.issues,
-          onChanged: (value) {
-            setState(() {
-              scoutedMatchSingleton.issues = value!;
-            });
+        DropdownList(
+          label: "Issues?",
+          initialValue: 0,
+          options: [
+            MultiSelectOption(value: 0, label: "None"),
+            MultiSelectOption(value: 1, label: "Minor"),
+            MultiSelectOption(value: 2, label: "Major"),
+          ],
+          callback: (value) {
+            scoutedMatchSingleton.issues = value;
           },
         ),
-            TextInputField(
+        TextInputField(
           label: "Comments",
           hint:
               "general comments: describe anything eventful, mostly.\nparticularly, please be sure to describe any penalties, issues, or defense.",

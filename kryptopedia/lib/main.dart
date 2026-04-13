@@ -10,6 +10,8 @@ import 'dart:math';
 const Color cougarOrange = Color.fromARGB(225, 242, 101, 34);
 const Color cougarOffBlack = Color.fromARGB(225, 47, 45, 45);
 int? index;
+int? index2;
+bool rainbowMode = false;
 
 void main() {
   runApp(const MainApp());

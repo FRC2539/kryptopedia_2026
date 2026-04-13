@@ -18,6 +18,9 @@ import 'package:kryptopedia/util/vibrate.dart';
 import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/text_field.dart';
 import 'package:kryptopedia/widgets/match_scouting/positions_select.dart';
+import 'dart:math';
+
+List<Color> rainbowFromBlue = [];
 
 class MatchScoutingBoxesEdition extends StatefulWidget {
   final AlliancePosition alliancePosition;
@@ -96,12 +99,50 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
         colors.add(Colors.black);
         break;
       case MatchState.summary:
-        colors.add(Colors.green);
-        colors.add(allianceColor);
+        if (!rainbowMode) {
+          colors.add(index2 != null ? Colors.accents[index2!] : Colors.green);
+          colors.add(allianceColor);
+        } else {
+          colors.add(allianceColor);
+          if (allianceColor == Colors.red) {
+            colors.addAll(Colors.accents.reversed.toList());
+          } else {
+            for (int i = 0; i < Colors.accents.length; i++) {
+              if (Colors.accents[i] == Colors.blueAccent) {
+                rainbowFromBlue = [
+                  ...Colors.accents.sublist(i),
+                  ...Colors.accents.sublist(0, i),
+                ];
+                break;
+              }
+            }
+            colors.addAll(rainbowFromBlue.reversed.toList());
+          }
+          colors.add(allianceColor);
+        }
         break;
       case MatchState.end:
-        colors.add(Colors.green);
-        colors.add(allianceColor);
+        if (!rainbowMode) {
+          colors.add(index2 != null ? Colors.accents[index2!] : Colors.green);
+          colors.add(allianceColor);
+        } else {
+          colors.add(allianceColor);
+          if (allianceColor == Colors.red) {
+            colors.addAll(Colors.accents.reversed.toList());
+          } else {
+            for (int i = 0; i < Colors.accents.length; i++) {
+              if (Colors.accents[i] == Colors.blueAccent) {
+                rainbowFromBlue = [
+                  ...Colors.accents.sublist(i),
+                  ...Colors.accents.sublist(0, i),
+                ];
+                break;
+              }
+            }
+            colors.addAll(rainbowFromBlue.reversed.toList());
+          }
+          colors.add(allianceColor);
+        }
         break;
     }
 
@@ -197,6 +238,51 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   ),
                   Row(
                     children: [
+                      IconButton(
+                        icon: const Icon(Icons.format_color_reset),
+                        color:
+                            (state == MatchState.summary ||
+                                state == MatchState.end)
+                            ? (index2 == null
+                                  ? allianceColor
+                                  : (rainbowMode
+                                        ? allianceColor
+                                        : Colors.accents[index2!]))
+                            : Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            rainbowMode = false;
+                            index2 = null;
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.colorize),
+                        color:
+                            (state == MatchState.summary ||
+                                state == MatchState.end)
+                            ? (index2 == null
+                                  ? allianceColor
+                                  : (rainbowMode
+                                        ? allianceColor
+                                        : Colors.accents[index2!]))
+                            : Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            rainbowMode = false;
+                            int? nindex = index2;
+                            while (index2 == nindex) {
+                              nindex = Random().nextInt(Colors.accents.length);
+                            }
+                            index2 = nindex;
+                          });
+                        },
+                        onLongPress: () {
+                          setState(() {
+                            rainbowMode = !rainbowMode;
+                          });
+                        },
+                      ),
                       IconButton(
                         onPressed: () async {
                           await Navigator.push(
@@ -663,6 +749,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   child: ElevatedButton(
                     onLongPress: () => {
                       Navigator.pop(context, true),
+                      index2 = null,
+                      rainbowMode = false,
                       vibrate(HapticsType.success),
                     },
                     onPressed: () {},

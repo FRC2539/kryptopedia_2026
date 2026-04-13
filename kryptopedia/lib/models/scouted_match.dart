@@ -173,6 +173,15 @@ enum ClimbLevel { none, L1, L2, L3 }
 
 enum StartPosition { lTrench, lBump, center, rBump, rTrench, none }
 
+Map<StartPosition, String> startPositionNames = {
+  StartPosition.lTrench: "Left Trench",
+  StartPosition.lBump: "Left Bump",
+  StartPosition.center: "Center",
+  StartPosition.rBump: "Right Bump",
+  StartPosition.rTrench: "Right Trench",
+  StartPosition.none: "None",
+};
+
 enum Penalties { none, one, few, many }
 
 enum RobotRole { offense, defense, feeder }

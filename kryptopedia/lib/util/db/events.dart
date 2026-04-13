@@ -22,6 +22,7 @@ class DbEvents {
       "${Event.lastSyncKey} INTEGER NOT NULL, "
       "${Event.lastScouterKey} TEXT, "
       "${Event.defaultAlliancePositionKey} INTEGER, "
+      "${Event.defaultFieldSideKey} INTEGER, "
       "${Event.pitMapDataJSONKey} TEXT)"
     );
   }
@@ -87,6 +88,16 @@ class DbEvents {
       Event.defaultAlliancePositionKey: alliancePosition.index,
     }, where: "${Event.idKey} = 0").toString();
     
+    return result;
+  }
+
+  Future<String> updateFieldSide(FieldSide fieldSide) async {
+    Database db = await dbHelper.db;
+
+    String result = db.update(Event.tableName, {
+      Event.defaultFieldSideKey: fieldSide.index,
+    }, where: "${Event.idKey} = 0").toString();
+
     return result;
   }
 

@@ -19,6 +19,12 @@ class Event {
     _defaultAlliancePosition = value?.index;
   }
 
+  int? _defaultFieldSide; //enum index
+  FieldSide? get defaultFieldSide =>
+      _defaultFieldSide == null ? null : FieldSide.values[_defaultFieldSide!];
+  set defaultFieldSide(FieldSide? value) {
+    _defaultFieldSide = value?.index;
+  }
 
   String? _pitMapDataJSON;
   Map<String, dynamic>? get pitMapDataJSON =>
@@ -42,6 +48,7 @@ class Event {
   static const String lastSyncKey = "last_sync";
   static const String lastScouterKey = "last_scouter";
   static const String defaultAlliancePositionKey = "default_alliance_position";
+  static const String defaultFieldSideKey = "default_field_side";
   static const String pitMapDataJSONKey = "pit_map_data_json";
 
   Event(
@@ -69,6 +76,7 @@ class Event {
       lastSyncKey: _lastSync,
       lastScouterKey: lastScouter,
       defaultAlliancePositionKey: _defaultAlliancePosition,
+      defaultFieldSideKey: _defaultFieldSide,
       pitMapDataJSONKey: _pitMapDataJSON,
     };
   }
@@ -84,6 +92,7 @@ class Event {
       _lastSync = map[lastSyncKey],
       lastScouter = map[lastScouterKey],
       _defaultAlliancePosition = map[defaultAlliancePositionKey],
+      _defaultFieldSide = map[defaultFieldSideKey],
       _pitMapDataJSON = map[pitMapDataJSONKey];
 }
 
@@ -109,3 +118,6 @@ Map<AlliancePosition, String> alliancePositionNames = {
   AlliancePosition.blue2: "Blue 2",
   AlliancePosition.blue3: "Blue 3",
 };
+
+
+enum FieldSide { scoringTableSide, oppositeScoringTableSide }

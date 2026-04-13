@@ -17,6 +17,7 @@ import 'package:kryptopedia/util/singletons.dart';
 import 'package:kryptopedia/util/vibrate.dart';
 import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/text_field.dart';
+import 'package:kryptopedia/widgets/match_scouting/positions_select.dart';
 
 class MatchScoutingBoxesEdition extends StatefulWidget {
   final AlliancePosition alliancePosition;
@@ -154,7 +155,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(), //it works :)
+                  Container(),
                   FutureBuilder(
                     future: scouters,
                     builder: (context, snapshot) {
@@ -178,15 +179,15 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                               (scouter) => DropdownMenuItem<String>(
                                 value: scouter.id,
                                 child: AutoSizeText(
-                                    scouter.name,
-                                    style: TextStyle(
-                                      fontSize: Device.fontSize(
-                                        context,
-                                        12.0,
-                                        22.0,
-                                      ),
+                                  scouter.name,
+                                  style: TextStyle(
+                                    fontSize: Device.fontSize(
+                                      context,
+                                      12.0,
+                                      22.0,
                                     ),
-                                    maxLines: 2,
+                                  ),
+                                  maxLines: 2,
                                 ),
                               ),
                             )
@@ -281,99 +282,22 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
 
                   double aspectRatio = itemHeight / itemWidth;
 
+                  Alliance alliance =
+                      redAlliancePositions.contains(widget.alliancePosition)
+                      ? Alliance.red
+                      : Alliance.blue;
+                  String station1Label = alliance == Alliance.red
+                      ? widget.match.red1number.toString()
+                      : widget.match.blue1number.toString();
+                  String station2Label = alliance == Alliance.red
+                      ? widget.match.red2number.toString()
+                      : widget.match.blue2number.toString();
+                  String station3Label = alliance == Alliance.red
+                      ? widget.match.red3number.toString()
+                      : widget.match.blue3number.toString();
+
                   List<Widget> buttons = switch (state) {
-                    MatchState.start => [
-                      _buildGridButton(
-                        color: Colors.orangeAccent,
-                        label: "Left Trench",
-                        filled:
-                            scoutedMatchSingleton.startPosition ==
-                                StartPosition.lTrench &&
-                            setStartPosition,
-                        onPressed: () {
-                          scoutedMatchSingleton.startPosition =
-                              StartPosition.lTrench;
-                          state = MatchState.auto;
-                          setStartPosition = true;
-                          vibrate(HapticsType.heavy);
-                        },
-                      ),
-                      _buildGridButton(
-                        color: Colors.orangeAccent,
-                        label: "Left Bump",
-                        filled:
-                            scoutedMatchSingleton.startPosition ==
-                                StartPosition.lBump &&
-                            setStartPosition,
-                        onPressed: () {
-                          scoutedMatchSingleton.startPosition =
-                              StartPosition.lBump;
-                          state = MatchState.auto;
-                          setStartPosition = true;
-                          vibrate(HapticsType.heavy);
-                        },
-                      ),
-                      _buildGridButton(
-                        color: Colors.orangeAccent,
-                        label: "Center",
-                        filled:
-                            scoutedMatchSingleton.startPosition ==
-                                StartPosition.center &&
-                            setStartPosition,
-                        onPressed: () {
-                          scoutedMatchSingleton.startPosition =
-                              StartPosition.center;
-                          state = MatchState.auto;
-                          setStartPosition = true;
-                          vibrate(HapticsType.heavy);
-                        },
-                      ),
-                      _buildGridButton(
-                        color: Colors.orangeAccent,
-                        label: "Right Bump",
-                        filled:
-                            scoutedMatchSingleton.startPosition ==
-                                StartPosition.rBump &&
-                            setStartPosition,
-                        onPressed: () {
-                          scoutedMatchSingleton.startPosition =
-                              StartPosition.rBump;
-                          state = MatchState.auto;
-                          setStartPosition = true;
-                          vibrate(HapticsType.heavy);
-                        },
-                      ),
-                      _buildGridButton(
-                        color: Colors.orangeAccent,
-                        label: "Right Trench",
-                        filled:
-                            scoutedMatchSingleton.startPosition ==
-                                StartPosition.rTrench &&
-                            setStartPosition,
-                        onPressed: () {
-                          scoutedMatchSingleton.startPosition =
-                              StartPosition.rTrench;
-                          state = MatchState.auto;
-                          setStartPosition = true;
-                          vibrate(HapticsType.heavy);
-                        },
-                      ),
-                      _buildGridButton(
-                        color: Colors.redAccent,
-                        label: "No-show",
-                        filled:
-                            scoutedMatchSingleton.startPosition ==
-                                StartPosition.none &&
-                            setStartPosition,
-                        onPressed: () {
-                          scoutedMatchSingleton.startPosition =
-                              StartPosition.none;
-                          scoutedMatchSingleton.issues = true;
-                          vibrate(HapticsType.error);
-                          comments();
-                        },
-                      ),
-                    ],
+                    MatchState.start => [],
                     MatchState.auto => [
                       _buildGridButton(
                         color: Colors.yellow,
@@ -568,6 +492,55 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                     ],
                   };
 
+                  if (state == MatchState.start) {
+                    return Column(
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: StartPositionsSelect(
+                            alliance: alliance,
+                            station1Label: station1Label,
+                            station2Label: station2Label,
+                            station3Label: station3Label,
+                            value: setStartPosition
+                                ? scoutedMatchSingleton.startPosition
+                                : null,
+                            onPositionSelected: (pos) {
+                              scoutedMatchSingleton.startPosition = pos;
+                              setStartPosition = true;
+                              vibrate(HapticsType.medium);
+                              setState(() {
+                                state = MatchState.auto;
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: SizedBox.expand(
+                              child: _buildGridButton(
+                                color: Colors.redAccent,
+                                label: "No-show",
+                                filled:
+                                    scoutedMatchSingleton.startPosition ==
+                                        StartPosition.none &&
+                                    setStartPosition,
+                                onPressed: () {
+                                  scoutedMatchSingleton.startPosition =
+                                      StartPosition.none;
+                                  scoutedMatchSingleton.issues = true;
+                                  vibrate(HapticsType.error);
+                                  comments();
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+
                   return GridView.count(
                     scrollDirection: Axis.horizontal,
                     crossAxisCount: rows,
@@ -595,7 +568,6 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
   }) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
-      child: GestureDetector(
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             foregroundColor: color,
@@ -635,8 +607,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                   style: const TextStyle(fontSize: 11),
                   textAlign: TextAlign.center,
                 ),
-            ],
-          ),
+          ],
         ),
       ),
     );

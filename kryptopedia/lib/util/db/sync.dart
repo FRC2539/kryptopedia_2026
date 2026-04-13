@@ -267,32 +267,36 @@ Future syncFlow(
     DbScoutedPits dbScoutedPits = DbScoutedPits();
     List<ScoutedPit> scoutedPits = await dbScoutedPits.getScoutedPits();
 
-    List<ScoutedPit> pitsWithPhotos = [];
+    List<ScoutedPit> pitsToUpload = [];
     for (ScoutedPit pit in scoutedPits) {
       if (pit.serverPhotoUpdated == null &&
           !pit.local &&
           await File(await pit.photoPath).exists()) {
-        pitsWithPhotos.add(pit);
+        pitsToUpload.add(pit);
       }
     }
 
-    for (int i = 0; i < pitsWithPhotos.length; i++) {
-      ScoutedPit pit = pitsWithPhotos[i];
+    for (int i = 0; i < pitsToUpload.length; i++) {
+      ScoutedPit pit = pitsToUpload[i];
       syncStatus.value =
-          "Uploading photo for team ${pit.teamNumber}... ${i + 1}/${pitsWithPhotos.length}";
+          "Uploading photo for team ${pit.teamNumber}... ${i + 1}/${pitsToUpload.length}";
       try {
+        String path = await pit.photoPath;
         APIResponse response = await Api.uploadPhoto(
           event.serverURL!,
           event.teamNumber,
           event.authToken!,
           pit.uid,
-          await pit.photoPath,
+          path,
         );
         if (!response.success) throw response.data;
         await dbScoutedPits.updateScoutedPitPhotoTimestamp(
           pit.uid,
           response.data,
         );
+        //rewrite photo with itself to update modified time
+        File file = File(path);
+        await file.writeAsBytes(await file.readAsBytes());
       } catch (e) {
         if (!context.mounted) return;
         Navigator.pop(context);
@@ -307,24 +311,24 @@ Future syncFlow(
       }
     }
 
-    finalMessage += "Uploaded ${pitsWithPhotos.length} photos.\n";
+    finalMessage += "Uploaded ${pitsToUpload.length} photos.\n";
     syncStatus.value = "Downloading photos...";
 
-    List<ScoutedPit> pitsWithServerPhotos = [];
+    List<ScoutedPit> pitsToDownload = [];
     for (ScoutedPit pit in scoutedPits) {
       File localFile = File(await pit.photoPath);
       if (pit.serverPhotoUpdated != null &&
           !pit.local &&
           (!localFile.existsSync() ||
               localFile.lastModifiedSync().isBefore(pit.serverPhotoUpdated!))) {
-        pitsWithServerPhotos.add(pit);
+        pitsToDownload.add(pit);
       }
     }
 
-    for (int i = 0; i < pitsWithServerPhotos.length; i++) {
-      ScoutedPit pit = pitsWithServerPhotos[i];
+    for (int i = 0; i < pitsToDownload.length; i++) {
+      ScoutedPit pit = pitsToDownload[i];
       syncStatus.value =
-          "Downloading photo for team ${pit.teamNumber}... ${i + 1}/${pitsWithServerPhotos.length}";
+          "Downloading photo for team ${pit.teamNumber}... ${i + 1}/${pitsToDownload.length}";
       try {
         APIResponse response = await Api.downloadPitPhoto(
           event.serverURL!,
@@ -351,7 +355,7 @@ Future syncFlow(
       }
     }
 
-    finalMessage += "Downloaded ${pitsWithServerPhotos.length} photos.\n";
+    finalMessage += "Downloaded ${pitsToDownload.length} photos.\n";
   }
 
   if (!context.mounted) return;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/util/singletons.dart';
+import 'package:kryptopedia/widgets/common/dropdown.dart';
 import 'package:kryptopedia/widgets/common/layouts.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 import 'package:kryptopedia/widgets/common/super_number_field.dart';
@@ -17,6 +19,21 @@ class _AutoMatchScoutingState extends State<AutoMatchScouting> {
     return ScoutingSection(
       title: 'Auto Stats',
       children: [
+        DropdownList(
+          label: 'Start position',
+          initialValue: scoutedMatchSingleton.startPosition,
+          options: StartPosition.values
+              .map(
+                (pos) => MultiSelectOption(
+                  value: pos,
+                  label: startPositionNames[pos]!,
+                ),
+              )
+              .toList(),
+          callback: (newValue) {
+            scoutedMatchSingleton.startPosition = newValue;
+          },
+        ),
         ResponsiveLayout(
           portraitMode: LayoutMode.singleColumn,
           landscapeMode: LayoutMode.twoColumn,
@@ -42,16 +59,6 @@ class _AutoMatchScoutingState extends State<AutoMatchScouting> {
                 });
               },
             ),
-            /*SuperNumberField(
-              label: "Fuel held at end of auto",
-              minValue: 0,
-              maxValue: 6767,
-              superStep: 10,
-              startValue: scoutedMatchSingleton.autoFuelFinal,
-              callback: (int newValue) {
-                scoutedMatchSingleton.autoFuelFinal = newValue;
-              },
-            ),*/
           ],
         ),
       ],

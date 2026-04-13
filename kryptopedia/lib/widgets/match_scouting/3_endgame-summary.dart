@@ -22,7 +22,7 @@ class _EndgameMatchScoutingState extends State<EndgameMatchScouting> {
       children: [
         DropdownList(
           label: 'Climb level',
-          initialValue: ClimbLevel.none,
+          initialValue: scoutedMatchSingleton.climbLevel,
           options: [
             MultiSelectOption(value: ClimbLevel.none, label: 'No climb'),
             MultiSelectOption(value: ClimbLevel.L1, label: 'L1'),
@@ -35,7 +35,7 @@ class _EndgameMatchScoutingState extends State<EndgameMatchScouting> {
         ),
         DropdownList(
           label: 'Penalties',
-          initialValue: Penalties.none,
+          initialValue: scoutedMatchSingleton.penalties,
           options: [
             MultiSelectOption(value: Penalties.none, label: 'None'),
             MultiSelectOption(value: Penalties.few, label: 'Few'),

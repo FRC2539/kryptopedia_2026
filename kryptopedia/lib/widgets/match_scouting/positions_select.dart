@@ -236,7 +236,9 @@ class StartPositionPainter extends CustomPainter {
         textDirection: TextDirection.ltr,
       );
       tp.layout();
-      double x = !fieldOnRightSide ? lineX + 80 : lineX - 80 - tp.width;
+      double x = !fieldOnRightSide
+          ? lineX + size.width * 0.24
+          : lineX - size.width * 0.24 - tp.width;
       double y = stationOffsets * (i + 1) - tp.height / 2 - stationOffsets / 2;
       tp.paint(canvas, Offset(x, y));
     }

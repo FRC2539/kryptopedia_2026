@@ -214,6 +214,33 @@ class StartPositionPainter extends CustomPainter {
       tp.paint(canvas, Offset(x, y));
     }
 
+    List<String> startPosLabels = [
+      "TRENCH",
+      "BUMP",
+      "CENTER",
+      "BUMP",
+      "TRENCH",
+    ];
+    for (int i = 0; i < startPosLabels.length; i++) {
+      TextSpan span = TextSpan(
+        text: startPosLabels[i],
+        style: TextStyle(
+          color: color,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+      TextPainter tp = TextPainter(
+        text: span,
+        textAlign: TextAlign.right,
+        textDirection: TextDirection.ltr,
+      );
+      tp.layout();
+      double x = !fieldOnRightSide ? lineX + 80 : lineX - 80 - tp.width;
+      double y = stationOffsets * (i + 1) - tp.height / 2 - stationOffsets / 2;
+      tp.paint(canvas, Offset(x, y));
+    }
+
     Paint fieldElementOutlinePaint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke

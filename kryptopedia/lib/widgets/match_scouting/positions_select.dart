@@ -9,7 +9,7 @@ class StartPositionsSelect extends StatefulWidget {
   final String station1Label;
   final String station2Label;
   final String station3Label;
-  final StartPosition? value;
+  final ValueNotifier<StartPosition?>? value;
   final Function(StartPosition) onPositionSelected;
 
   const StartPositionsSelect({
@@ -36,7 +36,7 @@ class _StartPositionsSelectState extends State<StartPositionsSelect> {
   void initState() {
     super.initState();
     fieldSide = _getFieldSide();
-    selectedPosition = widget.value;
+    selectedPosition = widget.value?.value;
   }
 
   Future<FieldSide> _getFieldSide() async {
@@ -84,19 +84,24 @@ class _StartPositionsSelectState extends State<StartPositionsSelect> {
                       padding: const EdgeInsets.all(12.0),
                       child: GestureDetector(
                         onTapUp: (details) => _onTapUp(details),
-                        child: CustomPaint(
-                          painter: StartPositionPainter(
-                            alliance: widget.alliance,
-                            fieldSide: side,
-                            station1Label: widget.station1Label,
-                            station2Label: widget.station2Label,
-                            station3Label: widget.station3Label,
-                            selectedPosition: selectedPosition,
-                            onPositionPainted: (pos, bounds) {
-                              positionBounds[pos] = bounds;
-                            },
-                          ),
-                          size: Size(width, height),
+                        child: ValueListenableBuilder<StartPosition?>(
+                          valueListenable: widget.value ?? ValueNotifier(null),
+                          builder: (context, value, child) {
+                            return CustomPaint(
+                              painter: StartPositionPainter(
+                                alliance: widget.alliance,
+                                fieldSide: side,
+                                station1Label: widget.station1Label,
+                                station2Label: widget.station2Label,
+                                station3Label: widget.station3Label,
+                                selectedPosition: value,
+                                onPositionPainted: (pos, bounds) {
+                                  positionBounds[pos] = bounds;
+                                },
+                              ),
+                              size: Size(width, height),
+                            );
+                          }
                         ),
                       ),
                     ),
@@ -197,12 +202,13 @@ class StartPositionPainter extends CustomPainter {
       stationLabels = stationLabels.reversed.toList();
     }
     for (int i = 0; i < stationLabels.length; i++) {
-      if (stationLabels[i] == null) continue;
+      String? label = stationLabels[i];
+      if (label == null) continue;
       TextSpan span = TextSpan(
-        text: stationLabels[i],
+        text: label,
         style: TextStyle(
           color: color,
-          fontSize: 18,
+          fontSize: label.length > 6 ? 13 : 18,
           fontWeight: FontWeight.bold,
         ),
       );
@@ -228,7 +234,7 @@ class StartPositionPainter extends CustomPainter {
       TextSpan span = TextSpan(
         text: startPosLabels[i],
         style: TextStyle(
-          color: color,
+          color: Colors.amberAccent,
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kryptopedia/main.dart';
 import 'package:kryptopedia/models/event.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
 import 'package:kryptopedia/util/db/events.dart';
@@ -157,7 +158,9 @@ class StartPositionPainter extends CustomPainter {
         (alliance == Alliance.blue &&
             fieldSide == FieldSide.oppositeScoringTableSide);
 
-    Color color = alliance == Alliance.red ? Colors.red : Colors.blue;
+    Color color = index == null
+        ? (alliance == Alliance.red ? Colors.red : Colors.blue)
+        : Colors.black;
     Color backgroundColor = alliance == Alliance.red
         ? Colors.redAccent
         : Colors.blueAccent;

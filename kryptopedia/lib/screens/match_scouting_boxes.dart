@@ -165,6 +165,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
             if (confirmation != true || !context.mounted) {
               return;
             }
+            rainbowMode = false;
+            index2 = null;
             Navigator.pop(context);
           case MatchState.auto:
             setState(() {

@@ -53,6 +53,9 @@ class _AllianceSelectionState extends State<AllianceSelection> {
   );
   ValueNotifier<int> tbaUpdateNotifier = ValueNotifier<int>(1);
 
+  bool flagsVisible = false;
+  bool alliancesVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +65,24 @@ class _AllianceSelectionState extends State<AllianceSelection> {
           style: TextStyle(fontSize: Device.fontHeader(context)),
           maxLines: 1,
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                alliancesVisible = !alliancesVisible;
+              });
+            },
+            icon: const Icon(Icons.people),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                flagsVisible = !flagsVisible;
+              });
+            },
+            icon: const Icon(Icons.flag),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: getTeamList(),
@@ -76,137 +97,11 @@ class _AllianceSelectionState extends State<AllianceSelection> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(
-                              top: 10.0,
-                              bottom: 5.0,
-                              right: 10.0,
-                              left: 10.0,
-                            ),
-                            padding: const EdgeInsets.only(
-                              top: 5.0,
-                              bottom: 5.0,
-                              right: 20.0,
-                              left: 20.0,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              border: Border.all(width: 1.0),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(25.0),
-                              ),
-                            ),
-                            child: SizedBox(
-                              height: 320.0,
-                              width: 250.0,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 40.0,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        AutoSizeText(
-                                          "Alliance Picks",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            color: Colors.orangeAccent,
-                                            fontSize: Device.fontHeader2(
-                                              context,
-                                            ),
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(width: 30.0),
-                                        GestureDetector(
-                                          onTap: () {
-                                            if (allianceTeams[_activeAlliance -
-                                                    1]
-                                                .alliancePartners
-                                                .isNotEmpty) {
-                                              setState(() {
-                                                // Mark the team as not picked.
-                                                bool itemFound = false;
-                                                for (
-                                                  int i = 0;
-                                                  i < eventTeams.length &&
-                                                      !itemFound;
-                                                  i++
-                                                ) {
-                                                  if (eventTeams[i]
-                                                          .team
-                                                          .number ==
-                                                      allianceTeams[_activeAlliance -
-                                                              1]
-                                                          .alliancePartners
-                                                          .last) {
-                                                    eventTeams[i].picked =
-                                                        false;
-                                                    itemFound = true;
-                                                  }
-                                                }
-
-                                                // Remove the team from the alliance
-                                                allianceTeams[_activeAlliance -
-                                                        1]
-                                                    .alliancePartners
-                                                    .removeLast();
-
-                                                // Trigger an updates of the Metrics table
-                                                teamsToShowNotifier.value =
-                                                    TeamsToShow.init(
-                                                      getListOfTeamsToDisplay(),
-                                                      activeFlags.isNotEmpty,
-                                                    );
-                                              });
-                                            }
-                                          },
-                                          child: Container(
-                                            width: 50.0,
-                                            height: 25.0,
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue,
-                                              border: Border.all(width: 1.0),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                    Radius.circular(25.0),
-                                                  ),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  child: const AutoSizeText(
-                                                    'UNDO',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 10.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Column(children: allAlliances),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              height: 330.0,
+                      Visibility(
+                        visible: alliancesVisible,
+                        child: Row(
+                          children: [
+                            Container(
                               margin: const EdgeInsets.only(
                                 top: 10.0,
                                 bottom: 5.0,
@@ -216,7 +111,7 @@ class _AllianceSelectionState extends State<AllianceSelection> {
                               padding: const EdgeInsets.only(
                                 top: 5.0,
                                 bottom: 5.0,
-                                right: 0.0,
+                                right: 20.0,
                                 left: 20.0,
                               ),
                               decoration: BoxDecoration(
@@ -226,217 +121,355 @@ class _AllianceSelectionState extends State<AllianceSelection> {
                                   Radius.circular(25.0),
                                 ),
                               ),
-                              child: Column(
-                                children: [
-                                  AutoSizeText(
-                                    "Available Teams",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.orangeAccent,
-                                      fontSize: Device.fontHeader2(context),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.only(
-                                          right: 20.0,
-                                        ),
-                                        child: AutoSizeText(
-                                          "Sort Filter:",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: Device.fontTable(context),
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (teamSort != "rank") {
-                                            setState(() {
-                                              teamSort = "rank";
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.only(
-                                            left: 20.0,
-                                            right: 20.0,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: (teamSort == "rank")
-                                                ? Colors.orange.shade100
-                                                : Colors.black,
-                                            border: Border.all(width: 1.0),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                  Radius.circular(10.0),
-                                                ),
-                                          ),
-                                          child: AutoSizeText(
-                                            "Team Rank",
+                              child: SizedBox(
+                                height: 320.0,
+                                width: 250.0,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 40.0,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          AutoSizeText(
+                                            "Alliance Picks",
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
-                                              color: (teamSort == "rank")
-                                                  ? Colors.black
-                                                  : Colors.white,
-                                              fontSize: Device.fontTable(
+                                              color: Colors.orangeAccent,
+                                              fontSize: Device.fontHeader2(
                                                 context,
+                                              ),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(width: 30.0),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (allianceTeams[_activeAlliance -
+                                                      1]
+                                                  .alliancePartners
+                                                  .isNotEmpty) {
+                                                setState(() {
+                                                  // Mark the team as not picked.
+                                                  bool itemFound = false;
+                                                  for (
+                                                    int i = 0;
+                                                    i < eventTeams.length &&
+                                                        !itemFound;
+                                                    i++
+                                                  ) {
+                                                    if (eventTeams[i]
+                                                            .team
+                                                            .number ==
+                                                        allianceTeams[_activeAlliance -
+                                                                1]
+                                                            .alliancePartners
+                                                            .last) {
+                                                      eventTeams[i].picked =
+                                                          false;
+                                                      itemFound = true;
+                                                    }
+                                                  }
+
+                                                  // Remove the team from the alliance
+                                                  allianceTeams[_activeAlliance -
+                                                          1]
+                                                      .alliancePartners
+                                                      .removeLast();
+
+                                                  // Trigger an updates of the Metrics table
+                                                  teamsToShowNotifier
+                                                      .value = TeamsToShow.init(
+                                                    getListOfTeamsToDisplay(),
+                                                    activeFlags.isNotEmpty,
+                                                  );
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              width: 50.0,
+                                              height: 25.0,
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                border: Border.all(width: 1.0),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                      Radius.circular(25.0),
+                                                    ),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: const AutoSizeText(
+                                                      'UNDO',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (teamSort != "team_number") {
-                                            setState(() {
-                                              teamSort = "team_number";
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.only(
-                                            left: 20.0,
-                                            right: 20.0,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: (teamSort == "team_number")
-                                                ? Colors.orange.shade100
-                                                : Colors.black,
-                                            border: Border.all(width: 1.0),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                  Radius.circular(10.0),
-                                                ),
-                                          ),
-                                          child: AutoSizeText(
-                                            "Team Number",
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              color: (teamSort == "team_number")
-                                                  ? Colors.black
-                                                  : Colors.white,
-                                              fontSize: Device.fontTable(
-                                                context,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: ListView(
-                                        children: selectableTeams,
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  AutoSizeText(
-                                    "Single Tap = Add team to highlighted alliance  |  Double Tap = Toggle Do Not Pick",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: Device.fontTable(context),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                          top: 10.0,
-                          bottom: 0.0,
-                          right: 10.0,
-                          left: 10.0,
-                        ),
-                        padding: const EdgeInsets.only(
-                          top: 5.0,
-                          bottom: 5.0,
-                          right: 20.0,
-                          left: 20.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: Border.all(width: 1.0),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(25.0),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 100.0,
-                              child: AutoSizeText(
-                                "Team Flags:",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: Colors.orangeAccent,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
+                                    Column(children: allAlliances),
+                                  ],
                                 ),
                               ),
                             ),
                             Expanded(
-                              child: SizedBox(
-                                height: 50.0,
-                                child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: teamFlags.entries.map((entry) {
-                                    String key = entry.key;
-                                    return Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              (activeFlags.contains(key))
-                                              ? Colors.orange.shade300
-                                              : Colors.black,
-                                          side: BorderSide(
-                                            width: 2.0,
-                                            color: Colors.orange.shade300,
-                                          ),
-                                        ),
-                                        child: AutoSizeText(
-                                          key,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: (activeFlags.contains(key))
-                                                ? Colors.black
-                                                : Colors.white,
-                                            fontSize: 14.0,
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          setState(() {
-                                            (!activeFlags.contains(key))
-                                                ? activeFlags.add(key)
-                                                : activeFlags.remove(key);
-
-                                            // Trigger an update of the Team Metrics table
-                                            teamsToShowNotifier.value =
-                                                TeamsToShow.init(
-                                                  getListOfTeamsToDisplay(),
-                                                  activeFlags.isNotEmpty,
-                                                );
-                                          });
-                                        },
+                              child: Container(
+                                height: 330.0,
+                                margin: const EdgeInsets.only(
+                                  top: 10.0,
+                                  bottom: 5.0,
+                                  right: 10.0,
+                                  left: 10.0,
+                                ),
+                                padding: const EdgeInsets.only(
+                                  top: 5.0,
+                                  bottom: 5.0,
+                                  right: 0.0,
+                                  left: 20.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  border: Border.all(width: 1.0),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(25.0),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    AutoSizeText(
+                                      "Available Teams",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.orangeAccent,
+                                        fontSize: Device.fontHeader2(context),
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    );
-                                  }).toList(),
+                                    ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                            right: 20.0,
+                                          ),
+                                          child: AutoSizeText(
+                                            "Sort Filter:",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: Device.fontTable(
+                                                context,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (teamSort != "rank") {
+                                              setState(() {
+                                                teamSort = "rank";
+                                              });
+                                            }
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.only(
+                                              left: 20.0,
+                                              right: 20.0,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: (teamSort == "rank")
+                                                  ? Colors.orange.shade100
+                                                  : Colors.black,
+                                              border: Border.all(width: 1.0),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                    Radius.circular(10.0),
+                                                  ),
+                                            ),
+                                            child: AutoSizeText(
+                                              "Team Rank",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color: (teamSort == "rank")
+                                                    ? Colors.black
+                                                    : Colors.white,
+                                                fontSize: Device.fontTable(
+                                                  context,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (teamSort != "team_number") {
+                                              setState(() {
+                                                teamSort = "team_number";
+                                              });
+                                            }
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.only(
+                                              left: 20.0,
+                                              right: 20.0,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: (teamSort == "team_number")
+                                                  ? Colors.orange.shade100
+                                                  : Colors.black,
+                                              border: Border.all(width: 1.0),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                    Radius.circular(10.0),
+                                                  ),
+                                            ),
+                                            child: AutoSizeText(
+                                              "Team Number",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color:
+                                                    (teamSort == "team_number")
+                                                    ? Colors.black
+                                                    : Colors.white,
+                                                fontSize: Device.fontTable(
+                                                  context,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.only(
+                                          top: 10.0,
+                                        ),
+                                        child: ListView(
+                                          children: selectableTeams,
+                                        ),
+                                      ),
+                                    ),
+                                    AutoSizeText(
+                                      "Single Tap = Add team to highlighted alliance  |  Double Tap = Toggle Do Not Pick",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: Device.fontTable(context),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: flagsVisible,
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                            top: 10.0,
+                            bottom: 0.0,
+                            right: 10.0,
+                            left: 10.0,
+                          ),
+                          padding: const EdgeInsets.only(
+                            top: 5.0,
+                            bottom: 5.0,
+                            right: 20.0,
+                            left: 20.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            border: Border.all(width: 1.0),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(25.0),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 100.0,
+                                child: AutoSizeText(
+                                  "Team Flags:",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.orangeAccent,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 50.0,
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: teamFlags.entries.map((entry) {
+                                      String key = entry.key;
+                                      return Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                (activeFlags.contains(key))
+                                                ? Colors.orange.shade300
+                                                : Colors.black,
+                                            side: BorderSide(
+                                              width: 2.0,
+                                              color: Colors.orange.shade300,
+                                            ),
+                                          ),
+                                          child: AutoSizeText(
+                                            key,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: (activeFlags.contains(key))
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: 14.0,
+                                            ),
+                                          ),
+                                          onPressed: () async {
+                                            setState(() {
+                                              (!activeFlags.contains(key))
+                                                  ? activeFlags.add(key)
+                                                  : activeFlags.remove(key);
+
+                                              // Trigger an update of the Team Metrics table
+                                              teamsToShowNotifier.value =
+                                                  TeamsToShow.init(
+                                                    getListOfTeamsToDisplay(),
+                                                    activeFlags.isNotEmpty,
+                                                  );
+                                            });
+                                          },
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

@@ -101,7 +101,7 @@ class _StartPositionsSelectState extends State<StartPositionsSelect> {
                               ),
                               size: Size(width, height),
                             );
-                          }
+                          },
                         ),
                       ),
                     ),
@@ -208,7 +208,7 @@ class StartPositionPainter extends CustomPainter {
         text: label,
         style: TextStyle(
           color: color,
-          fontSize: label.length > 6 ? 13 : 18,
+          fontSize: label.length > 6 ? 10 : 18,
           fontWeight: FontWeight.bold,
         ),
       );

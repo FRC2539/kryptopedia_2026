@@ -48,7 +48,8 @@ sentry:
 
 - set the `PARTIAL_DB_URL` environment variable to a postgres database url but without the db name at the end
 - make sure your `production.key` is in `config/credentials/`
-- use the `Dockerfile` to build and deploy the docker container, then expose port 3000! i think that should be it
+- use the `Dockerfile` to build and deploy the docker container, then expose port 3000!
+- you also need a job worker, i just use the same dockerfile and run it with `--entrypoint bin/jobs` but there are probably better ways to do it
 
 ## webhook setup
 

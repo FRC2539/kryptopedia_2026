@@ -280,6 +280,7 @@ Future syncFlow(
       ScoutedPit pit = pitsToUpload[i];
       syncStatus.value =
           "Uploading photo for team ${pit.teamNumber}... ${i + 1}/${pitsToUpload.length}";
+      loadingProgress.value = (i + 1) / pitsToUpload.length;
       try {
         String path = await pit.photoPath;
         APIResponse response = await Api.uploadPhoto(
@@ -329,6 +330,7 @@ Future syncFlow(
       ScoutedPit pit = pitsToDownload[i];
       syncStatus.value =
           "Downloading photo for team ${pit.teamNumber}... ${i + 1}/${pitsToDownload.length}";
+      loadingProgress.value = (i + 1) / pitsToDownload.length;
       try {
         APIResponse response = await Api.downloadPitPhoto(
           event.serverURL!,

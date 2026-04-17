@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_23_225444) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_17_140320) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -92,6 +92,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_23_225444) do
     t.bigint "scouted_event_id", null: false
     t.datetime "updated_at", null: false
     t.index ["scouted_event_id"], name: "index_preloaded_flags_on_scouted_event_id"
+  end
+
+  create_table "scouted_event_exports", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "excludes_comments"
+    t.bigint "scouted_event_id", null: false
+    t.bigint "team_member_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["scouted_event_id"], name: "index_scouted_event_exports_on_scouted_event_id"
+    t.index ["team_member_id"], name: "index_scouted_event_exports_on_team_member_id"
   end
 
   create_table "scouted_event_teams", force: :cascade do |t|
@@ -186,6 +196,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_23_225444) do
   add_foreign_key "matches", "teams", column: "red2_id"
   add_foreign_key "matches", "teams", column: "red3_id"
   add_foreign_key "preloaded_flags", "scouted_events"
+  add_foreign_key "scouted_event_exports", "scouted_events"
+  add_foreign_key "scouted_event_exports", "team_members"
   add_foreign_key "scouted_events", "teams"
   add_foreign_key "scouting_data_items", "scouted_events"
   add_foreign_key "scouting_data_items", "team_members"

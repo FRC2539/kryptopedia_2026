@@ -70,3 +70,7 @@ gem "sentry-rails", "~> 6.3"
 gem "active_storage_validations", "~> 3.0"
 
 gem "aws-sdk-s3", require: false
+
+gem "mission_control-jobs", "~> 1.1"
+
+gem "rodf", "~> 1.2"

@@ -46,10 +46,11 @@ sentry:
   dsn: # optional, for error and metrics tracking with Sentry.
 ```
 
-- set the `PARTIAL_DB_URL` environment variable to a postgres database url but without the username/password or db name
-- make sure your `production.key` is either in `config/credentials/` or set in the `RAILS_MASTER_KEY` environment variable
-- use the `Dockerfile` to build and deploy the docker container, then expose port 3000!
+- set the `PARTIAL_DB_URL` environment variable to a postgres database url but without the db name at the end
+- make sure your `production.key` is in `config/credentials/`
+- use the `Dockerfile` to build and deploy the docker container, then expose port 3000! i think that should be it
 
 ## webhook setup
 
-you can point a webhook to `/webhooks/tba` to get some data to update automatically, in theory. TBA will want a verification code after you do this, which will be shown for an hour on `/webhooks`
+you can point a webhook to `/webhooks/tba` to get some data to update automatically, in theory. TBA will want a
+verification code after you do this, which will be shown for an hour on `/webhooks`

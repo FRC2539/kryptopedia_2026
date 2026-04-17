@@ -35,6 +35,7 @@ class ScoutedEvent < ApplicationRecord
   has_many :scouting_data_items
   has_many :matches
   has_many :preloaded_flags
+  has_many :exports, class_name: "ScoutedEventExport", dependent: :destroy
 
   validates :name, presence: true, uniqueness: { scope: :team_id }
   validates :code, presence: true, uniqueness: { scope: :team_id }

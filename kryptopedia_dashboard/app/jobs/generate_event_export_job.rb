@@ -68,9 +68,9 @@ class GenerateEventExportJob < ApplicationJob
           t.row do |r|
             r.cell item.uid
             r.cell item.team_member.hashid
-            r.cell item.deleted_at
-            r.cell item.created_at
-            r.cell item.updated_at
+            r.cell item.deleted_at.to_i
+            r.cell item.created_at.to_i
+            r.cell item.updated_at.to_i
             columns.each { |col| r.cell item.data[col] }
           end
         end

@@ -62,7 +62,7 @@ class DeviceApiController < ApplicationController
         next
       end
       team_member = TeamMember.find_by_hashid(item["scouter_id"]) if item["scouter_id"]
-      ScoutingDataItem.upsert({ data_type: item["type"], uid: item["uid"], scouted_event_id: @event.id, team_member_id: team_member&.id, data: data, deleted_at: nil })
+      ScoutingDataItem.upsert({ data_type: item["type"], uid: item["uid"], scouted_event_id: @event.id, team_member_id: team_member&.id, data: data, deleted_at: nil }, unique_by: "index_scouting_data_items_on_uid_and_scouted_event_id")
     end
 
     # ACCEPT/PUSH ^^

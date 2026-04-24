@@ -5,4 +5,5 @@ Sentry.init do |config|
   config.dsn = Rails.application.credentials.dig(:sentry, :dsn)
   config.traces_sample_rate = 1.0
   config.send_default_pii = false
+  config.enable_logs = true
 end

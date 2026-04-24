@@ -1,0 +1,12 @@
+<%= button_to "Generate export", team_scouted_event_enqueue_export_path(@scouted_event) %>
+<%= button_to "Generate export without comments", team_scouted_event_enqueue_export_path(@scouted_event, exclude_comments: true) %>
+
+
+<% @exports.each do |export| %>
+  <div class="card">
+    <strong><%= export.team_member.name %></strong> generated an export
+    <span title="<%= export.created_at.to_s %>"> <%= time_ago_in_words(export.created_at) %>
+      ago</span>: <%= link_to "download", url_for(export.file) %>
+    <%= "(export excludes  comments)" if export.excludes_comments %>
+  </div>
+<% end %>

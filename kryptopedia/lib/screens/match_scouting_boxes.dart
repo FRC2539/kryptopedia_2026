@@ -45,7 +45,10 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
   late TeamMember _selectedScouter;
   late Future<List<TeamMember>> scouters;
   DbEvents dbEvents = DbEvents();
+
   bool setStartPosition = false;
+  bool setAutoClimb = false;
+  bool setEndgameClimb = false;
 
   Future<List<TeamMember>> _future() async {
     DbTeamMembers dbTeamMembers = DbTeamMembers();
@@ -426,6 +429,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       _buildGridButton(
                         color: Colors.teal,
                         label: "Next\nCLIMBED",
+                        filled: scoutedMatchSingleton.autoClimbed == true,
                         onPressed: () {
                           scoutedMatchSingleton.autoClimbed = true;
                           state = MatchState.teleop;
@@ -435,10 +439,14 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       _buildGridButton(
                         color: cougarOrange,
                         label: "Next\nNOT CLIMBED",
+                        filled:
+                            scoutedMatchSingleton.autoClimbed == false &&
+                            setAutoClimb,
                         onPressed: () {
                           scoutedMatchSingleton.autoClimbed = false;
                           state = MatchState.teleop;
                           vibrate(HapticsType.error);
+                          setAutoClimb = true;
                         },
                       ),
                     ],
@@ -503,6 +511,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.blueAccent,
                         label: "Level 3 Climb",
                         description: "bumpers completely above second rung",
+                        filled:
+                            scoutedMatchSingleton.climbLevel == ClimbLevel.L3,
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L3;
                           state = MatchState.summary;
@@ -513,6 +523,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.blueAccent,
                         label: "Level 2 Climb",
                         description: "bumpers completely above first rung",
+                        filled:
+                            scoutedMatchSingleton.climbLevel == ClimbLevel.L2,
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L2;
                           state = MatchState.summary;
@@ -523,6 +535,8 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                         color: Colors.blueAccent,
                         label: "Level 1 Climb",
                         description: "completely off the ground",
+                        filled:
+                            scoutedMatchSingleton.climbLevel == ClimbLevel.L1,
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.L1;
                           state = MatchState.summary;
@@ -532,10 +546,15 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                       _buildGridButton(
                         color: Colors.blueAccent,
                         label: "None",
+                        filled:
+                            scoutedMatchSingleton.climbLevel ==
+                                ClimbLevel.none &&
+                            setEndgameClimb,
                         onPressed: () {
                           scoutedMatchSingleton.climbLevel = ClimbLevel.none;
                           state = MatchState.summary;
                           vibrate(HapticsType.error);
+                          setEndgameClimb = true;
                         },
                       ),
                     ],
@@ -601,7 +620,9 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                             station2Label: station2Label,
                             station3Label: station3Label,
                             value: setStartPosition
-                                ? scoutedMatchSingleton.startPosition
+                                ? ValueNotifier(
+                                    scoutedMatchSingleton.startPosition,
+                                  )
                                 : null,
                             onPositionSelected: (pos) {
                               scoutedMatchSingleton.startPosition = pos;
@@ -622,8 +643,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
                                 label: "No-show",
                                 filled:
                                     scoutedMatchSingleton.startPosition ==
-                                        StartPosition.none &&
-                                    setStartPosition,
+                                    StartPosition.none,
                                 onPressed: () {
                                   scoutedMatchSingleton.startPosition =
                                       StartPosition.none;

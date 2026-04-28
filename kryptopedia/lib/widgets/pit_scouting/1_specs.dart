@@ -7,6 +7,8 @@ import 'package:kryptopedia/widgets/common/layouts.dart';
 import 'package:kryptopedia/widgets/common/number_field.dart';
 import 'package:kryptopedia/widgets/common/scouting_section.dart';
 
+List<UnitOption> lengthUnits = [UnitOption("in", 1), UnitOption("cm", 2.54)];
+
 class PitScoutingSpecs extends StatefulWidget {
   const PitScoutingSpecs({super.key});
 
@@ -38,7 +40,7 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
               contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
             ),
             NumberField(
-              label: "Robot weight (lbs.)",
+              label: "Robot weight",
               subtitle: "without battery or bumpers, preferably at inspection",
               minValue: 35,
               maxValue: 115,
@@ -46,9 +48,10 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
               callback: (int newValue) {
                 scoutedPitSingleton.weight = newValue;
               },
+              unitOptions: [UnitOption("lb", 1), UnitOption("kg", 0.453592)],
             ),
             NumberField(
-              label: "Robot's width (in.)",
+              label: "Robot's width",
               subtitle: "with bumpers",
               minValue: 10,
               maxValue: 40,
@@ -56,29 +59,32 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
               callback: (int newValue) {
                 scoutedPitSingleton.width = newValue;
               },
+              unitOptions: lengthUnits,
             ),
             NumberField(
-              label: "Robot's depth (in.)",
+              label: "Robot's depth",
               minValue: 10,
               maxValue: 40,
               startValue: scoutedPitSingleton.depth,
               callback: (int newValue) {
                 scoutedPitSingleton.depth = newValue;
               },
+              unitOptions: lengthUnits,
             ),
           ],
           group2: [
             NumberField(
-              label: "Robot starting height (in.)",
+              label: "Robot starting height",
               minValue: 2,
               maxValue: 150,
               startValue: scoutedPitSingleton.startingHeight,
               callback: (int newValue) {
                 scoutedPitSingleton.startingHeight = newValue;
               },
+              unitOptions: lengthUnits,
             ),
             NumberField(
-              label: "Robot's height when fully extended (in.)",
+              label: "Robot's height when fully extended",
               subtitle: "(not including an extended climber hook)",
               minValue: 2,
               maxValue: 150,
@@ -86,6 +92,7 @@ class _PitScoutingSpecsState extends State<PitScoutingSpecs> {
               callback: (int newValue) {
                 scoutedPitSingleton.extendedHeight = newValue;
               },
+              unitOptions: lengthUnits,
             ),
             DropdownList(
               label: 'Robot\'s drivetrain',

@@ -12,7 +12,9 @@ module NexusService
     end
 
     def pit_map(year, event_code)
-      _conn.get("event/#{year}#{event_code}/map").body
+      event = TBAService.event_info(year, event_code)
+      code = event["first_event_code"] || event_code
+      _conn.get("event/#{year}#{code}/map").body
     end
   end
 end

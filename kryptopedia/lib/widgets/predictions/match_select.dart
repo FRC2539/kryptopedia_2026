@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kryptopedia/util/db/events.dart';
 import 'package:kryptopedia/util/db/matches.dart';
 import 'package:kryptopedia/util/deviceinfo.dart';
@@ -17,10 +18,17 @@ class MatchSelect extends StatefulWidget {
 class _MatchSelectState extends State<MatchSelect> {
   int _selectedMatch = -1;
 
-  bool _team2539MatchesOnly = true;
+  int _oneTeamOnly = 2539;
+  final TextEditingController _teamInputController = TextEditingController();
 
   DbEvents dbEvent = DbEvents();
   DbMatches dbMatch = DbMatches();
+
+  @override
+  void initState() {
+    super.initState();
+    _teamInputController.text = _oneTeamOnly.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,40 +129,41 @@ class _MatchSelectState extends State<MatchSelect> {
                       ),
                     )
                   : CircularProgressIndicator(),
-              Expanded(
-                child: Row(
+              Row(
+                spacing: 8,
                   children: [
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: AutoSizeText(
-                          "Team 2539 Matches Only?",
-                          style: TextStyle(fontSize: Device.fontLabel(context)),
-                          maxLines: 1,
-                        ),
-                      ),
+                  Center(
+                    child: Text(
+                      "Team",
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                        top: 5.0,
-                        bottom: 5.0,
-                        right: 20.0,
-                      ),
-                      child: Switch(
-                        value: _team2539MatchesOnly == true,
-                        onChanged: (newValue) async {
+                  ),
+                  SizedBox(
+                    width: 60,
+                    child: TextField(
+                      controller: _teamInputController,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        if (value == "") {
                           setState(() {
-                            _team2539MatchesOnly = newValue;
-                            _selectedMatch = 1;
+                            _oneTeamOnly = 0;
                           });
-                          await getMatchList();
+                          return;
+                        }
+                        setState(() {
+                          _oneTeamOnly = int.parse(value);
+                        });
                         },
-                        activeTrackColor: Colors.lightGreenAccent,
-                        activeThumbColor: Colors.green,
+                    ),
+                  ),
+                  Center(
+                    child: Text(
+                      "matches only",
+                      style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
             ],
           ),
@@ -166,7 +175,7 @@ class _MatchSelectState extends State<MatchSelect> {
   Future<List<EventMatch>> getMatchList() async {
     List<EventMatch> matches = await dbMatch.getMatches();
 
-    if (_team2539MatchesOnly == true) {
+    if (_oneTeamOnly != 0) {
       matches.removeWhere(
         (match) =>
             [
@@ -176,7 +185,7 @@ class _MatchSelectState extends State<MatchSelect> {
               match.blue1number,
               match.blue2number,
               match.blue3number,
-            ].contains(2539) ==
+            ].contains(_oneTeamOnly) ==
             false
       );
     }
@@ -185,7 +194,8 @@ class _MatchSelectState extends State<MatchSelect> {
       return (a.number).compareTo(b.number);
     });
 
-    if (_selectedMatch == -1) {
+    if (_selectedMatch == -1 ||
+        matches.where((match) => match.number == _selectedMatch).isEmpty) {
       _selectedMatch = matches.first.number;
       widget.callback(matches.first);
     }

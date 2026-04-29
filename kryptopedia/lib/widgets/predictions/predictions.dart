@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kryptopedia/models/scouted_match.dart';
+import 'package:kryptopedia/models/team_insights_record.dart';
 import 'package:kryptopedia/models/teaminfosummary.dart';
+import 'package:kryptopedia/util/db/team_insights.dart';
 import 'package:kryptopedia/widgets/predictions/1_overview.dart';
 import 'package:kryptopedia/widgets/predictions/2_alliance_overview.dart';
 import 'package:kryptopedia/util/2026helpers/calculate_teaminfo_averages.dart';
@@ -16,15 +18,16 @@ class MatchPredictionViewer extends StatefulWidget {
   final int blue3;
   final bool adhoc;
 
-  const MatchPredictionViewer(
-      {super.key,
-      required this.red1,
-      required this.red2,
-      required this.red3,
-      required this.blue1,
-      required this.blue2,
-      required this.blue3,
-      required this.adhoc});
+  const MatchPredictionViewer({
+    super.key,
+    required this.red1,
+    required this.red2,
+    required this.red3,
+    required this.blue1,
+    required this.blue2,
+    required this.blue3,
+    required this.adhoc,
+  });
 
   @override
   State<MatchPredictionViewer> createState() => _MatchPredictionViewerState();
@@ -43,28 +46,69 @@ class _MatchPredictionViewerState extends State<MatchPredictionViewer> {
 
   late TeamInfoSummary blue3Summary = TeamInfoSummary();
 
+  late int blue1rank;
+  late int blue2rank;
+  late int blue3rank;
+  late int red1rank;
+  late int red2rank;
+  late int red3rank;
+
   Future<MatchScorePrediction> _getPrediction() async {
     DbScoutedMatches dbScoutedMatch = DbScoutedMatches();
 
     List<ScoutedMatch> blue1ScoutedMatches = await dbScoutedMatch
         .getScoutedMatchesForTeam(widget.blue1);
-    blue1Summary = CalculateTeamInfoAverages.calculateAverages(blue1ScoutedMatches);
+    blue1Summary = CalculateTeamInfoAverages.calculateAverages(
+      blue1ScoutedMatches,
+    );
     List<ScoutedMatch> blue2ScoutedMatches = await dbScoutedMatch
         .getScoutedMatchesForTeam(widget.blue2);
-    blue2Summary = CalculateTeamInfoAverages.calculateAverages(blue2ScoutedMatches);
+    blue2Summary = CalculateTeamInfoAverages.calculateAverages(
+      blue2ScoutedMatches,
+    );
     List<ScoutedMatch> blue3ScoutedMatches = await dbScoutedMatch
         .getScoutedMatchesForTeam(widget.blue3);
-    blue3Summary = CalculateTeamInfoAverages.calculateAverages(blue3ScoutedMatches);
+    blue3Summary = CalculateTeamInfoAverages.calculateAverages(
+      blue3ScoutedMatches,
+    );
 
     List<ScoutedMatch> red1ScoutedMatches = await dbScoutedMatch
         .getScoutedMatchesForTeam(widget.red1);
-    red1Summary = CalculateTeamInfoAverages.calculateAverages(red1ScoutedMatches);
+    red1Summary = CalculateTeamInfoAverages.calculateAverages(
+      red1ScoutedMatches,
+    );
     List<ScoutedMatch> red2ScoutedMatches = await dbScoutedMatch
         .getScoutedMatchesForTeam(widget.red2);
-    red2Summary = CalculateTeamInfoAverages.calculateAverages(red2ScoutedMatches);
+    red2Summary = CalculateTeamInfoAverages.calculateAverages(
+      red2ScoutedMatches,
+    );
     List<ScoutedMatch> red3ScoutedMatches = await dbScoutedMatch
         .getScoutedMatchesForTeam(widget.red3);
-    red3Summary = CalculateTeamInfoAverages.calculateAverages(red3ScoutedMatches);
+    red3Summary = CalculateTeamInfoAverages.calculateAverages(
+      red3ScoutedMatches,
+    );
+
+    DbTeamInsightsRecords dbTeamInsightsRecords = DbTeamInsightsRecords();
+
+    // 🤮
+    blue1rank =
+        (await dbTeamInsightsRecords.getTeamInsights(widget.blue1))?.ranking ??
+        0;
+    blue2rank =
+        (await dbTeamInsightsRecords.getTeamInsights(widget.blue2))?.ranking ??
+        0;
+    blue3rank =
+        (await dbTeamInsightsRecords.getTeamInsights(widget.blue3))?.ranking ??
+        0;
+    red1rank =
+        (await dbTeamInsightsRecords.getTeamInsights(widget.red1))?.ranking ??
+        0;
+    red2rank =
+        (await dbTeamInsightsRecords.getTeamInsights(widget.red2))?.ranking ??
+        0;
+    red3rank =
+        (await dbTeamInsightsRecords.getTeamInsights(widget.blue1))?.ranking ??
+        0;
 
     return await MatchScorePrediction.createPrediction(
       widget.red1,
@@ -91,11 +135,10 @@ class _MatchPredictionViewerState extends State<MatchPredictionViewer> {
         } else if (snapshot.hasData) {
           return SizedBox(
             height: (!widget.adhoc)
-                ?
-              MediaQuery.sizeOf(context).height - 175.0 :
-              MediaQuery.sizeOf(context).height - 275.0,
-            child: Padding(   
-            // return Padding(
+                ? MediaQuery.sizeOf(context).height - 175.0
+                : MediaQuery.sizeOf(context).height - 275.0,
+            child: Padding(
+              // return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView(
                 // shrinkWrap: true,
@@ -109,6 +152,9 @@ class _MatchPredictionViewerState extends State<MatchPredictionViewer> {
                     blue1Summary,
                     blue2Summary,
                     blue3Summary,
+                    blue1rank,
+                    blue2rank,
+                    blue3rank
                   ),
                   AllianceOverview(
                     "Red",
@@ -118,11 +164,14 @@ class _MatchPredictionViewerState extends State<MatchPredictionViewer> {
                     red1Summary,
                     red2Summary,
                     red3Summary,
+                    blue1rank,
+                    blue2rank,
+                    blue3rank
                   ),
                 ],
               ),
             ),
-            );
+          );
           // );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');

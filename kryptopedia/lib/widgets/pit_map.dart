@@ -149,13 +149,18 @@ class PitMapPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     for (Map<String, dynamic> pit in pitMapData["pits"]?.values ?? []) {
-      final paint = Paint()
-        ..color =
-            scoutedPits.any((sPit) => sPit.teamNumber == int.parse(pit["team"]))
-            ? Colors.green
-            : Colors.red
-        ..style = PaintingStyle.fill;
-
+      final String teamString = pit["team"]?.toString() ?? "";
+      final int teamNumber = int.tryParse(teamString) ?? 0;
+      final Paint paint;
+      if (teamString == "" || teamNumber == 0) {
+        paint = Paint()..color = Color(0xFF616161);
+      } else {
+        paint = Paint()
+          ..color = scoutedPits.any((sPit) => sPit.teamNumber == teamNumber)
+              ? Colors.green
+              : Colors.red
+          ..style = PaintingStyle.fill;
+      }
       // Create rect for drawing and hit testing
       // data is from center, but we need top-left for drawing
       final Rect pitRect = Rect.fromLTWH(
@@ -198,7 +203,7 @@ class PitMapPainter extends CustomPainter {
 
       // Store the pit bounds for hit detection
       if (onPitPainted != null) {
-        onPitPainted!(int.parse(pit["team"]), pitRect);
+        onPitPainted!(teamNumber, pitRect);
       }
     }
 
@@ -229,9 +234,11 @@ class PitMapPainter extends CustomPainter {
         borderPaint,
       );
 
+      final String areaLabel = area["label"]?.toString() ?? "";
+
       final textPainter = TextPainter(
         text: TextSpan(
-          text: area["label"],
+          text: areaLabel,
           style: const TextStyle(color: Colors.black, fontSize: 15),
         ),
         textDirection: TextDirection.ltr,
@@ -251,9 +258,10 @@ class PitMapPainter extends CustomPainter {
     }
 
     for (Map<String, dynamic> label in pitMapData["labels"]?.values ?? []) {
+      final String labelText = label["label"]?.toString() ?? "";
       final textPainter = TextPainter(
         text: TextSpan(
-          text: label["label"],
+          text: labelText,
           style: const TextStyle(color: Colors.white, fontSize: 15),
         ),
         textDirection: TextDirection.ltr,

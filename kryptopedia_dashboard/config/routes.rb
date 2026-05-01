@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
+  mount MissionControl::Jobs::Engine, at: "/jobs"
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
@@ -30,15 +31,21 @@ Rails.application.routes.draw do
     resources :scouted_events do
       resources :matches
       post "matches/download-from-tba" => "matches#download_matches_from_tba", as: :download_matches_from_tba
+
       get "teams" => "scouted_events#index_teams", as: :teams
       post "teams/download-from-tba" => "scouted_events#download_teams", as: :download_teams_from_tba
+
       resources :scouting_data_items, param: :uid do
         post "restore" => "scouting_data_items#restore", as: :restore
       end
       resources :preloaded_flags
+
       get "schedule" => "scouted_events#schedule", as: :schedule
       get "schedule/edit" => "scouted_events#edit_schedule", as: :edit_schedule
       patch "schedule" => "scouted_events#update_schedule", as: :update_schedule
+
+      get "exports" => "scouted_events#exports", as: :exports
+      post "exports" => "scouted_events#enqueue_export", as: :enqueue_export
     end
 
     resources :team_members

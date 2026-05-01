@@ -48,6 +48,17 @@ class ScoutedEventsController < ApplicationController
     @can_edit = current_user&.admin? && current_user.team == @team
   end
 
+  def exports
+    @working_exports = ActiveJob
+    @exports = @scouted_event.exports.order(created_at: :desc)
+  end
+
+  def enqueue_export
+    exclude_comments = ActiveModel::Type::Boolean.new.cast(params[:exclude_comments]) || false
+    GenerateEventExportJob.perform_later(@scouted_event.id, exclude_comments, current_user.id)
+    redirect_to team_scouted_event_exports_path(@scouted_event), notice: "Export queued, check back in a little bit"
+  end
+
   private
 
   def scouted_event_params

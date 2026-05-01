@@ -3,18 +3,17 @@ module StatboticsService
 
   class << self
     def _conn
-      @conn ||= Faraday.new url: BASE_URL do |conn|
+      @conn ||= Faraday.new url: BASE_URL, request: { timeout: 10 } do |conn|
         conn.response :json
         conn.response :raise_error
       end
     end
 
-    def event_team(year, event_code, team_number)
-      _conn.get("team_event/#{team_number}/#{year}#{event_code}").body
-    end
-
     def event_teams(year, event_code)
       _conn.get("team_events?event=#{year}#{event_code}").body
+    rescue Faraday::Error => e
+      Sentry.logger.error("Statbotics is mad", error: e)
+      []
     end
   end
 end

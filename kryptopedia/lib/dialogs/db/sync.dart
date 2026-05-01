@@ -48,7 +48,14 @@ class _SyncPopupState extends State<SyncPopup> {
         future: event,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text("Error: ${snapshot.error}");
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                Text("Error: ${snapshot.error}"),
+                RecreateDatabaseButton(expanded: true),
+              ],
+            );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
@@ -138,31 +145,7 @@ class _SyncPopupState extends State<SyncPopup> {
               Spacer(),
               Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      bool? confirmed = await showDialog(
-                        context: context,
-                        builder: (context) => ConfirmationDialog(
-                          title: "Clear the database?",
-                          body:
-                              "any unsynced data will be lost! this could be bad!!",
-                          protected: true,
-                        ),
-                      );
-                      if (confirmed != true) return;
-                      DbHelper dbHelper = DbHelper();
-                      await dbHelper.recreateDatabase();
-                      if (!context.mounted) return;
-                      Navigator.pop(context);
-                      await showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        useRootNavigator: false,
-                        builder: (context) => EventSetupDialog(),
-                      );
-                    },
-                    child: Icon(Icons.delete_forever),
-                  ),
+                  RecreateDatabaseButton(),
                   Spacer(),
                   ElevatedButton.icon(
                     onPressed: () {
@@ -180,6 +163,40 @@ class _SyncPopupState extends State<SyncPopup> {
           );
         },
       ),
+    );
+  }
+}
+
+class RecreateDatabaseButton extends StatelessWidget {
+  final bool expanded;
+  const RecreateDatabaseButton({super.key, this.expanded = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: () async {
+        bool? confirmed = await showDialog(
+          context: context,
+          builder: (context) => ConfirmationDialog(
+            title: "Clear the database?",
+            body: "any unsynced data will be lost! this could be bad!!",
+            protected: true,
+          ),
+        );
+        if (confirmed != true) return;
+        DbHelper dbHelper = DbHelper();
+        await dbHelper.recreateDatabase();
+        if (!context.mounted) return;
+        Navigator.pop(context);
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          useRootNavigator: false,
+          builder: (context) => EventSetupDialog(),
+        );
+      },
+      icon: expanded ? Icon(Icons.delete_forever) : null,
+      label: expanded ? Text("Recreate database") : Icon(Icons.delete_forever),
     );
   }
 }

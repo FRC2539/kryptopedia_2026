@@ -327,7 +327,17 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
         backgroundColor: index != null
             ? Colors.accents[index!]
             : Colors.transparent,
-        body: Column(
+        body: Container(
+          decoration: rainbowBackground
+              ? BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.redAccent, ...Colors.accents.reversed],
+                    begin: AlignmentGeometry.topCenter,
+                    end: AlignmentGeometry.bottomCenter,
+                  ),
+                )
+              : BoxDecoration(),
+          child: Column(
           children: [
             Container(
               decoration: BoxDecoration(
@@ -662,6 +672,7 @@ class _MatchScoutingBoxesEditionState extends State<MatchScoutingBoxesEdition> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

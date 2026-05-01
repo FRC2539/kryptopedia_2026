@@ -12,6 +12,7 @@ class NumberField extends StatefulWidget {
   final int minValue;
   final int startValue;
   final bool allowDirectEditing;
+  final List<UnitOption> unitOptions;
 
   final ValueChanged<int> callback;
 
@@ -24,6 +25,7 @@ class NumberField extends StatefulWidget {
     required this.startValue,
     required this.callback,
     this.allowDirectEditing = true,
+    this.unitOptions = const [],
   });
 
   @override
@@ -32,6 +34,11 @@ class NumberField extends StatefulWidget {
 
 class _NumberFieldState extends State<NumberField> {
   final TextEditingController _controller = TextEditingController();
+
+  late UnitOption selectedUnit;
+  late int inputMax;
+  late int inputMin;
+  late List<DropdownMenuItem<UnitOption>> _unitDropdownOptions;
 
   @override
   void initState() {
@@ -44,14 +51,35 @@ class _NumberFieldState extends State<NumberField> {
       throw ("startValue must be greater than or equal to minValue");
     }
 
+    if (widget.unitOptions.isNotEmpty &&
+        widget.unitOptions[0].multiplier != 1) {
+      throw ("first unit option must have multiplier of 1");
+    }
+
     _controller.text = widget.startValue.toString();
+    selectedUnit = widget.unitOptions.isNotEmpty
+        ? widget.unitOptions[0]
+        : UnitOption("", 1);
+    inputMax = (widget.maxValue * selectedUnit.multiplier).round();
+    inputMin = (widget.minValue * selectedUnit.multiplier).round();
+
+    _unitDropdownOptions = widget.unitOptions
+        .map(
+          (option) =>
+              DropdownMenuItem(value: option, child: Text(option.label)),
+        )
+        .toList();
+  }
+
+  void callback(int input) {
+    widget.callback((input / selectedUnit.multiplier).round());
   }
 
   @override
   Widget build(BuildContext context) {
     var tooHighSnackbar = SnackBar(
       content: Text(
-        '${widget.label} must be <= ${widget.maxValue}',
+        '${widget.label} must be <= $inputMax',
         style: const TextStyle(fontSize: 20),
       ),
       duration: const Duration(seconds: 4),
@@ -60,7 +88,7 @@ class _NumberFieldState extends State<NumberField> {
     );
     SnackBar tooLowSnackbar = SnackBar(
       content: Text(
-        '${widget.label} must be >= ${widget.minValue}',
+        '${widget.label} must be >= $inputMin',
         style: const TextStyle(fontSize: 20),
       ),
       duration: const Duration(seconds: 4),
@@ -117,12 +145,12 @@ class _NumberFieldState extends State<NumberField> {
             ),
             onTap: () {
               int currentValue = int.parse(_controller.text);
-              if (currentValue > widget.minValue) {
+              if (currentValue > inputMin) {
                 setState(() {
                   currentValue--;
                   _controller.text = (currentValue)
                       .toString(); // incrementing value
-                  widget.callback(currentValue);
+                  callback(currentValue);
                 });
               } else {
                 ScaffoldMessenger.of(context).clearSnackBars();
@@ -161,8 +189,8 @@ class _NumberFieldState extends State<NumberField> {
               if ((_controller.text == "") ||
                   (int.tryParse(_controller.text) == null)) {
                 setState(() {
-                  _controller.text = (widget.minValue.toString());
-                  widget.callback(widget.minValue);
+                  _controller.text = (inputMin.toString());
+                  callback(inputMin);
                 });
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(nanSnackbar);
@@ -170,25 +198,48 @@ class _NumberFieldState extends State<NumberField> {
               }
               int value = int.parse(_controller.text);
 
-              if (value < widget.minValue) {
+              if (value < inputMin) {
                 setState(() {
-                  _controller.text = (widget.minValue.toString());
+                  _controller.text = (inputMin.toString());
                 });
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(tooLowSnackbar);
               }
-              if (value > widget.maxValue) {
+              if (value > inputMax) {
                 setState(() {
-                  _controller.text = (widget.maxValue.toString());
+                  _controller.text = (inputMax.toString());
                 });
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(tooHighSnackbar);
               }
 
               setState(() {
-                widget.callback(int.parse(_controller.text));
+                callback(int.parse(_controller.text));
               });
             },
+          ),
+          Visibility(
+            visible: widget.unitOptions.isNotEmpty,
+            child: DropdownButton(
+              items: _unitDropdownOptions,
+              onChanged: (UnitOption? newUnit) {
+                setState(() {
+                  if (newUnit == null) return;
+                  _controller.text =
+                      ((int.parse(_controller.text) / selectedUnit.multiplier) *
+                              newUnit.multiplier)
+                          .round()
+                          .toString();
+                  selectedUnit = newUnit;
+
+                  inputMax = (widget.maxValue * selectedUnit.multiplier)
+                      .round();
+                  inputMin = (widget.minValue * selectedUnit.multiplier)
+                      .round();
+                });
+              },
+              value: selectedUnit,
+            ),
           ),
           InkWell(
             child: Container(
@@ -205,12 +256,12 @@ class _NumberFieldState extends State<NumberField> {
             ),
             onTap: () {
               int currentValue = int.parse(_controller.text);
-              if (currentValue < widget.maxValue) {
+              if (currentValue < inputMax) {
                 setState(() {
                   currentValue++;
                   _controller.text = (currentValue > 0 ? currentValue : 0)
                       .toString(); // decrementing value
-                  widget.callback(currentValue);
+                  callback(currentValue);
                 });
               } else {
                 ScaffoldMessenger.of(context).clearSnackBars();
@@ -222,4 +273,11 @@ class _NumberFieldState extends State<NumberField> {
       ),
     );
   }
+}
+
+class UnitOption {
+  final String label;
+  final double multiplier;
+
+  UnitOption(this.label, this.multiplier);
 }

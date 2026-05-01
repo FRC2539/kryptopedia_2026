@@ -12,6 +12,7 @@ const Color cougarOffBlack = Color.fromARGB(225, 47, 45, 45);
 int? index;
 int? index2;
 bool rainbowMode = false;
+bool rainbowBackground = false;
 
 void main() {
   runApp(const MainApp());
@@ -81,7 +82,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: index != null
+      backgroundColor: index != null || (rainbowBackground = false)
           ? Colors.accents[index!]
           : Colors.transparent,
       appBar: AppBar(
@@ -115,6 +116,11 @@ class _MainScreenState extends State<MainScreen> {
                 index = nindex;
               });
             },
+            onLongPress: () {
+              setState(() {
+                rainbowBackground = !rainbowBackground;
+              });
+            },
           ),
           IconButton(
             splashColor: cougarOrange,
@@ -138,7 +144,17 @@ class _MainScreenState extends State<MainScreen> {
         ),
         centerTitle: true,
       ),
-      body: Row(
+      body: Container(
+        decoration: rainbowBackground
+            ? BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.redAccent, ...Colors.accents.reversed],
+                  begin: AlignmentGeometry.topCenter,
+                  end: AlignmentGeometry.bottomCenter,
+                ),
+              )
+            : BoxDecoration(),
+        child: Row(
         children: [
           SizedBox(
             width: landscape(context)
@@ -156,6 +172,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
         ],
+      ),
       ),
     );
   }

@@ -1,6 +1,6 @@
 name: kryptopedia
 publish_to: "none"
-version: 2026.0.12
+version: 2026.0.13
 
 environment:
   sdk: ^3.9.2

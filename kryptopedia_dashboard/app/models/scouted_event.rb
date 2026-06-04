@@ -4,10 +4,12 @@
 #
 #  id                    :bigint           not null, primary key
 #  code                  :string
+#  end_date              :date             not null
 #  max_app_version       :string
 #  min_app_version       :string
 #  name                  :string
 #  pit_map_cache_updated :datetime
+#  start_date            :date             not null
 #  tba_sync              :boolean          default(FALSE), not null
 #  test                  :boolean
 #  created_at            :datetime         not null
@@ -16,7 +18,8 @@
 #
 # Indexes
 #
-#  index_scouted_events_on_team_id  (team_id)
+#  index_scouted_events_on_start_date  (start_date)
+#  index_scouted_events_on_team_id     (team_id)
 #
 # Foreign Keys
 #
@@ -38,15 +41,22 @@ class ScoutedEvent < ApplicationRecord
   has_many :exports, class_name: "ScoutedEventExport", dependent: :destroy
 
   validates :name, presence: true, uniqueness: { scope: :team_id }
+  validates :start_date, presence: true
+  validates :end_date, presence: true
+  validate :start_date_before_end_date
   validates :code, presence: true, uniqueness: { scope: :team_id }
   validates :test, inclusion: [true, false]
 
   normalizes :min_app_version, :max_app_version, with: -> { it.presence }
 
+  def season
+    Season.new(start_date.year)
+  end
+
   def pit_map
     Rails.cache.fetch("#{code}/pit_map", expires_in: 1.hour) do
       self.update!(pit_map_cache_updated: Time.current)
-      NexusService.pit_map(2026, code)
+      NexusService.pit_map(season.year, code)
     rescue Faraday::ResourceNotFound
       nil
     end
@@ -55,7 +65,7 @@ class ScoutedEvent < ApplicationRecord
   def download_matches_from_tba!
     return unless tba_sync?
 
-    TBAService.event_matches(2026, code).each do |match_data|
+    TBAService.event_matches(season.year, code).each do |match_data|
       comp_level = match_data["comp_level"]
       match_number = comp_level != "sf" ? match_data["match_number"] : match_data["set_number"]
       match = matches.find_or_initialize_by(comp_level: comp_level, number: match_number)
@@ -74,9 +84,9 @@ class ScoutedEvent < ApplicationRecord
   def teams_insights
     return [] unless teams and tba_sync?
     Rails.cache.fetch("#{id}/insights", expires_in: 5.minutes) do
-      statbotics_insights = StatboticsService.event_teams(2026, code).index_by { |t| t["team"] }
-      tba_insights = TBAService.event_oprs(2026, code)
-      tba_rankings = TBAService.event_rankings(2026, code)["rankings"].index_by { |r| r["team_key"].delete_prefix("frc").to_i }
+      statbotics_insights = StatboticsService.event_teams(season.year, code).index_by { |t| t["team"] }
+      tba_insights = TBAService.event_oprs(season.year, code)
+      tba_rankings = TBAService.event_rankings(season.year, code)["rankings"].index_by { |r| r["team_key"].delete_prefix("frc").to_i }
       return [] if tba_insights.empty?
       teams.map do |team|
         {
@@ -100,6 +110,15 @@ class ScoutedEvent < ApplicationRecord
   end
 
   private
+
+  def start_date_before_end_date
+    if start_date < end_date
+      true
+    else
+      errors.add(:start_date, "must be before end date")
+      false
+    end
+  end
 
   def revive_or_create_join(team)
     join = ScoutedEventTeam.unscoped.find_or_initialize_by(

@@ -31,7 +31,7 @@ class ScoutedEventsController < ApplicationController
   def download_teams
     redirect_to edit_team_scouted_event_path(@scouted_event), alert: "TBA Sync is disabled" and return unless @scouted_event.tba_sync?
 
-    teams_numbers = TBAService.event_teams(2026, @scouted_event.code).map { |team_data| team_data["team_number"] }
+    teams_numbers = TBAService.event_teams(@scouted_event.season.year, @scouted_event.code).map { |team_data| team_data["team_number"] }
     teams = teams_numbers.map { |num| Team.find_or_create_by!(number: num) }
 
     @scouted_event.teams = teams
@@ -62,7 +62,7 @@ class ScoutedEventsController < ApplicationController
   private
 
   def scouted_event_params
-    params.require(:scouted_event).permit(:name, :code, :tba_sync, :min_app_version, :max_app_version)
+    params.require(:scouted_event).permit(:name, :code, :start_date, :end_date, :tba_sync, :min_app_version, :max_app_version)
   end
 
   def set_scouted_event

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_17_140320) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_03_220748) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -117,14 +117,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_17_140320) do
   create_table "scouted_events", force: :cascade do |t|
     t.string "code"
     t.datetime "created_at", null: false
+    t.date "end_date", null: false
     t.string "max_app_version"
     t.string "min_app_version"
     t.string "name"
     t.datetime "pit_map_cache_updated"
+    t.date "start_date", null: false
     t.boolean "tba_sync", default: false, null: false
     t.bigint "team_id", null: false
     t.boolean "test"
     t.datetime "updated_at", null: false
+    t.index ["start_date"], name: "index_scouted_events_on_start_date"
     t.index ["team_id"], name: "index_scouted_events_on_team_id"
   end
 

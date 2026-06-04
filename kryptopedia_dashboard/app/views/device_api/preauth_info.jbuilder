@@ -4,7 +4,7 @@ json.events @events do |event|
   json.id event.hashid
   json.name event.name
   json.code event.code
-  json.year 2026
+  json.year event.season.year
   json.test event.test
 end
 

@@ -10,6 +10,16 @@
     <%= error_messages_for scouted_event, :code %>
   </div>
   <div>
+    <%= f.label :start_date %>
+    <%= f.date_field :start_date %>
+    <%= error_messages_for scouted_event, :start_date %>
+  </div>
+  <div>
+    <%= f.label :end_date %>
+    <%= f.date_field :end_date %>
+    <%= error_messages_for scouted_event, :end_date %>
+  </div>
+  <div>
     <%= f.label :tba_sync %>
     <%= f.check_box :tba_sync %>
     <%= error_messages_for scouted_event, :tba_sync %>
